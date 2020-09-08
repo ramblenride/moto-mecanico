@@ -1,1 +1,15 @@
-theme: jekyll-theme-midnight
+title: Moto Mecanico
+email: ramblenride+motomecanico@gmail.com
+description: >- # this means to ignore newlines until "baseurl:"
+  Moto Mecanico is an Android application to manage the maintenace tasks
+  of your motorcycle.
+twitter_username: ramblenride
+github_username:  ramblenride
+
+show_downloads: true
+gplay_url: https://play.google.com/store/apps/details?id=com.ramblenride.la_tuerca
+google_analytics: UA-167408836-2
+
+theme: jekyll-theme-architect
+
+

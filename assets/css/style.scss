@@ -1,0 +1,26 @@
+---
+---
+
+@import "{{ site.theme }}";
+
+header {
+  color: #becdda;
+  background: #00182d;
+  border-bottom: 1px solid rgba(243, 233, 230, 0.1);
+}
+
+body {
+  color: #becdda;
+  background: #496883
+}
+
+aside#sidebar {
+  background: transparent;
+}
+
+a {
+  color: #e69c24;
+}
+a:hover {
+  color: #af6e00;
+}
