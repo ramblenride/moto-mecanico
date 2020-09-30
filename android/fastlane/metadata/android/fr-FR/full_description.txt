@@ -1,0 +1,6 @@
+Une application de maintenance de moto fonctionnelle pour remplacer ces feuilles de calcul embêtantes. Conçu pour être utile sur la base de notre expérience dans l'entretien de nos motos tout en parcourant des dizaines de milliers de kilomètres sur route et hors route.
+
+* Fonctionne complètement hors ligne, car il se peut que vous n'ayez pas d'accès au réseau.
+* Importez / exportez parce que ce sont VOS données. Ne laissez pas une application vous enfermer.
+* Open source sur GitHub.
+* Disponible en anglais, français et espagnol.

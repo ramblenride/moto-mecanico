@@ -1,0 +1,6 @@
+Una aplicación funcional de mantenimiento de motocicletas para reemplazar esas molestas hojas de cálculo. Construido para ser útil en base a nuestra experiencia en el mantenimiento de nuestras motocicletas mientras recorremos decenas de miles de kilómetros dentro y fuera de la carretera.
+
+* Funciona completamente sin conexión, porque es posible que no tenga acceso a la red.
+* Importar / exportar porque son SUS datos. No dejes que una aplicación te bloquee.
+* Código abierto en GitHub.
+* Disponible en inglés, francés y español.

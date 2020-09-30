@@ -1,5 +1,7 @@
 # moto-mecanico
 
+<img alt="Moto Mecanico Logo" src="assets/images/moto_mecanico.png" align="left" height="248" width="248">
+
 > More to come soon...
 
 ## License

@@ -1,0 +1,2 @@
+json_key_file "google-service-api-key.json"
+package_name("com.ramblenride.moto_mecanico")

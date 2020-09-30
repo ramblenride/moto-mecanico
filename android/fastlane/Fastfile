@@ -1,0 +1,20 @@
+desc 'Deploy a new internal version to the Google Play Store'
+lane :build do
+  gradle(
+    task: 'assemble',
+    build_type: 'Release'
+  )
+end
+
+lane :playstore do
+  gradle(
+    task: 'assemble',
+    build_type: 'Release'
+  )
+  upload_to_play_store(
+    aab: '../build/app/outputs/bundle/release/app-release.aab',
+    track: 'internal',
+    skip_upload_screenshots: true,
+    skip_upload_images: true
+)
+end
