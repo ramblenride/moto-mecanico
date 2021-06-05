@@ -1,117 +1,221 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_native_timezone/flutter_native_timezone.dart';
+import 'package:intl/intl_standalone.dart';
+import 'package:moto_mecanico/configuration.dart';
+import 'package:moto_mecanico/models/garage_model.dart';
+import 'package:moto_mecanico/models/labels.dart';
+import 'package:moto_mecanico/pages/garage_page.dart';
+import 'package:moto_mecanico/pages/loading_page.dart';
+import 'package:moto_mecanico/storage/garage_storage.dart';
+import 'package:moto_mecanico/storage/local_file_storage.dart';
+import 'package:moto_mecanico/themes.dart';
+import 'package:moto_mecanico/widgets/config_widget.dart';
+import 'package:package_info/package_info.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
+
+final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
 void main() {
-  runApp(MyApp());
+  loadMotoMecanico();
 }
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-        // This makes the visual density adapt to the platform that you run
-        // the app on. For desktop platforms, the controls will be smaller and
-        // closer together (more dense) than on mobile platforms.
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
-    );
+void loadMotoMecanico() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await _configureLocalTimeZone();
+
+  await _initializeNotifications();
+
+  await _deleteCacheDir();
+
+  runApp(MotoLogApp());
+}
+
+Future<void> _configureLocalTimeZone() async {
+  tz.initializeTimeZones();
+  final currentTimeZone = await FlutterNativeTimezone.getLocalTimezone();
+  tz.setLocalLocation(tz.getLocation(currentTimeZone));
+}
+
+Future<void> _initializeNotifications() async {
+  await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+  const initSettingsAndroid = AndroidInitializationSettings('app_icon');
+
+  final initSettings = InitializationSettings(
+    android: initSettingsAndroid,
+  );
+  await flutterLocalNotificationsPlugin.initialize(
+    initSettings,
+    onSelectNotification: (String payload) async {
+      if (payload != null) {
+        debugPrint('notification payload: $payload');
+        // FIXME: Show the task tied to the notification
+        //selectNotificationSubject.add(payload);
+      }
+    },
+  );
+
+  // FIXME: Whatever creates notifications must check if enabled in config
+  //await _createNotification();
+  _showActiveNotifications();
+  _showPendingNotifications();
+}
+
+/*
+void _createNotification() async {
+  return await flutterLocalNotificationsPlugin.zonedSchedule(
+      0,
+      'scheduled title',
+      'scheduled body',
+      tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5)),
+      const NotificationDetails(
+          android: AndroidNotificationDetails('your channel id',
+              'your channel name', 'your channel description')),
+      androidAllowWhileIdle: true,
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.absoluteTime);
+}
+*/
+
+void _showActiveNotifications() async {
+  final activeNotifications = await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()
+      ?.getActiveNotifications();
+  debugPrint('Active Notifications:');
+  activeNotifications.forEach((element) => debugPrint(element.toString()));
+}
+
+void _showPendingNotifications() async {
+  final pendingNotificationRequests =
+      await flutterLocalNotificationsPlugin.pendingNotificationRequests();
+  debugPrint('Pending Notifications:');
+  pendingNotificationRequests
+      .forEach((element) => debugPrint(element.toString()));
+}
+
+Future<void> _deleteCacheDir() async {
+  final cacheDir = await getTemporaryDirectory();
+  if (cacheDir.existsSync()) {
+    try {
+      await cacheDir.delete(recursive: true);
+    } catch (error) {
+      debugPrint(error.toString());
+    }
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
+class MotoLogApp extends StatefulWidget {
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  State<StatefulWidget> createState() => _MotoLogAppState();
+
+  static void applyConfiguration(BuildContext context) {
+    final state = context.findAncestorStateOfType<_MotoLogAppState>();
+
+    state.applyConfiguration();
+  }
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class _MotoLogAppState extends State<MotoLogApp> {
+  Future _initialized;
+  Configuration _config;
+  LabelsModel _labels;
+  GarageModel _garage;
+  Locale _locale;
 
-  void _incrementCounter() {
+  void applyConfiguration() {
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+      _locale = _config.locale;
     });
   }
 
+  Future<void> _loadConfig() async {
+    _config = Configuration(await findSystemLocale());
+    await _config.loadConfig();
+    _config.packageInfo = await PackageInfo.fromPlatform();
+    _locale = _config.locale;
+  }
+
+  Future<void> _loadLabels() async {
+    _labels = LabelsModel();
+    await _labels.loadFromStorage();
+  }
+
+  Future<void> _setGarage() async {
+    _garage = GarageModel();
+    final garageStorage = GarageStorage();
+    garageStorage.storage =
+        LocalFileStorage(baseDir: await GarageStorage.getBaseDir());
+    _garage.storage = garageStorage;
+  }
+
+  Future<bool> _initConfiguration() async {
+    await _loadConfig();
+    await _loadLabels();
+    await _setGarage();
+    return true;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _initialized = _initConfiguration();
+  }
+
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
+    return FutureBuilder(
+        future: _initialized,
+        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+          if (snapshot.hasData) {
+            return ConfigWidget(
+              config: _config,
+              child: MultiProvider(
+                providers: [
+                  ChangeNotifierProvider.value(
+                    value: _garage,
+                  ),
+                  ChangeNotifierProvider.value(
+                    value: _labels,
+                  ),
+                ],
+                child: MaterialApp(
+                  title: _config.packageInfo.appName,
+                  darkTheme: Theme.of(context).RnrDarkTheme,
+                  themeMode: ThemeMode.dark,
+                  home: GaragePage(),
+                  locale: _locale,
+                  localeResolutionCallback: _getLocale,
+                  localizationsDelegates:
+                      AppLocalizations.localizationsDelegates,
+                  supportedLocales: AppLocalizations.supportedLocales,
+                ),
+              ),
+            );
+          } else if (snapshot.hasError) {
+            return Center(
+                child: Directionality(
+              textDirection: TextDirection.ltr,
+              child: Text('Initialization Error: ' + snapshot.error),
+            ));
+          } else {
+            return LoadingPage();
+          }
+        });
+  }
+
+  Locale _getLocale(Locale deviceLocale, Iterable<Locale> supportedLocales) {
+    return supportedLocales.contains(deviceLocale)
+        ? deviceLocale
+        : supportedLocales.firstWhere(
+            (element) =>
+                element.languageCode.split(RegExp(r'[_-]'))[0] ==
+                deviceLocale.languageCode.split(RegExp(r'[_-]'))[0],
+            orElse: () => Locale('en'));
   }
 }

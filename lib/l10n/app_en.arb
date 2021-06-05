@@ -1,0 +1,1319 @@
+{
+  "@@locale": "en",
+
+  "@@last_modified": "2020-10-01T21:40:13.633388",
+  "about_page_title": "About",
+  "@about_page_title": {
+    "description": "The title of the about page/dialog.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "add_attachment_dialog_title": "Add Attachment",
+  "@add_attachment_dialog_title": {
+    "description": "Title of the dialog to add an attachment",
+    "type": "text",
+    "placeholders": {}
+  },
+  "add_attachment_dialog_add_new_picture": "New picture",
+  "@add_attachment_dialog_add_new_picture": {
+    "description": "Name of the button to add a new picture (from camera)",
+    "type": "text",
+    "placeholders": {}
+  },
+  "add_attachment_dialog_add_picture": "Photo",
+  "@add_attachment_dialog_add_picture": {
+    "description": "Name of the button to add an existing picture",
+    "type": "text",
+    "placeholders": {}
+  },
+  "add_attachment_dialog_add_file": "File",
+  "@add_attachment_dialog_add_file": {
+    "description": "Name of the button to add an existing file",
+    "type": "text",
+    "placeholders": {}
+  },
+  "add_attachment_dialog_add_link": "Link",
+  "@add_attachment_dialog_add_link": {
+    "description": "Name of the button to add a new link",
+    "type": "text",
+    "placeholders": {}
+  },
+  "add_attachment_dialog_default_name_picture": "Picture",
+  "@add_attachment_dialog_default_name_picture": {
+    "description": "Default name of a picture attachment",
+    "type": "text",
+    "placeholders": {}
+  },
+  "add_attachment_dialog_default_name_file": "File",
+  "@add_attachment_dialog_default_name_file": {
+    "description": "Default name of a file attachment",
+    "type": "text",
+    "placeholders": {}
+  },
+  "add_cost_dialog_title": "Add Cost",
+  "@add_cost_dialog_title": {
+    "description": "Title of the dialog to add a cost",
+    "type": "text",
+    "placeholders": {}
+  },
+  "add_cost_edit_dialog_title": "Edit Cost",
+  "@add_cost_edit_dialog_title": {
+    "description": "Title of the dialog to edit a cost",
+    "type": "text",
+    "placeholders": {}
+  },
+  "add_cost_dialog_hint_description": "Enter Description",
+  "@add_cost_dialog_hint_description": {
+    "description": "Hint text for the description text field",
+    "type": "text",
+    "placeholders": {}
+  },
+  "add_cost_dialog_hint_value": "Enter Value",
+  "@add_cost_dialog_hint_value": {
+    "description": "Hint text for the value text field",
+    "type": "text",
+    "placeholders": {}
+  },
+  "add_cost_type_dialog_title": "Cost Type",
+  "@add_cost_type_dialog_title": {
+    "description": "Title of the dialog to add a cost (select type)",
+    "type": "text",
+    "placeholders": {}
+  },
+  "add_link_attachment_dialog_title": "Add Link",
+  "@add_link_attachment_dialog_title": {
+    "description": "Title of the dialog to add a link attachment",
+    "type": "text",
+    "placeholders": {}
+  },
+  "add_link_attachment_dialog_property_name_link_name": "LINK NAME",
+  "@add_link_attachment_dialog_property_name_link_name": {
+    "description": "Name description of the link name property",
+    "type": "text",
+    "placeholders": {}
+  },
+  "add_link_attachment_dialog_property_name_link_value": "LINK URL",
+  "@add_link_attachment_dialog_property_name_link_value": {
+    "description": "Name description of the link name property",
+    "type": "text",
+    "placeholders": {}
+  },
+  "add_link_attachment_dialog_property_hint_link_name": "Enter name",
+  "@add_link_attachment_dialog_property_hint_link_name": {
+    "description": "Hint text of the link name property",
+    "type": "text",
+    "placeholders": {}
+  },
+  "add_link_attachment_dialog_property_hint_link_value": "Paste URL",
+  "@add_link_attachment_dialog_property_hint_link_value": {
+    "description": "Hint text of the link name property",
+    "type": "text",
+    "placeholders": {}
+  },
+  "add_link_attachment_error_url_missing": "Please enter a URL",
+  "@add_link_attachment_error_url_missing": {
+    "description": "Error displayed when the URL is empty",
+    "type": "text",
+    "placeholders": {}
+  },
+  "add_link_attachment_error_not_supported": "Unsupported URL. It must start with 'http://' or 'https://'",
+  "@add_link_attachment_error_not_supported": {
+    "description": "Error displayed when the URL cannot be parsed correctly",
+    "type": "text",
+    "placeholders": {}
+  },
+  "appbar_add_button": "Add",
+  "@appbar_add_button": {
+    "description": "Text on the add button used in the app bar.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "appbar_filter_textfield_hint": "Filter motorcycles",
+  "@appbar_filter_textfield_hint": {
+    "description": "Hint text on the filter button",
+    "type": "text",
+    "placeholders": {}
+  },
+  "appbar_save_button": "Save",
+  "@appbar_save_button": {
+    "description": "Text on the save button used in the app bar.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "appbar_filter_textfield_tootip": "Filter the motorcycle list",
+  "@appbar_filter_textfield_tootip": {
+    "description": "Description of the filter feature in the garage",
+    "type": "text",
+    "placeholders": {}
+  },
+  "attachment_selector_add_attachment": "Add an attachment",
+  "@attachment_selector_add_attachment": {
+    "description": "Name of the button/tooltip to add a new attachment",
+    "type": "text",
+    "placeholders": {}
+  },
+  "attachment_selector_title": "Attachments",
+  "@attachment_selector_title": {
+    "description": "The title of the top row on the attachment selector",
+    "type": "text",
+    "placeholders": {}
+  },
+  "attachment_selector_action_rename": "Rename",
+  "@attachment_selector_action_rename": {
+    "description": "The name of the popup dialog option to rename an attachment",
+    "type": "text",
+    "placeholders": {}
+  },
+  "attachment_selector_action_delete": "Delete",
+  "@attachment_selector_action_delete": {
+    "description": "The name of the popup dialog option to delete an attachment",
+    "type": "text",
+    "placeholders": {}
+  },
+  "attachment_selector_empty_list": "No attachment",
+  "@attachment_selector_empty_list": {
+    "description": "The string displayed when the attachment list is empty",
+    "type": "text",
+    "placeholders": {}
+  },
+  "attachment_selector_attachment_error_dialog_title": "Attachment Error",
+  "@attachment_selector_attachment_error_dialog_title": {
+    "description": "The title of error dialog when opening an attachment fails",
+    "type": "text",
+    "placeholders": {}
+  },
+  "attachment_selector_attachment_error_link_open_failed": "Failed to open the link",
+  "@attachment_selector_attachment_error_link_open_failed": {
+    "description": "Error message when opening attached link failed",
+    "type": "text",
+    "placeholders": {}
+  },
+  "attachment_selector_attachment_error_link_unsupported": "Unsupported URL",
+  "@attachment_selector_attachment_error_link_unsupported": {
+    "description": "Error message when opening attached link failed because the link is not supported",
+    "type": "text",
+    "placeholders": {}
+  },
+  "attachment_selector_attachment_error_file_open_failed": "Failed to open the file",
+  "@attachment_selector_attachment_error_file_open_failed": {
+    "description": "Error message when opening attached file failed",
+    "type": "text",
+    "placeholders": {}
+  },
+  "attachment_selector_attachment_error_file_not_found": "File not found",
+  "@attachment_selector_attachment_error_file_not_found": {
+    "description": "Error message when opening attachment returns file not found",
+    "type": "text",
+    "placeholders": {}
+  },
+  "attachment_selector_attachment_error_no_app_to_open": "No app to open this type of file",
+  "@attachment_selector_attachment_error_no_app_to_open": {
+    "description": "Error message when opening attachment returns no app to open file type",
+    "type": "text",
+    "placeholders": {}
+  },
+  "attachment_selector_attachment_error_permission_denied": "Permission denied",
+  "@attachment_selector_attachment_error_permission_denied": {
+    "description": "Error message when opening attachment returns permission denied",
+    "type": "text",
+    "placeholders": {}
+  },
+  "closed_task_card_cost": "Cost",
+  "@closed_task_card_cost": {
+    "description": "Prelude to the actual cost",
+    "type": "text",
+    "placeholders": {}
+  },
+  "closed_task_card_executor": "Done by",
+  "@closed_task_card_executor": {
+    "description": "Prelude to the actual executor name",
+    "type": "text",
+    "placeholders": {}
+  },
+  "complete_task_dialog_title": "{numTasks,plural, =1{Complete task}other{Complete {numTasks} tasks}}",
+  "@complete_task_dialog_title": {
+    "description": "The title of the dialog when many tasks are getting closed",
+    "type": "text",
+    "placeholders": {
+      "numTasks": {}
+    }
+  },
+  "complete_task_dialog_date_prop_name": "COMPLETED ON",
+  "@complete_task_dialog_date_prop_name": {
+    "description": "The name of the completion date property",
+    "type": "text",
+    "placeholders": {}
+  },
+  "complete_task_dialog_date_prop_hint": "Enter date",
+  "@complete_task_dialog_date_prop_hint": {
+    "description": "The hint of the completion date property",
+    "type": "text",
+    "placeholders": {}
+  },
+  "cost_selector_action_edit": "Edit",
+  "@cost_selector_action_edit": {
+    "description": "The name of the popup dialog option to edit a cost",
+    "type": "text",
+    "placeholders": {}
+  },
+  "cost_selector_empty_list": "No cost entered",
+  "@cost_selector_empty_list": {
+    "description": "The string displayed when the cost list is empty",
+    "type": "text",
+    "placeholders": {}
+  },
+  "cost_selector_row_hint_cost": "Cost",
+  "@cost_selector_row_hint_cost": {
+    "description": "Hint inside the textfield to enter the cost",
+    "type": "text",
+    "placeholders": {}
+  },
+  "cost_selector_row_hint_description": "Description",
+  "@cost_selector_row_hint_description": {
+    "description": "Hint inside the textfield to enter the name/description",
+    "type": "text",
+    "placeholders": {}
+  },
+  "cost_selector_title": "Costs",
+  "@cost_selector_title": {
+    "description": "The title of the top row on the cost selector",
+    "type": "text",
+    "placeholders": {}
+  },
+  "cost_selector_add_cost": "Add a cost",
+  "@cost_selector_add_cost": {
+    "description": "Add cost button below the title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "cost_type_parts": "Parts",
+  "@cost_type_parts": {
+    "description": "Description of the cost type 'parts'",
+    "type": "text",
+    "placeholders": {}
+  },
+  "cost_type_labor": "Labor",
+  "@cost_type_labor": {
+    "description": "Description of the cost type 'labor'",
+    "type": "text",
+    "placeholders": {}
+  },
+  "cost_type_other": "Other",
+  "@cost_type_other": {
+    "description": "Description of the cost type 'other'",
+    "type": "text",
+    "placeholders": {}
+  },
+  "cost_total": "Total Cost",
+  "@cost_total": {
+    "description": "Total cost header",
+    "type": "text",
+    "placeholders": {}
+  },
+  "copyright": "Copyright © 2020 Ramble 'n' Ride.\nDefault motorcycle image by Pedro Henrique Santos.",
+  "@copyright": {
+    "description": "The copyright string used in the About dialog",
+    "type": "text",
+    "placeholders": {}
+  },
+  "dialog_add_button": "Add",
+  "@dialog_add_button": {
+    "description": "The caption on the add button at the bottom of a dialog",
+    "type": "text",
+    "placeholders": {}
+  },
+  "dialog_cancel_button": "Cancel",
+  "@dialog_cancel_button": {
+    "description": "The caption on the cancel button at the bottom of a dialog",
+    "type": "text",
+    "placeholders": {}
+  },
+  "dialog_delete_button": "Delete",
+  "@dialog_delete_button": {
+    "description": "Button caption in a delete dialog",
+    "type": "text",
+    "placeholders": {}
+  },
+  "dialog_discard_button": "Discard",
+  "@dialog_discard_button": {
+    "description": "The caption on the discard button at the bottom of a dialog",
+    "type": "text",
+    "placeholders": {}
+  },
+  "dialog_complete_button": "Complete",
+  "@dialog_complete_button": {
+    "description": "The caption on the 'complete' button at the bottom of a dialog",
+    "type": "text",
+    "placeholders": {}
+  },
+  "dialog_ok_button": "Ok",
+  "@dialog_ok_button": {
+    "description": "The caption on the ok button at the bottom of a dialog",
+    "type": "text",
+    "placeholders": {}
+  },
+  "dialog_save_button": "Save",
+  "@dialog_save_button": {
+    "description": "The caption on the save button at the bottom of a dialog",
+    "type": "text",
+    "placeholders": {}
+  },
+  "info_tab_enjoyed_for": "Enjoyed for",
+  "@info_tab_enjoyed_for": {
+    "description": "Generic string used in the info page.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "info_tab_over": "over",
+  "@info_tab_over": {
+    "description": "Generic string used in the info page.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedback_page_title": "Feedback",
+  "@feedback_page_title": {
+    "description": "The title of the feedback page.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedback_page_thanks": "We appreciate your feedback!",
+  "@feedback_page_thanks": {
+    "description": "Thank you note at the bottom of the feedback dialog.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedback_donate": "Donate",
+  "@feedback_donate": {
+    "description": "Donate feedback method.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedback_email": "Email",
+  "@feedback_email": {
+    "description": "Email feedback method.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedback_rate": "Rate on Play Store",
+  "@feedback_rate": {
+    "description": "Rate on play store feedback method.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "garage_import": "Import garage",
+  "@garage_import": {
+    "description": "Title of drawer option",
+    "type": "text",
+    "placeholders": {}
+  },
+  "garage_import_ignored": "{numIgnored,plural, =1{Import ignored 1 existing motorcycle.}other{Import ignored {numIgnored} existing motorcycles.}}",
+  "@garage_import_ignored": {
+    "description": "Snackbar notification when import ignores existing motorcycles",
+    "type": "text",
+    "placeholders": {
+      "numIgnored": {}
+    }
+  },
+  "garage_import_error": "Failed to import the garage.",
+  "@garage_import_error": {
+    "description": "Import error showed in the snackbar",
+    "type": "text",
+    "placeholders": {}
+  },
+  "garage_export": "Export garage",
+  "@garage_export": {
+    "description": "Title of drawer option",
+    "type": "text",
+    "placeholders": {}
+  },
+  "garage_export_error": "Failed to export the garage.",
+  "@garage_export_error": {
+    "description": "Export error showed in the snackbar",
+    "type": "text",
+    "placeholders": {}
+  },
+  "garage_page_title": "Garage",
+  "@garage_page_title": {
+    "description": "The title of the garage page",
+    "type": "text",
+    "placeholders": {}
+  },
+  "garage_page_empty_garage": "The garage is empty.",
+  "@garage_page_empty_garage": {
+    "description": "Tooltip shown when the garage is empty",
+    "type": "text",
+    "placeholders": {}
+  },
+  "garage_page_loading": "Loading the garage...",
+  "@garage_page_loading": {
+    "description": "Loading message on the garage page",
+    "type": "text",
+    "placeholders": {}
+  },
+  "snackbar_storage_error": "Storage error",
+  "@snackbar_storage_error": {
+    "description": "Error message from the storage displayed in a snack bar",
+    "type": "text",
+    "placeholders": {}
+  },
+  "garage_page_add_motorcycle_button": "Add a motorcycle to the garage",
+  "@garage_page_add_motorcycle_button": {
+    "description": "Description of the add button on the garage page.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "garage_page_sort_button_tooltip": "Sort the motorcycle list",
+  "@garage_page_sort_button_tooltip": {
+    "description": "Tooltip over the sort button",
+    "type": "text",
+    "placeholders": {}
+  },
+  "garage_page_sort_list_header": "Sort method:",
+  "@garage_page_sort_list_header": {
+    "description": "Header in the sort method selection list",
+    "type": "text",
+    "placeholders": {}
+  },
+  "garage_page_sort_list_alarms": "Alarms",
+  "@garage_page_sort_list_alarms": {
+    "description": "Motorcycle sort list option",
+    "type": "text",
+    "placeholders": {}
+  },
+  "garage_page_sort_list_make": "Make",
+  "@garage_page_sort_list_make": {
+    "description": "Motorcycle sort list option",
+    "type": "text",
+    "placeholders": {}
+  },
+  "garage_page_sort_list_name": "Name",
+  "@garage_page_sort_list_name": {
+    "description": "Motorcycle sort list option",
+    "type": "text",
+    "placeholders": {}
+  },
+  "garage_page_sort_list_year": "Year",
+  "@garage_page_sort_list_year": {
+    "description": "Motorcycle sort list option",
+    "type": "text",
+    "placeholders": {}
+  },
+  "homepage": "Visit homepage",
+  "@homepage": {
+    "description": "The text linking to the application home page",
+    "type": "text",
+    "placeholders": {}
+  },
+  "label_selector_title": "Labels",
+  "@label_selector_title": {
+    "description": "The title of the top row on the label selector",
+    "type": "text",
+    "placeholders": {}
+  },
+  "label_editor_name_hint": "Enter a name",
+  "@label_editor_name_hint": {
+    "description": "Hint inside the label editor edit boxes",
+    "type": "text",
+    "placeholders": {}
+  },
+  "label_editor_name_initial_hint_1": "Enter",
+  "@label_editor_name_initial_hint_1": {
+    "description": "Second line of the hint inside the label editor when opened first",
+    "type": "text",
+    "placeholders": {}
+  },
+  "label_editor_name_initial_hint_2": "the",
+  "@label_editor_name_initial_hint_2": {
+    "description": "Third line of the hint inside the label editor when opened first",
+    "type": "text",
+    "placeholders": {}
+  },
+  "label_editor_name_initial_hint_3": "name",
+  "@label_editor_name_initial_hint_3": {
+    "description": "Fourth line of the hint inside the label editor when opened first",
+    "type": "text",
+    "placeholders": {}
+  },
+  "label_editor_name_initial_hint_4": "of",
+  "@label_editor_name_initial_hint_4": {
+    "description": "Fifth line of the hint inside the label editor when opened first",
+    "type": "text",
+    "placeholders": {}
+  },
+  "label_editor_name_initial_hint_5": "your",
+  "@label_editor_name_initial_hint_5": {
+    "description": "Sixth line of the hint inside the label editor when opened first",
+    "type": "text",
+    "placeholders": {}
+  },
+  "label_editor_name_initial_hint_6": "labels",
+  "@label_editor_name_initial_hint_6": {
+    "description": "Seventh line of the hint inside the label editor when opened first",
+    "type": "text",
+    "placeholders": {}
+  },
+  "label_editor_name_initial_hint_7": "here",
+  "@label_editor_name_initial_hint_7": {
+    "description": "First line of the hint inside the label editor when opened first",
+    "type": "text",
+    "placeholders": {}
+  },
+  "motorcycle": "Motorcycle",
+  "@motorcycle": {
+    "description": "Just the word motorcycle.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "motorcycle_image_load_failed": "Failed to load the motorcycle image.",
+  "@motorcycle_image_load_failed": {
+    "description": "Error displayed instead of image.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "motorcycle_delete_dialog_title": "Delete Motorcycle",
+  "@motorcycle_delete_dialog_title": {
+    "description": "Title of the motorcycle delete dialog",
+    "type": "text",
+    "placeholders": {}
+  },
+  "motorcycle_delete_dialog_text": "Are you sure you want to remove {motoName} from your garage?",
+  "@motorcycle_delete_dialog_text": {
+    "description": "Text of the motorcycle delete dialog",
+    "type": "text",
+    "placeholders": {
+      "motoName": {}
+    }
+  },
+  "motorcycle_task_template_page_title": "Add tasks",
+  "@motorcycle_task_template_page_title": {
+    "description": "The title of the page to  import tasks from a motorcycle template",
+    "type": "text",
+    "placeholders": {}
+  },
+  "motorcycle_task_template_page_help_dialog_title": "About templates.",
+  "@motorcycle_task_template_page_help_dialog_title": {
+    "description": "Title of the template import help dialog template",
+    "type": "text",
+    "placeholders": {}
+  },
+  "motorcycle_task_template_page_error_loading_index": "Failed to download the motorcycle index. Internet access is required.",
+  "@motorcycle_task_template_page_error_loading_index": {
+    "description": "Error when the index file cannot be downloaded",
+    "type": "text",
+    "placeholders": {}
+  },
+  "motorcycle_task_template_page_error_loading_motorcycle": "Failed to download the motorcycle task file. Internet access is required.",
+  "@motorcycle_task_template_page_error_loading_motorcycle": {
+    "description": "Error when a motorcycle file cannot be downloaded",
+    "type": "text",
+    "placeholders": {}
+  },
+  "motorcycle_task_template_page_help_dialog": "Motorcycle task templates are created by users like you. To help us maintain this list, please visit the Motorcycle Service DB website by clicking the icon below.",
+  "@motorcycle_task_template_page_help_dialog": {
+    "description": "Text describing task template creation",
+    "type": "text",
+    "placeholders": {}
+  },
+  "motorcycle_task_template_page_disclaimer": "Disclaimer: We cannot be held responsible for errors in the templates. Always refer to the owner's manual.",
+  "@motorcycle_task_template_page_disclaimer": {
+    "description": "Disclaimer at the bottom of the task template import page",
+    "type": "text",
+    "placeholders": {}
+  },
+  "motorcycle_task_template_page_add_button": "Add",
+  "@motorcycle_task_template_page_add_button": {
+    "description": "Add button label at the top of the page",
+    "type": "text",
+    "placeholders": {}
+  },
+  "motorcycle_task_template_page_note_name": "Template Note",
+  "@motorcycle_task_template_page_note_name": {
+    "description": "Name set on the imported notes",
+    "type": "text",
+    "placeholders": {}
+  },
+  "motorcycle_task_template_page_search_hint": "Select a template",
+  "@motorcycle_task_template_page_search_hint": {
+    "description": "Hint text on the template search form",
+    "type": "text",
+    "placeholders": {}
+  },
+  "motorcycle_task_template_page_empty_list": "No template",
+  "@motorcycle_task_template_page_empty_list": {
+    "description": "Text displayed when the list of templates is empty",
+    "type": "text",
+    "placeholders": {}
+  },
+  "motorcycle_task_template_page_loading_templates": "Loading templates...",
+  "@motorcycle_task_template_page_loading_templates": {
+    "description": "Text displayed while loading the templates",
+    "type": "text",
+    "placeholders": {}
+  },
+  "motorcycle_task_template_page_select_task_header": "Select the tasks to add",
+  "@motorcycle_task_template_page_select_task_header": {
+    "description": "Header above the list of tasks that can be imported",
+    "type": "text",
+    "placeholders": {}
+  },
+  "motorcycle_task_template_page_task_icon_tooltip_recurring": "Recurring task",
+  "@motorcycle_task_template_page_task_icon_tooltip_recurring": {
+    "description": "Tooltip over the icon of recurring tasks",
+    "type": "text",
+    "placeholders": {}
+  },
+  "motorcycle_task_template_page_task_icon_tooltip_fixed": "Fixed task",
+  "@motorcycle_task_template_page_task_icon_tooltip_fixed": {
+    "description": "Tooltip over the icon of tasks at fixed time/distance",
+    "type": "text",
+    "placeholders": {}
+  },
+  "motorcycle_task_template_page_task_add_switch_tooltip": "Add to motorcycle",
+  "@motorcycle_task_template_page_task_add_switch_tooltip": {
+    "description": "Tooltip over switch to enable/disable the importation of a task",
+    "type": "text",
+    "placeholders": {}
+  },
+  "motorcycle_view_page_appbar_icon_odometer": "Update Odometer",
+  "@motorcycle_view_page_appbar_icon_odometer": {
+    "description": "Tooltip over the appbar button to update the odometer",
+    "type": "text",
+    "placeholders": {}
+  },
+  "motorcycle_view_page_appbar_title_tasks_selected": "{numTasks,plural, other{{numTasks} selected}}",
+  "@motorcycle_view_page_appbar_title_tasks_selected": {
+    "description": "Label of the app bar when multiple tasks are selected",
+    "type": "text",
+    "placeholders": {
+      "numTasks": {}
+    }
+  },
+  "motorcycle_view_page_appbar_tooltip_icon_close": "Complete tasks",
+  "@motorcycle_view_page_appbar_tooltip_icon_close": {
+    "description": "Tooltip over the appbar button to close multiple tasks",
+    "type": "text",
+    "placeholders": {}
+  },
+  "motorcycle_view_page_appbar_tooltip_icon_delete": "Delete tasks",
+  "@motorcycle_view_page_appbar_tooltip_icon_delete": {
+    "description": "Tooltip over the appbar button to delete multiple tasks",
+    "type": "text",
+    "placeholders": {}
+  },
+  "motorcycle_view_page_delete_tasks_dialog_text": "{numTasks,plural, =1{Delete the selected task?}other{Delete the {numTasks} selected tasks?}}",
+  "@motorcycle_view_page_delete_tasks_dialog_text": {
+    "description": "Tooltip over the appbar button to delete multiple tasks",
+    "type": "text",
+    "placeholders": {
+      "numTasks": {}
+    }
+  },
+  "motorcycle_view_page_appbar_odometer_textfield_prefix": "Current Odometer:",
+  "@motorcycle_view_page_appbar_odometer_textfield_prefix": {
+    "description": "Text before the appbar textfield to update the odometer",
+    "type": "text",
+    "placeholders": {}
+  },
+  "motorcycle_view_appbar_popop_add_tasks": "Add tasks from template",
+  "@motorcycle_view_appbar_popop_add_tasks": {
+    "description": "App bar popup menu option",
+    "type": "text",
+    "placeholders": {}
+  },
+  "motorcycle_view_appbar_popop_edit_moto": "Edit motorcycle",
+  "@motorcycle_view_appbar_popop_edit_moto": {
+    "description": "App bar popup menu option",
+    "type": "text",
+    "placeholders": {}
+  },
+  "motorcycle_view_appbar_popop_delete_moto": "Delete motorcycle",
+  "@motorcycle_view_appbar_popop_delete_moto": {
+    "description": "App bar popup menu option",
+    "type": "text",
+    "placeholders": {}
+  },
+  "motorcycle_view_page_appbar_filter_hint": "Filter tasks",
+  "@motorcycle_view_page_appbar_filter_hint": {
+    "description": "Tab hint in the task filter of the motorcycle view page appbar",
+    "type": "text",
+    "placeholders": {}
+  },
+  "motorcycle_view_page_appbar_tab_tasks": "TASKS",
+  "@motorcycle_view_page_appbar_tab_tasks": {
+    "description": "Tab label in the  motorcycle view page appbar",
+    "type": "text",
+    "placeholders": {}
+  },
+  "motorcycle_view_page_appbar_tab_history": "HISTORY",
+  "@motorcycle_view_page_appbar_tab_history": {
+    "description": "Tab label in the  motorcycle view page appbar",
+    "type": "text",
+    "placeholders": {}
+  },
+  "motorcycle_view_page_appbar_tab_info": "INFO",
+  "@motorcycle_view_page_appbar_tab_info": {
+    "description": "Tab label in the  motorcycle view page appbar",
+    "type": "text",
+    "placeholders": {}
+  },
+  "motorcycle_view_page_tooltip_no_task": "No task",
+  "@motorcycle_view_page_tooltip_no_task": {
+    "description": "Tooltip over the icon when the task list is empty",
+    "type": "text",
+    "placeholders": {}
+  },
+  "motorcycle_view_task_button_add_task_tooltip": "Add a task",
+  "@motorcycle_view_task_button_add_task_tooltip": {
+    "description": "Floating button to add a new task",
+    "type": "text",
+    "placeholders": {}
+  },
+  "motorcycle_edit_page_image_selection_empty": "No image selected",
+  "@motorcycle_edit_page_image_selection_empty": {
+    "description": "Caption displayed in the image box when no image is selected.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "motorcycle_edit_page_image_selection_tooltip": "Select an image",
+  "@motorcycle_edit_page_image_selection_tooltip": {
+    "description": "Tooltip over the image selection box.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "motorcycle_edit_page_title_edit": "Edit Motorcycle",
+  "@motorcycle_edit_page_title_edit": {
+    "description": "Title of the motorcycle edit page.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "motorcycle_edit_page_title_add": "New Motorcycle",
+  "@motorcycle_edit_page_title_add": {
+    "description": "Title of the motorcycle add page.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "motorcycle_edit_page_name_prop_color": "COLOR",
+  "@motorcycle_edit_page_name_prop_color": {
+    "description": "Title of the property.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "motorcycle_edit_page_name_prop_name": "NAME",
+  "@motorcycle_edit_page_name_prop_name": {
+    "description": "Title of the property.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "motorcycle_edit_page_name_prop_odometer": "ODOMETER",
+  "@motorcycle_edit_page_name_prop_odometer": {
+    "description": "Title of the property.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "motorcycle_edit_page_name_prop_purchase_odometer": "ODOMETER AT PURCHASE",
+  "@motorcycle_edit_page_name_prop_purchase_odometer": {
+    "description": "Title of the property.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "motorcycle_edit_page_name_prop_licence_plate": "LICENSE PLATE",
+  "@motorcycle_edit_page_name_prop_licence_plate": {
+    "description": "Title of the property.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "motorcycle_edit_page_name_prop_make": "MAKE",
+  "@motorcycle_edit_page_name_prop_make": {
+    "description": "Title of the property.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "motorcycle_edit_page_name_prop_model": "MODEL",
+  "@motorcycle_edit_page_name_prop_model": {
+    "description": "Title of the property.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "motorcycle_edit_page_name_prop_year": "YEAR",
+  "@motorcycle_edit_page_name_prop_year": {
+    "description": "Title of the property.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "motorcycle_edit_page_name_prop_vin": "VIN",
+  "@motorcycle_edit_page_name_prop_vin": {
+    "description": "Title of the property.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "motorcycle_edit_page_name_prop_price": "PRICE",
+  "@motorcycle_edit_page_name_prop_price": {
+    "description": "Title of the property.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "motorcycle_edit_page_name_prop_date": "DATE",
+  "@motorcycle_edit_page_name_prop_date": {
+    "description": "Title of the property.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "motorcycle_edit_page_name_prop_purchase_date": "PURCHASE DATE",
+  "@motorcycle_edit_page_name_prop_purchase_date": {
+    "description": "Title of the property.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "motorcycle_edit_page_name_prop_tech_level": "TECHNICAL LEVEL",
+  "@motorcycle_edit_page_name_prop_tech_level": {
+    "description": "Title of the property.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "motorcycle_edit_page_name_prop_effort_level": "EFFORT LEVEL",
+  "@motorcycle_edit_page_name_prop_effort_level": {
+    "description": "Title of the property.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "motorcycle_edit_page_section_header_moto_info": "Motorcycle Information",
+  "@motorcycle_edit_page_section_header_moto_info": {
+    "description": "Title at the top of the section.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "motorcycle_edit_page_section_header_purchase_info": "Purchase Information",
+  "@motorcycle_edit_page_section_header_purchase_info": {
+    "description": "Title at the top of the section.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "motorcycle_edit_page_section_header_notes": "Notes",
+  "@motorcycle_edit_page_section_header_notes": {
+    "description": "Title of the property.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "motorcycle_edit_page_hint_prop_color": "Enter color",
+  "@motorcycle_edit_page_hint_prop_color": {
+    "description": "Textfield hint.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "motorcycle_edit_page_hint_prop_name": "Enter name",
+  "@motorcycle_edit_page_hint_prop_name": {
+    "description": "Textfield hint.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "motorcycle_edit_page_hint_prop_odometer": "Enter odometer",
+  "@motorcycle_edit_page_hint_prop_odometer": {
+    "description": "Textfield hint.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "motorcycle_edit_page_hint_prop_licence_plate": "Enter license",
+  "@motorcycle_edit_page_hint_prop_licence_plate": {
+    "description": "Textfield hint.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "motorcycle_edit_page_hint_prop_make": "Enter make",
+  "@motorcycle_edit_page_hint_prop_make": {
+    "description": "Textfield hint.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "motorcycle_edit_page_hint_prop_model": "Enter model",
+  "@motorcycle_edit_page_hint_prop_model": {
+    "description": "Textfield hint.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "motorcycle_edit_page_hint_prop_year": "Enter year",
+  "@motorcycle_edit_page_hint_prop_year": {
+    "description": "Textfield hint.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "motorcycle_edit_page_hint_prop_vin": "Enter VIN",
+  "@motorcycle_edit_page_hint_prop_vin": {
+    "description": "Textfield hint.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "motorcycle_edit_page_hint_prop_purchase_date": "Enter purchase date",
+  "@motorcycle_edit_page_hint_prop_purchase_date": {
+    "description": "Textfield hint.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "motorcycle_edit_page_hint_prop_purchase_price": "Enter purchase price",
+  "@motorcycle_edit_page_hint_prop_purchase_price": {
+    "description": "Textfield hint.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "note_last_updated": "Last updated",
+  "@note_last_updated": {
+    "description": "Text displayed before that date of the last update.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "note_selector_add_note": "Add a note",
+  "@note_selector_add_note": {
+    "description": "Add note button below the title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "note_selector_empty_list": "No note entered",
+  "@note_selector_empty_list": {
+    "description": "The string displayed when the note list is empty",
+    "type": "text",
+    "placeholders": {}
+  },
+  "privacy_policy": "Privacy Policy",
+  "@privacy_policy": {
+    "description": "Name of the link to the privacy policy.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "property_name_missing_error": "Please enter a name",
+  "@property_name_missing_error": {
+    "description": "The name of a property is missing.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "recurring_task_dialog_title": "Recurring schedule",
+  "@recurring_task_dialog_title": {
+    "description": "The title of the dialog to edit a recurring schedule",
+    "type": "text",
+    "placeholders": {}
+  },
+  "recurring_task_dialog_duration_prop_name": "EVERY",
+  "@recurring_task_dialog_duration_prop_name": {
+    "description": "The name of the property setting the recurrence in months",
+    "type": "text",
+    "placeholders": {}
+  },
+  "recurring_task_dialog_duration_prop_hint": "Enter time",
+  "@recurring_task_dialog_duration_prop_hint": {
+    "description": "The hint of the property setting the recurrence in months",
+    "type": "text",
+    "placeholders": {}
+  },
+  "recurring_task_dialog_duration_months": "months",
+  "@recurring_task_dialog_duration_months": {
+    "description": "The suffix after the textbox to input the number of months",
+    "type": "text",
+    "placeholders": {}
+  },
+  "recurring_task_dialog_distance_prop_name": "EVERY",
+  "@recurring_task_dialog_distance_prop_name": {
+    "description": "The name of the property setting the recurrence in kilometers",
+    "type": "text",
+    "placeholders": {}
+  },
+  "recurring_task_dialog_distance_prop_hint": "Enter distance",
+  "@recurring_task_dialog_distance_prop_hint": {
+    "description": "The hint of the property setting the recurrence in kilometers",
+    "type": "text",
+    "placeholders": {}
+  },
+  "renew_task_dialog_title": "Renew recurring task",
+  "@renew_task_dialog_title": {
+    "description": "The title of the dialog to renew a recurring task",
+    "type": "text",
+    "placeholders": {}
+  },
+  "renew_task_dialog_date_prop_name": "NEXT DATE",
+  "@renew_task_dialog_date_prop_name": {
+    "description": "The name of the renew task, target date property",
+    "type": "text",
+    "placeholders": {}
+  },
+  "renew_task_dialog_odometer_prop_name": "NEXT ODOMETER",
+  "@renew_task_dialog_odometer_prop_name": {
+    "description": "The name of the renew task, target odometer property",
+    "type": "text",
+    "placeholders": {}
+  },
+  "renew_task_dialog_date_prop_hint": "Enter date",
+  "@renew_task_dialog_date_prop_hint": {
+    "description": "The hint of the renew task, target date property",
+    "type": "text",
+    "placeholders": {}
+  },
+  "renew_task_dialog_odometer_prop_hint": "Enter odometer",
+  "@renew_task_dialog_odometer_prop_hint": {
+    "description": "The hint of the renew task, target odometer property",
+    "type": "text",
+    "placeholders": {}
+  },
+  "settings_page_title": "Settings",
+  "@settings_page_title": {
+    "description": "The title of the settings page.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "settings_page_localization_header": "Localization",
+  "@settings_page_localization_header": {
+    "description": "The title of the localization section.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "settings_page_labels_header": "Labels",
+  "@settings_page_labels_header": {
+    "description": "The title of the labels section.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "settings_page_language_prop_name": "LANGUAGE",
+  "@settings_page_language_prop_name": {
+    "description": "The name of the language property",
+    "type": "text",
+    "placeholders": {}
+  },
+  "settings_page_date_format_prop_name": "DATE FORMAT",
+  "@settings_page_date_format_prop_name": {
+    "description": "The name of the date format property",
+    "type": "text",
+    "placeholders": {}
+  },
+  "settings_page_currency_prop_name": "CURRENCY",
+  "@settings_page_currency_prop_name": {
+    "description": "The name of the currency property",
+    "type": "text",
+    "placeholders": {}
+  },
+  "settings_page_distance_prop_name": "DISTANCE UNIT",
+  "@settings_page_distance_prop_name": {
+    "description": "The name of the distance property",
+    "type": "text",
+    "placeholders": {}
+  },
+  "settings_page_notifications_prop_name": "NOTIFICATIONS",
+  "@settings_page_notifications_prop_name": {
+    "description": "The name of the notifications property",
+    "type": "text",
+    "placeholders": {}
+  },
+  "settings_page_select_color": "Select a color",
+  "@settings_page_select_color": {
+    "description": "Title of the dialog box to select a new label color",
+    "type": "text",
+    "placeholders": {}
+  },
+  "snackbar_copy_to_clipboard": "Copied \"{item}\" to the clipboard.",
+  "@snackbar_copy_to_clipboard": {
+    "description": "Snackbar message when something is added to the clipboard",
+    "type": "text",
+    "placeholders": {
+      "item": {}
+    }
+  },
+  "task_edit_page_header_schedule": "Schedule",
+  "@task_edit_page_header_schedule": {
+    "description": "Header of the schedule section.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "task_edit_page_header_closed_schedule": "Completion Information",
+  "@task_edit_page_header_closed_schedule": {
+    "description": "Header of the schedule section for closed tasks.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "task_edit_page_title_edit": "Edit Task",
+  "@task_edit_page_title_edit": {
+    "description": "Title of the task edit page.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "task_edit_page_title_edit_closed": "Edit Completed Task",
+  "@task_edit_page_title_edit_closed": {
+    "description": "Title of the task edit page for a closed task.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "task_edit_page_title_add": "New Task",
+  "@task_edit_page_title_add": {
+    "description": "Title of the task add page.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "task_edit_page_action_close": "Complete task",
+  "@task_edit_page_action_close": {
+    "description": "Label of the menu item to close/complete the task.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "task_edit_page_action_reopen": "Reopen task",
+  "@task_edit_page_action_reopen": {
+    "description": "Label of the menu item to reopen a closed task.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "task_edit_page_action_delete": "Delete task",
+  "@task_edit_page_action_delete": {
+    "description": "Label of the menu item to delete the task.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "task_edit_page_tooltip_add_to_calendar": "Add to calendar",
+  "@task_edit_page_tooltip_add_to_calendar": {
+    "description": "Button that opens the default calender to add the task",
+    "type": "text",
+    "placeholders": {}
+  },
+  "task_edit_page_tooltip_recurring_button": "Setup recurring task",
+  "@task_edit_page_tooltip_recurring_button": {
+    "description": "Button that opens the recurring task setup dialog",
+    "type": "text",
+    "placeholders": {}
+  },
+  "task_edit_page_name_prop_name": "NAME",
+  "@task_edit_page_name_prop_name": {
+    "description": "Title of the property.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "task_edit_page_name_prop_description": "DESCRIPTION",
+  "@task_edit_page_name_prop_description": {
+    "description": "Title of the property.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "task_edit_page_name_prop_executor": "DONE BY",
+  "@task_edit_page_name_prop_executor": {
+    "description": "Title of the property.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "task_edit_page_hint_prop_name": "Enter the task name",
+  "@task_edit_page_hint_prop_name": {
+    "description": "Textfield hint.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "task_edit_page_hint_prop_description": "Enter description",
+  "@task_edit_page_hint_prop_description": {
+    "description": "Textfield hint.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "task_edit_page_hint_prop_executor": "Enter name",
+  "@task_edit_page_hint_prop_executor": {
+    "description": "Textfield hint.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "task_edit_page_hint_prop_tech_level": "Select technical level",
+  "@task_edit_page_hint_prop_tech_level": {
+    "description": "Tooltip hint for the property.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "task_edit_page_hint_prop_effort_level": "Select effort level",
+  "@task_edit_page_hint_prop_effort_level": {
+    "description": "Tooltip hint for the property.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "task_edit_page_tooltip_button_tech_level_none": "Unknown difficulty level",
+  "@task_edit_page_tooltip_button_tech_level_none": {
+    "description": "Tooltip hint for the property.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "task_edit_page_tooltip_button_tech_level_easy": "Easy task",
+  "@task_edit_page_tooltip_button_tech_level_easy": {
+    "description": "Tooltip hint for the property.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "task_edit_page_tooltip_button_tech_level_intermediate": "Intermediate task",
+  "@task_edit_page_tooltip_button_tech_level_intermediate": {
+    "description": "Tooltip hint for the property.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "task_edit_page_tooltip_button_tech_level_difficult": "Difficult task",
+  "@task_edit_page_tooltip_button_tech_level_difficult": {
+    "description": "Tooltip hint for the property.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "task_edit_page_tooltip_button_effort_level_none": "Unknown effort level",
+  "@task_edit_page_tooltip_button_effort_level_none": {
+    "description": "Tooltip hint for the property.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "task_edit_page_tooltip_button_effort_level_small": "Small task",
+  "@task_edit_page_tooltip_button_effort_level_small": {
+    "description": "Tooltip hint for the property.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "task_edit_page_tooltip_button_effort_level_medium": "Medium task",
+  "@task_edit_page_tooltip_button_effort_level_medium": {
+    "description": "Tooltip hint for the property.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "task_edit_page_tooltip_button_effort_level_large": "Large task",
+  "@task_edit_page_tooltip_button_effort_level_large": {
+    "description": "Tooltip hint for the property.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "task_edit_page_hint_prop_date": "Enter target date",
+  "@task_edit_page_hint_prop_date": {
+    "description": "Textfield hint for the property.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "renewable": "Renewable",
+  "@renewable": {
+    "description": "Name of the property indicating if an element should be kept on renewal",
+    "type": "text",
+    "placeholders": {}
+  },
+  "renewable_tooltip": "Whether the element is copied when the task is renewed.",
+  "@renewable_tooltip": {
+    "description": "Name of the property indicating if an element should be kept on renewal",
+    "type": "text",
+    "placeholders": {}
+  },
+  "task_delete_dialog_text": "Are you sure you want to delete the task: '{taskName}' ?",
+  "@task_delete_dialog_text": {
+    "description": "Text of the task delete dialog",
+    "type": "text",
+    "placeholders": {
+      "taskName": {}
+    }
+  },
+  "tooltip_reset_date": "Reset the date",
+  "@tooltip_reset_date": {
+    "description": "The tooltip over a button that erases the value in a date field",
+    "type": "text",
+    "placeholders": {}
+  },
+  "unit_days": "{numDays,plural, =1{day}other{days}}",
+  "@unit_days": {
+    "description": "String indicating a number of days",
+    "type": "text",
+    "placeholders": {
+      "numDays": {}
+    }
+  },
+  "unit_years": "{numYears,plural, =1{year}other{years}}",
+  "@unit_years": {
+    "description": "String indicating a number of years",
+    "type": "text",
+    "placeholders": {
+      "numYears": {}
+    }
+  }
+}
