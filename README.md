@@ -17,3 +17,9 @@ A functional motorcycle maintenance app to replace those pesky spreadsheets. Bui
 [![License: MPL 2.0](https://img.shields.io/badge/License-MPL%202.0-brightgreen.svg)](https://opensource.org/licenses/MPL-2.0)
 
 This work is licensed under the [Mozilla Public License Version 2.0](https://www.mozilla.org/en-US/MPL/2.0/).
+
+## PlayStore
+
+<a href='https://play.google.com/store/apps/details?id=com.ramblenride.moto_mecanico&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" align="center" height="64"></a>
+
+_Google Play and the Google Play logo are trademarks of Google LLC._
