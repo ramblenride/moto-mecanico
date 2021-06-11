@@ -8,6 +8,7 @@ import 'package:moto_mecanico/dialogs/complete_task_dialog.dart';
 import 'package:moto_mecanico/dialogs/delete_dialog.dart';
 import 'package:moto_mecanico/dialogs/recurring_task_dialog.dart';
 import 'package:moto_mecanico/locale/formats.dart';
+import 'package:moto_mecanico/models/attachment.dart';
 import 'package:moto_mecanico/models/distance.dart';
 import 'package:moto_mecanico/models/motorcycle.dart';
 import 'package:moto_mecanico/models/task.dart';
@@ -43,8 +44,11 @@ class _TaskEditPageState extends State<TaskEditPage> {
   _TaskEditPageState({this.task}) {
     _isNew = false;
     if (task == null) {
-      task = Task(name: '');
       _isNew = true;
+
+      // Correctly create the task to track images/attachments
+      // The task will be removed if the user leaves the page without adding it.
+      task = Task(name: '');
     }
   }
 
@@ -68,11 +72,10 @@ class _TaskEditPageState extends State<TaskEditPage> {
     super.dispose();
   }
 
-  bool _saveTask() {
+  bool _validateAndSaveTask() {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-      widget.motorcycle.addTask(task);
-      widget.motorcycle.saveChanges();
+      _saveTask();
       return true;
     }
     return false;
@@ -521,7 +524,12 @@ class _TaskEditPageState extends State<TaskEditPage> {
 
     return WillPopScope(
       onWillPop: () async {
-        return _isNew ? true : _saveTask();
+        if (_isNew) {
+          _deleteTask();
+          return true;
+        } else {
+          return _validateAndSaveTask();
+        }
       },
       child: Scaffold(
         appBar: AppBar(
@@ -550,7 +558,7 @@ class _TaskEditPageState extends State<TaskEditPage> {
                       icon: Icon(Icons.delete_outline),
                       tooltip: AppLocalizations.of(context)
                           .task_edit_page_action_delete,
-                      onPressed: _deleteTask,
+                      onPressed: _deleteTaskDialog,
                     ),
                   ),
             Container(
@@ -608,20 +616,20 @@ class _TaskEditPageState extends State<TaskEditPage> {
   }
 
   void _addTask() {
-    if (_saveTask()) {
+    if (_validateAndSaveTask()) {
       Navigator.pop(context);
     }
   }
 
   Future<void> _closeTask() async {
-    if (_saveTask()) {
+    if (_validateAndSaveTask()) {
       final result = await _showTaskCompleteDialog();
       if (result != null && result) {
         if (task.recurring) {
           final newTask = Task.fromRenew(task);
           if (newTask != null) {
             final storage = widget.motorcycle.storage.storage;
-            await Task.transferAttachments(task, storage, storage);
+            await Task.transferAttachments(newTask, storage, storage);
             widget.motorcycle.addTask(newTask);
           }
         }
@@ -632,14 +640,14 @@ class _TaskEditPageState extends State<TaskEditPage> {
   }
 
   void _reopenTask() {
-    if (_saveTask()) {
+    if (_validateAndSaveTask()) {
       task.closed = false;
       widget.motorcycle.saveChanges();
       Navigator.pop(context, true);
     }
   }
 
-  Future<void> _deleteTask() async {
+  Future<void> _deleteTaskDialog() async {
     final result = await showDialog<bool>(
       context: context,
       builder: (BuildContext context) {
@@ -654,9 +662,25 @@ class _TaskEditPageState extends State<TaskEditPage> {
       },
     );
     if (result) {
-      widget.motorcycle.removeTask(task);
-      widget.motorcycle.saveChanges();
+      _deleteTask();
       Navigator.pop(context, true);
     }
+  }
+
+  void _deleteTask() {
+    widget.motorcycle.removeTask(task);
+    task.attachments.forEach((attachment) {
+      // FIXME: This should be centralized
+      if (attachment.type == AttachmentType.file ||
+          attachment.type == AttachmentType.picture) {
+        widget.motorcycle.storage.storage.deleteFile(attachment.url);
+      }
+    });
+    widget.motorcycle.saveChanges();
+  }
+
+  void _saveTask() {
+    widget.motorcycle.addTask(task);
+    widget.motorcycle.saveChanges();
   }
 }

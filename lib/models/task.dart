@@ -351,6 +351,7 @@ class Task implements Comparable<dynamic> {
           name: attachment.name,
           type: attachment.type,
           url: url,
+          copyable: attachment.copyable,
         ));
 
         toRemove.add(attachment);

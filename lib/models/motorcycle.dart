@@ -71,7 +71,7 @@ class Motorcycle extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool addTask(task) {
+  bool addTask(Task task) {
     if (_tasks.contains(task)) {
       return false;
     }
@@ -80,7 +80,7 @@ class Motorcycle extends ChangeNotifier {
     return true;
   }
 
-  bool removeTask(task) {
+  bool removeTask(Task task) {
     return _tasks.remove(task);
   }
 

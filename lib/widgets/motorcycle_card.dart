@@ -53,19 +53,21 @@ class MotorcycleCard extends StatelessWidget {
                           }
                         }),
                   ),
-                  Positioned(
-                    bottom: 16.0,
-                    left: 16.0,
-                    right: 16.0,
-                    child: FittedBox(
-                      fit: BoxFit.scaleDown,
-                      alignment: Alignment.bottomLeft,
-                      child: Text(
-                        motorcycle.name,
-                        style: titleStyle,
-                      ),
-                    ),
-                  ),
+                  motorcycle.name.isNotEmpty
+                      ? Positioned(
+                          bottom: 16.0,
+                          left: 16.0,
+                          right: 16.0,
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            alignment: Alignment.bottomLeft,
+                            child: Text(
+                              motorcycle.name,
+                              style: titleStyle,
+                            ),
+                          ),
+                        )
+                      : Container(),
                 ],
               ),
             ),

@@ -73,8 +73,12 @@ class _MotorcycleEditPageState extends State<MotorcycleEditPage> {
     }
   }
 
-  void _addMotorcycleToGarage(Motorcycle moto) {
-    Provider.of<GarageModel>(context, listen: false).add(motorcycle);
+  void _addMotorcycleToGarage(Motorcycle moto) async {
+    await Provider.of<GarageModel>(context, listen: false).add(moto);
+  }
+
+  void _removeMotorcycleFromGarage(Motorcycle moto) async {
+    await Provider.of<GarageModel>(context, listen: false).remove(moto);
   }
 
   Future<bool> _saveMotorcycle() async {
@@ -91,11 +95,9 @@ class _MotorcycleEditPageState extends State<MotorcycleEditPage> {
         }
         motorcycle.picture = await motorcycle.storage.addMotoFile(_image.path);
       }
-      if (_isNew) {
-        _addMotorcycleToGarage(motorcycle); // Don't wait for the result
-      } else {
-        motorcycle.saveChanges();
-      }
+
+      motorcycle.saveChanges();
+
       return true;
     }
     return false;
@@ -429,10 +431,13 @@ class _MotorcycleEditPageState extends State<MotorcycleEditPage> {
     super.didChangeDependencies();
 
     if (motorcycle == null) {
+      // Correctly create the motorcycle to track images/attachments
+      // The motorcycle will be removed if the user leaves the page without adding it.
       motorcycle = Motorcycle(name: '');
-      // FIXME: This is terrible
       motorcycle.storage = MotorcycleLocalStorage(motoId: motorcycle.id);
       await motorcycle.storage.connect();
+      await _addMotorcycleToGarage(motorcycle);
+
       _isNew = true;
     }
 
@@ -451,7 +456,12 @@ class _MotorcycleEditPageState extends State<MotorcycleEditPage> {
 
     return WillPopScope(
       onWillPop: () async {
-        return _isNew ? true : await _saveMotorcycle();
+        if (_isNew) {
+          await _removeMotorcycleFromGarage(motorcycle);
+          return true;
+        } else {
+          return await _saveMotorcycle();
+        }
       },
       child: Scaffold(
         appBar: AppBar(
@@ -503,10 +513,7 @@ class _MotorcycleEditPageState extends State<MotorcycleEditPage> {
                               },
                             );
                             if (result != null && result) {
-                              Provider.of<GarageModel>(
-                                context,
-                                listen: false,
-                              ).remove(motorcycle);
+                              await _removeMotorcycleFromGarage(motorcycle);
 
                               while (Navigator.of(context).canPop()) {
                                 Navigator.of(context).pop();

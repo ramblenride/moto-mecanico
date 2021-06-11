@@ -5,6 +5,7 @@ import 'package:moto_mecanico/assets.dart';
 import 'package:moto_mecanico/dialogs/complete_task_dialog.dart';
 import 'package:moto_mecanico/dialogs/delete_dialog.dart';
 import 'package:moto_mecanico/locale/formats.dart';
+import 'package:moto_mecanico/models/attachment.dart';
 import 'package:moto_mecanico/models/distance.dart';
 import 'package:moto_mecanico/models/labels.dart';
 import 'package:moto_mecanico/models/motorcycle.dart';
@@ -128,7 +129,7 @@ class _MotorcycleViewPageState extends State<MotorcycleViewPage>
       final newTask = Task.fromRenew(task);
       if (newTask != null) {
         final storage = motorcycle.storage.storage;
-        await Task.transferAttachments(task, storage, storage);
+        await Task.transferAttachments(newTask, storage, storage);
         motorcycle.addTask(newTask);
       }
     }
@@ -313,7 +314,16 @@ class _MotorcycleViewPageState extends State<MotorcycleViewPage>
       },
     );
     if (result) {
-      _selectedTasks.forEach(motorcycle.removeTask);
+      _selectedTasks.forEach((task) {
+        motorcycle.removeTask(task);
+        task.attachments.forEach((attachment) {
+          // FIXME: This should be centralized
+          if (attachment.type == AttachmentType.file ||
+              attachment.type == AttachmentType.picture) {
+            motorcycle.storage.storage.deleteFile(attachment.url);
+          }
+        });
+      });
       _selectedTasks.clear();
       motorcycle.saveChanges();
     }
