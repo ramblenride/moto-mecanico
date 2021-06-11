@@ -55,7 +55,7 @@ class MotorcycleInfoTab extends StatelessWidget {
                           image: imageProvider.data,
                           fit: BoxFit.contain,
                         );
-                      } else {
+                      } else if (imageProvider.hasError) {
                         return Container(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -70,6 +70,8 @@ class MotorcycleInfoTab extends StatelessWidget {
                             ],
                           ),
                         );
+                      } else {
+                        return Icon(Icons.image_search);
                       }
                     },
                   ),
