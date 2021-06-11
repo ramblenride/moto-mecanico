@@ -7,7 +7,7 @@ import 'package:moto_mecanico/storage/local_file_storage.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 
-const ARCHIVE_NAME = 'moto_mechanico_archive.zip';
+const ARCHIVE_NAME = 'moto_mecanico_archive.zip';
 
 class GarageImportExport {
   // NOTE: This will get more complex once the app supports remote repositories.
