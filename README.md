@@ -12,6 +12,12 @@ A functional motorcycle maintenance app to replace those pesky spreadsheets. Bui
 * Open source on GitHub.
 * Available in English, French, and Spanish.
 
+## What's Coming Next
+
+* Notifcations when tasks are due.
+* Sharing motorcycle between different devices/people.
+* iOS release.
+
 ## License
 
 [![License: MPL 2.0](https://img.shields.io/badge/License-MPL%202.0-brightgreen.svg)](https://opensource.org/licenses/MPL-2.0)
