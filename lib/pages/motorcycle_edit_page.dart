@@ -66,7 +66,7 @@ class _MotorcycleEditPageState extends State<MotorcycleEditPage> {
       source: source,
       maxHeight: 1080,
     );
-    if (pickedFile?.path?.isNotEmpty == true) {
+    if (pickedFile != null) {
       setState(() {
         _image = File(pickedFile.path);
       });

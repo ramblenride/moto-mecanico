@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:intl/intl_standalone.dart';
 import 'package:moto_mecanico/configuration.dart';
 import 'package:moto_mecanico/models/garage_model.dart';
@@ -15,10 +13,6 @@ import 'package:moto_mecanico/widgets/config_widget.dart';
 import 'package:package_info/package_info.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:timezone/data/latest.dart' as tz;
-import 'package:timezone/timezone.dart' as tz;
-
-final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
 void main() {
   loadMotoMecanico();
@@ -27,76 +21,9 @@ void main() {
 void loadMotoMecanico() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await _configureLocalTimeZone();
-
-  await _initializeNotifications();
-
   await _deleteCacheDir();
 
   runApp(MotoLogApp());
-}
-
-Future<void> _configureLocalTimeZone() async {
-  tz.initializeTimeZones();
-  final currentTimeZone = await FlutterNativeTimezone.getLocalTimezone();
-  tz.setLocalLocation(tz.getLocation(currentTimeZone));
-}
-
-Future<void> _initializeNotifications() async {
-  await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
-  const initSettingsAndroid = AndroidInitializationSettings('app_icon');
-
-  final initSettings = InitializationSettings(
-    android: initSettingsAndroid,
-  );
-  await flutterLocalNotificationsPlugin.initialize(
-    initSettings,
-    onSelectNotification: (String payload) async {
-      if (payload != null) {
-        debugPrint('notification payload: $payload');
-        // FIXME: Show the task tied to the notification
-        //selectNotificationSubject.add(payload);
-      }
-    },
-  );
-
-  // FIXME: Whatever creates notifications must check if enabled in config
-  //await _createNotification();
-  _showActiveNotifications();
-  _showPendingNotifications();
-}
-
-/*
-void _createNotification() async {
-  return await flutterLocalNotificationsPlugin.zonedSchedule(
-      0,
-      'scheduled title',
-      'scheduled body',
-      tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5)),
-      const NotificationDetails(
-          android: AndroidNotificationDetails('your channel id',
-              'your channel name', 'your channel description')),
-      androidAllowWhileIdle: true,
-      uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime);
-}
-*/
-
-void _showActiveNotifications() async {
-  final activeNotifications = await flutterLocalNotificationsPlugin
-      .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>()
-      ?.getActiveNotifications();
-  debugPrint('Active Notifications:');
-  activeNotifications.forEach((element) => debugPrint(element.toString()));
-}
-
-void _showPendingNotifications() async {
-  final pendingNotificationRequests =
-      await flutterLocalNotificationsPlugin.pendingNotificationRequests();
-  debugPrint('Pending Notifications:');
-  pendingNotificationRequests
-      .forEach((element) => debugPrint(element.toString()));
 }
 
 Future<void> _deleteCacheDir() async {

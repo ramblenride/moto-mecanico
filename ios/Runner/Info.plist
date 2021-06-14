@@ -41,5 +41,9 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Attach the image of motorcycles and tasks.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Take a picture of your motorcycles and tasks.</string>
 </dict>
 </plist>

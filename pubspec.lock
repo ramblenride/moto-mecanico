@@ -132,32 +132,11 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.9.0"
-  flutter_local_notifications:
-    dependency: "direct main"
-    description:
-      name: flutter_local_notifications
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "6.0.0"
-  flutter_local_notifications_platform_interface:
-    dependency: transitive
-    description:
-      name: flutter_local_notifications_platform_interface
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "4.0.0"
   flutter_localizations:
     dependency: "direct main"
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_native_timezone:
-    dependency: "direct main"
-    description:
-      name: flutter_native_timezone
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.0"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -202,7 +181,7 @@ packages:
       name: image_picker
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.7.5+4"
+    version: "0.8.0+3"
   image_picker_for_web:
     dependency: transitive
     description:
@@ -467,13 +446,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.3.0"
-  timezone:
-    dependency: transitive
-    description:
-      name: timezone
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.7.0"
   typed_data:
     dependency: transitive
     description:
@@ -567,4 +539,4 @@ packages:
     version: "3.1.0"
 sdks:
   dart: ">=2.13.0 <3.0.0"
-  flutter: ">=2.2.0"
+  flutter: ">=2.0.0"

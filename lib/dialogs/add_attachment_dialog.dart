@@ -119,7 +119,7 @@ class _AddAttachmentDialogState extends State<AddAttachmentDialog> {
       source: source,
       maxHeight: 1080,
     );
-    if (pickedFile?.path?.isNotEmpty == true) {
+    if (pickedFile != null) {
       return Attachment(
         type: AttachmentType.picture,
         name: AppLocalizations.of(context)
