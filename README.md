@@ -16,6 +16,7 @@ A functional motorcycle maintenance app to replace those pesky spreadsheets. Bui
 
 * Notifcations when tasks are due.
 * Sharing motorcycle between different devices/people.
+* Inventory of spare parts.
 * iOS release.
 
 ## License
