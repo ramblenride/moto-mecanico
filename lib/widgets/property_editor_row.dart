@@ -6,16 +6,15 @@ import 'package:moto_mecanico/themes.dart';
 // of the inputField.
 class PropertyEditorRow extends StatelessWidget {
   PropertyEditorRow({
-    @required this.name,
-    @required this.inputField,
+    required this.name,
+    required this.inputField,
     this.trailer,
-  })  : assert(name != null),
-        assert(inputField != null);
+  });
 
   static const WIDTH_NARROW_LAYOUT = 360;
   final String name;
   final Widget inputField;
-  final Widget trailer;
+  final Widget? trailer;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +28,7 @@ class PropertyEditorRow extends StatelessWidget {
 
     if (trailer != null) {
       children.add(const SizedBox(width: 5));
-      children.add(trailer);
+      children.add(trailer!);
     }
 
     if (width < WIDTH_NARROW_LAYOUT) {

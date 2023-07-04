@@ -10,10 +10,11 @@ enum CostAction { delete, edit, copyable }
 
 class CostSelectorRow extends StatefulWidget {
   CostSelectorRow(
-      {Key key, @required this.cost, @required this.onRemove, this.onUpdate})
-      : assert(cost != null),
-        assert(onRemove != null),
-        super(key: key);
+      {Key? key,
+      required this.cost,
+      required this.onRemove,
+      required this.onUpdate})
+      : super(key: key);
 
   final Cost cost;
   final Function onRemove;
@@ -24,13 +25,13 @@ class CostSelectorRow extends StatefulWidget {
 }
 
 class _CostSelectorRowState extends State<CostSelectorRow> {
-  _CostSelectorRowState({@required this.cost}) : assert(cost != null);
+  _CostSelectorRowState({required this.cost});
 
   final Cost cost;
   final _formKey = GlobalKey<FormState>();
   bool _edit = false;
-  TextStyle _textStyle;
-  TextStyle _hintStyle;
+  late final TextStyle _textStyle;
+  late final TextStyle _hintStyle;
 
   @override
   Widget build(BuildContext context) {
@@ -72,20 +73,20 @@ class _CostSelectorRowState extends State<CostSelectorRow> {
                   enabled: !_edit,
                   value: CostAction.edit,
                   child: Text(
-                      AppLocalizations.of(context).cost_selector_action_edit),
+                      AppLocalizations.of(context)!.cost_selector_action_edit),
                 ),
                 PopupMenuItem(
                   value: CostAction.delete,
-                  child: Text(AppLocalizations.of(context)
+                  child: Text(AppLocalizations.of(context)!
                       .attachment_selector_action_delete),
                 ),
                 PopupMenuItem(
                   value: CostAction.copyable,
                   child: Tooltip(
-                    message: AppLocalizations.of(context).renewable_tooltip,
+                    message: AppLocalizations.of(context)!.renewable_tooltip,
                     child: Row(
                       children: [
-                        Text(AppLocalizations.of(context).renewable),
+                        Text(AppLocalizations.of(context)!.renewable),
                         const SizedBox(width: 10),
                         Icon(
                           cost.copyable
@@ -134,7 +135,6 @@ class _CostSelectorRowState extends State<CostSelectorRow> {
       case CostType.other:
         return Image.asset(IMG_COST_OTHER);
     }
-    return null;
   }
 
   Widget _getNameTextOrEditor() {
@@ -149,7 +149,7 @@ class _CostSelectorRowState extends State<CostSelectorRow> {
         initialValue: cost.description,
         decoration: InputDecoration(
           hintText:
-              AppLocalizations.of(context).cost_selector_row_hint_description,
+              AppLocalizations.of(context)!.cost_selector_row_hint_description,
           hintStyle: _hintStyle,
         ),
         inputFormatters: [
@@ -158,7 +158,7 @@ class _CostSelectorRowState extends State<CostSelectorRow> {
         style: _textStyle,
         onFieldSubmitted: (value) => _saveCost(),
         onSaved: (value) {
-          if (value.isNotEmpty) {
+          if (value != null && value.isNotEmpty) {
             cost.description = value;
           }
         },
@@ -181,7 +181,7 @@ class _CostSelectorRowState extends State<CostSelectorRow> {
       return TextFormField(
         initialValue: cost.value != 0 ? cost.value.toString() : '',
         decoration: InputDecoration(
-          hintText: AppLocalizations.of(context).cost_selector_row_hint_cost,
+          hintText: AppLocalizations.of(context)!.cost_selector_row_hint_cost,
           hintStyle: _hintStyle,
         ),
         textAlign: TextAlign.end,
@@ -193,7 +193,7 @@ class _CostSelectorRowState extends State<CostSelectorRow> {
         style: _textStyle,
         onFieldSubmitted: (value) => _saveCost(),
         onSaved: (value) {
-          if (value.isNotEmpty) {
+          if (value != null && value.isNotEmpty) {
             cost.value = int.parse(value);
           }
         },
@@ -202,10 +202,10 @@ class _CostSelectorRowState extends State<CostSelectorRow> {
   }
 
   void _saveCost() {
-    if (_formKey.currentState.validate()) {
-      _formKey.currentState.save();
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
       setState(() => _edit = false);
-      if (widget.onUpdate != null) widget.onUpdate();
+      widget.onUpdate();
     }
   }
 }

@@ -11,11 +11,11 @@ const ARCHIVE_NAME = 'moto_mecanico_archive.zip';
 
 class GarageImportExport {
   // NOTE: This will get more complex once the app supports remote repositories.
-  static Future<File> Export(GarageModel garage) async {
+  static Future<File?> Export(GarageModel garage) async {
     final storage = garage.storage;
-    if (storage == null) return null;
+    if (storage?.storage == null) return null;
 
-    final dataDir = Directory(await storage.storage.getBaseDir());
+    final dataDir = Directory(await storage!.storage!.getBaseDir());
     final archiveDir = await getTemporaryDirectory();
 
     final zipFile = File(join(archiveDir.path, ARCHIVE_NAME));
@@ -38,8 +38,8 @@ class GarageImportExport {
         zipFile: archive, destinationDir: archiveDir);
     final garage = GarageModel();
     garage.storage = GarageStorage();
-    garage.storage.storage = LocalFileStorage(baseDir: archiveDir.path);
-    await garage.storage.loadGarage(garage);
+    garage.storage!.storage = LocalFileStorage(baseDir: archiveDir.path);
+    await garage.storage!.loadGarage(garage);
     return garage;
   }
 

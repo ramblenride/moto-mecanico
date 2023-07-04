@@ -15,19 +15,19 @@ enum MotorcycleSort {
 class GarageModel extends ChangeNotifier {
   final List<Motorcycle> _motos = [];
   final Map<String, VoidCallback> _listeners = {};
-  GarageStorage _storage;
-  Function(Error) _onErrorCb; // FIXME: Use a event stream instead?
+  GarageStorage? _storage;
+  Function(Error)? _onErrorCb; // FIXME: Use a event stream instead?
   bool _loading = false;
 
-  GarageStorage get storage => _storage;
-  set storage(GarageStorage storage) => _storage = storage;
+  GarageStorage? get storage => _storage;
+  set storage(GarageStorage? storage) => _storage = storage;
   set onErrorCb(Function(Error) onErrorCb) => _onErrorCb = onErrorCb;
 
   /// Returns the complete unsorted list of motorcycles in the garage
   UnmodifiableListView<Motorcycle> get motos => UnmodifiableListView(_motos);
 
   /// Returns the sorted list of motorcycles matching the current filter
-  List<Motorcycle> getFilteredMotos(String filter, MotorcycleSort sortMethod) {
+  List<Motorcycle> getFilteredMotos(String? filter, MotorcycleSort sortMethod) {
     return _motos.where((moto) {
       return (filter == null || moto.matches(filter));
     }).toList()
@@ -51,24 +51,22 @@ class GarageModel extends ChangeNotifier {
             }
           case MotorcycleSort.make:
             {
-              return (a.make ?? '').compareTo(b.make ?? '');
+              return (a.make).compareTo(b.make);
             }
           case MotorcycleSort.year:
             {
               return (a.year ?? 0).compareTo(b.year ?? 0);
             }
         }
-
-        // FIXME: Needed because of the analyzer.
-        return 0;
       });
   }
 
   void _motoEventListener(Motorcycle moto) {
-    try {
-      moto.storage.updateMotorcycle(moto);
-    } catch (error) {
-      _handleError(error, 'Failed to save motorcycle to storage.');
+    if (moto.storage != null) {
+      moto.storage!.updateMotorcycle(moto).catchError((error) {
+        _handleError(error, 'Failed to save motorcycle to storage.');
+        return true;
+      });
     }
   }
 
@@ -84,8 +82,8 @@ class GarageModel extends ChangeNotifier {
       notifyListeners();
       if (_loading == false && _storage != null) {
         try {
-          await _storage.addMotorcycle(this, moto);
-        } catch (error) {
+          await _storage!.addMotorcycle(this, moto);
+        } on Error catch (error) {
           _handleError(error, 'Failed to save motorcycle to storage.');
         }
       }
@@ -98,11 +96,14 @@ class GarageModel extends ChangeNotifier {
 
     notifyListeners();
     if (_storage != null) {
-      moto.removeListener(_listeners[moto.id]);
-      _listeners.remove(moto.id);
+      var listener = _listeners[moto.id];
+      if (listener != null) {
+        moto.removeListener(listener);
+        _listeners.remove(moto.id);
+      }
       try {
-        _storage.deleteMotorcycle(this, moto);
-      } catch (error) {
+        _storage!.deleteMotorcycle(this, moto);
+      } on Error catch (error) {
         _handleError(error, 'Failed to remove motorcycle from storage.');
       }
     }
@@ -112,8 +113,8 @@ class GarageModel extends ChangeNotifier {
     if (_storage != null) {
       _loading = true;
       try {
-        await _storage.loadGarage(this);
-      } catch (error) {
+        await _storage!.loadGarage(this);
+      } on Error catch (error) {
         _handleError(error, 'Failed to load garage.');
       }
       _loading = false;
@@ -124,7 +125,7 @@ class GarageModel extends ChangeNotifier {
     debugPrint('Error: $message}');
     debugPrint('Exception: ${error.toString()}');
     if (_onErrorCb != null) {
-      _onErrorCb(error);
+      _onErrorCb!(error);
     }
   }
 }

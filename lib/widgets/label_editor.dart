@@ -7,7 +7,7 @@ import 'package:moto_mecanico/themes.dart';
 import 'package:provider/provider.dart';
 
 class LabelEditor extends StatefulWidget {
-  LabelEditor({Key key}) : super(key: key);
+  LabelEditor({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _LabelEditorState();
@@ -17,21 +17,22 @@ class _LabelEditorState extends State<LabelEditor> {
   _LabelEditorState();
 
   final _formKey = GlobalKey<FormState>();
-  List<String> _initialHints;
+  late final List<String> _initialHints;
+  late final TextStyle _hintFont;
+  late final TextStyle _textFont;
+
   List<Color> _labelColors = <Color>[];
-  TextStyle _hintFont;
-  TextStyle _textFont;
 
   @override
   Widget build(BuildContext context) {
     _initialHints = [
-      AppLocalizations.of(context).label_editor_name_initial_hint_1,
-      AppLocalizations.of(context).label_editor_name_initial_hint_2,
-      AppLocalizations.of(context).label_editor_name_initial_hint_3,
-      AppLocalizations.of(context).label_editor_name_initial_hint_4,
-      AppLocalizations.of(context).label_editor_name_initial_hint_5,
-      AppLocalizations.of(context).label_editor_name_initial_hint_6,
-      AppLocalizations.of(context).label_editor_name_initial_hint_7
+      AppLocalizations.of(context)!.label_editor_name_initial_hint_1,
+      AppLocalizations.of(context)!.label_editor_name_initial_hint_2,
+      AppLocalizations.of(context)!.label_editor_name_initial_hint_3,
+      AppLocalizations.of(context)!.label_editor_name_initial_hint_4,
+      AppLocalizations.of(context)!.label_editor_name_initial_hint_5,
+      AppLocalizations.of(context)!.label_editor_name_initial_hint_6,
+      AppLocalizations.of(context)!.label_editor_name_initial_hint_7
     ];
 
     _hintFont = Theme.of(context).textTheme.propEditorHint.copyWith(
@@ -45,7 +46,7 @@ class _LabelEditorState extends State<LabelEditor> {
   }
 
   void _save() {
-    _formKey.currentState.save();
+    _formKey.currentState!.save();
   }
 
   Widget _buildLabelList() {
@@ -55,9 +56,10 @@ class _LabelEditorState extends State<LabelEditor> {
     var i = 0;
     return Form(
       key: _formKey,
-      onWillPop: () {
+      onPopInvoked: (bool didPop) {
+        if (!didPop) return;
+
         _save();
-        return Future.value(true);
       },
       child: Wrap(
         runSpacing: 5,
@@ -90,11 +92,13 @@ class _LabelEditorState extends State<LabelEditor> {
                         i,
                         firstEdit,
                         (name) {
-                          Provider.of<LabelsModel>(context, listen: false)
-                              .update(Label(
-                                  id: label.value.id,
-                                  color: _labelColors[index],
-                                  name: name));
+                          if (name != null) {
+                            Provider.of<LabelsModel>(context, listen: false)
+                                .update(Label(
+                                    id: label.value.id,
+                                    color: _labelColors[index],
+                                    name: name));
+                          }
                         },
                       ),
                     ),
@@ -122,7 +126,7 @@ class _LabelEditorState extends State<LabelEditor> {
   }
 
   Widget _getTextField(
-      Label label, int i, bool firstEdit, Function(String) onSaved) {
+      Label label, int i, bool firstEdit, Function(String?) onSaved) {
     return TextFormField(
       cursorColor: Colors.white,
       decoration: InputDecoration.collapsed(
@@ -142,7 +146,7 @@ class _LabelEditorState extends State<LabelEditor> {
     await showDialog(
       context: context,
       builder: (BuildContext context) => SimpleDialog(
-        title: Text(AppLocalizations.of(context).settings_page_select_color),
+        title: Text(AppLocalizations.of(context)!.settings_page_select_color),
         children: [
           SingleChildScrollView(
             child: BlockPicker(

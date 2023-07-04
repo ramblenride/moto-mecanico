@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:moto_mecanico/models/motorcycle.dart';
 import 'package:moto_mecanico/models/task.dart';
 import 'package:moto_mecanico/storage/garage_storage.dart';
@@ -11,12 +10,12 @@ import 'package:moto_mecanico/storage/storage.dart';
 import 'package:path/path.dart';
 
 class MotorcycleLocalStorage extends MotorcycleStorage {
-  Storage _storage;
+  late final Storage _storage;
   final String motoId;
-  MotorcycleLocalStorage({@required this.motoId}) : assert(motoId != null);
+  MotorcycleLocalStorage({required this.motoId});
 
   @override
-  Future<bool> connect({String baseDir}) async {
+  Future<bool> connect({String? baseDir}) async {
     // FIXME: Force passing the base dir in the constructor?
     // Not possible right now because of the MotorcycleAddEditPage
     final root = baseDir ?? await GarageStorage.getBaseDir();
@@ -34,7 +33,9 @@ class MotorcycleLocalStorage extends MotorcycleStorage {
 
   @override
   Future<bool> addMotorcycle(Motorcycle moto) async {
-    if (await _storage.createDir('', recursive: true) == null) {
+    try {
+      await _storage.createDir('', recursive: true);
+    } catch (error) {
       return false;
     }
     return await updateMotorcycle(moto);
@@ -55,12 +56,12 @@ class MotorcycleLocalStorage extends MotorcycleStorage {
   }
 
   @override
-  Future<File> getMotoFile(String id) async {
+  Future<File?> getMotoFile(String id) async {
     return await _storage.getFile(id);
   }
 
   @override
-  Future<String> addMotoFile(String sourcePath) async {
+  Future<String?> addMotoFile(String sourcePath) async {
     return await _storage.addExternalFile(sourcePath);
   }
 
@@ -69,7 +70,7 @@ class MotorcycleLocalStorage extends MotorcycleStorage {
     return await _storage.deleteFile(id);
   }
 
-  Future<Motorcycle> loadMotorcycle(String id) async {
+  Future<Motorcycle?> loadMotorcycle(String id) async {
     final motoJson = await _storage.getFromJson(_getMotoFilename(id));
     final motorcycle = await Motorcycle.fromJson(motoJson);
     if (motorcycle != null) {

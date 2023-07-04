@@ -21,12 +21,12 @@ void main() {
       // Save garage
       final garage = GarageModel();
       garage.storage = GarageStorage();
-      garage.storage.storage =
+      garage.storage!.storage =
           LocalFileStorage(baseDir: await GarageStorage.getBaseDir());
 
       final motorcycle = Motorcycle(name: 'mine');
       motorcycle.storage = MotorcycleLocalStorage(motoId: motorcycle.id);
-      await motorcycle.storage.connect();
+      await motorcycle.storage!.connect();
       final task = Task(name: 'my task');
       motorcycle.addTask(task);
       await garage.add(motorcycle);
@@ -34,10 +34,10 @@ void main() {
       // Create a new garage and load the data
       final garage2 = GarageModel();
       garage2.storage = GarageStorage();
-      garage2.storage.storage =
+      garage2.storage!.storage =
           LocalFileStorage(baseDir: await GarageStorage.getBaseDir());
 
-      await garage2.storage.loadGarage(garage2);
+      await garage2.storage!.loadGarage(garage2);
       expect(garage2.motos.length, equals(1));
       final moto2 = garage2.motos.first;
       expect(moto2.name, equals(motorcycle.name));

@@ -9,11 +9,11 @@ import 'package:moto_mecanico/widgets/property_editor_row.dart';
 
 class EditCostDialog extends StatefulWidget {
   EditCostDialog({
-    @required this.onResult,
-    @required this.cost,
-  }) : assert(cost != null);
+    required this.onResult,
+    required this.cost,
+  });
 
-  final Function(Cost) onResult;
+  final Function(Cost?) onResult;
   final Cost cost;
 
   @override
@@ -49,8 +49,8 @@ class _EditCostDialogState extends State<EditCostDialog> {
               ),
               child: Text(
                 widget.cost.value != 0
-                    ? AppLocalizations.of(context).add_cost_edit_dialog_title
-                    : AppLocalizations.of(context).add_cost_dialog_title,
+                    ? AppLocalizations.of(context)!.add_cost_edit_dialog_title
+                    : AppLocalizations.of(context)!.add_cost_dialog_title,
                 style: theme.dialogHeader,
                 textAlign: TextAlign.center,
               ),
@@ -71,14 +71,14 @@ class _EditCostDialogState extends State<EditCostDialog> {
                           ),
                         ),
                         Text(
-                          AppLocalizations.of(context)
+                          AppLocalizations.of(context)!
                               .cost_selector_row_hint_description
                               .toUpperCase(),
                           style: theme.propEditorName,
                         ),
                         TextFormField(
                           decoration: InputDecoration.collapsed(
-                            hintText: AppLocalizations.of(context)
+                            hintText: AppLocalizations.of(context)!
                                 .add_cost_dialog_hint_description,
                             hintStyle: propHintStyle,
                           ),
@@ -89,17 +89,17 @@ class _EditCostDialogState extends State<EditCostDialog> {
                             LengthLimitingTextInputFormatter(24),
                           ],
                           onSaved: (value) {
-                            widget.cost.description = value;
+                            widget.cost.description = value ?? '';
                           },
                         ),
                         const SizedBox(height: 10),
                         PropertyEditorRow(
-                          name: AppLocalizations.of(context)
+                          name: AppLocalizations.of(context)!
                               .cost_selector_row_hint_cost
                               .toUpperCase(),
                           inputField: TextFormField(
                             decoration: InputDecoration.collapsed(
-                              hintText: AppLocalizations.of(context)
+                              hintText: AppLocalizations.of(context)!
                                   .add_cost_dialog_hint_value,
                               hintStyle: propHintStyle,
                             ),
@@ -115,7 +115,9 @@ class _EditCostDialogState extends State<EditCostDialog> {
                             ],
                             onSaved: (value) {
                               widget.cost.value =
-                                  value.isNotEmpty ? int.parse(value) : 0;
+                                  (value != null && value.isNotEmpty)
+                                      ? int.parse(value)
+                                      : 0;
                             },
                           ),
                         ),
@@ -142,7 +144,6 @@ class _EditCostDialogState extends State<EditCostDialog> {
       case CostType.other:
         return Image.asset(IMG_COST_OTHER);
     }
-    return null;
   }
 
   Widget _getButtonRow() {
@@ -153,14 +154,14 @@ class _EditCostDialogState extends State<EditCostDialog> {
       children: [
         TextButton(
           child: Text(
-            AppLocalizations.of(context).dialog_cancel_button,
+            AppLocalizations.of(context)!.dialog_cancel_button,
             style: buttonTheme,
           ),
           onPressed: () => widget.onResult(null),
         ),
         TextButton(
           child: Text(
-            AppLocalizations.of(context).dialog_add_button,
+            AppLocalizations.of(context)!.dialog_add_button,
             style: buttonTheme,
           ),
           onPressed: () {
@@ -174,9 +175,9 @@ class _EditCostDialogState extends State<EditCostDialog> {
     );
   }
 
-  Cost _getCost() {
-    if (_formKey.currentState.validate()) {
-      _formKey.currentState.save();
+  Cost? _getCost() {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
       return widget.cost;
     }
     return null;

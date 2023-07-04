@@ -3,14 +3,14 @@ import 'package:moto_mecanico/themes.dart';
 
 class PropertyEditorCard extends StatelessWidget {
   PropertyEditorCard({
-    @required this.children,
+    required this.children,
     this.title,
-    this.icons,
-    this.isDialog,
+    this.icons = const [],
+    this.isDialog = false,
   });
 
   final List<Widget> children;
-  final String title;
+  final String? title;
   final List<Widget> icons;
   final bool isDialog;
 
@@ -24,13 +24,13 @@ class PropertyEditorCard extends StatelessWidget {
         Align(
           alignment: Alignment.centerLeft,
           child: Text(
-            title,
+            title!,
             style: headerStyle,
           ),
         ),
       );
     }
-    if (icons?.isNotEmpty ?? false) {
+    if (icons.isNotEmpty) {
       topRow.add(
         Row(
           mainAxisAlignment: MainAxisAlignment.end,

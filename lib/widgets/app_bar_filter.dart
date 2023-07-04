@@ -4,25 +4,24 @@ import 'package:moto_mecanico/themes.dart';
 
 class AppBarFilter extends StatefulWidget implements PreferredSizeWidget {
   AppBarFilter(
-      {Key key,
-      @required this.updateSearchQueryCb,
+      {Key? key,
+      required this.updateSearchQueryCb,
       this.title,
       this.hintText,
       this.leading,
-      this.leadingActions,
-      this.trailingActions,
+      this.leadingActions = const [],
+      this.trailingActions = const [],
       this.bottom})
-      : assert(updateSearchQueryCb != null),
-        preferredSize = Size.fromHeight(
-            kToolbarHeight + (bottom?.preferredSize?.height ?? 0.0)),
+      : preferredSize = Size.fromHeight(
+            kToolbarHeight + (bottom?.preferredSize.height ?? 0.0)),
         super(key: key);
   final Function(String) updateSearchQueryCb;
-  final Widget title;
-  final String hintText;
-  final Widget leading;
+  final Widget? title;
+  final String? hintText;
+  final Widget? leading;
   final List<Widget> leadingActions;
   final List<Widget> trailingActions;
-  final PreferredSizeWidget bottom;
+  final PreferredSizeWidget? bottom;
 
   @override
   final Size preferredSize;
@@ -34,7 +33,7 @@ class AppBarFilter extends StatefulWidget implements PreferredSizeWidget {
 class _AppBarFilterState extends State<AppBarFilter> {
   _AppBarFilterState();
 
-  TextEditingController _searchQuery;
+  late final TextEditingController _searchQuery;
   bool _isSearching = false;
 
   @override
@@ -50,7 +49,7 @@ class _AppBarFilterState extends State<AppBarFilter> {
   }
 
   void _startSearch() {
-    ModalRoute.of(context)
+    ModalRoute.of(context)!
         .addLocalHistoryEntry(LocalHistoryEntry(onRemove: _stopSearching));
 
     setState(() {
@@ -109,17 +108,17 @@ class _AppBarFilterState extends State<AppBarFilter> {
     }
 
     final actions = <Widget>[];
-    actions.addAll(widget.leadingActions ?? []);
+    actions.addAll(widget.leadingActions);
     actions.add(
       IconButton(
         padding: EdgeInsets.zero,
         visualDensity: VisualDensity.compact,
-        tooltip: AppLocalizations.of(context).appbar_filter_textfield_tootip,
+        tooltip: AppLocalizations.of(context)!.appbar_filter_textfield_tootip,
         icon: const Icon(Icons.filter_list),
         onPressed: _startSearch,
       ),
     );
-    actions.addAll(widget.trailingActions ?? []);
+    actions.addAll(widget.trailingActions);
 
     return actions;
   }

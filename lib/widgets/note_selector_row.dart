@@ -10,20 +10,20 @@ enum NoteAction { delete, copyable }
 
 class NoteSelectorRow extends StatefulWidget {
   NoteSelectorRow({
-    Key key,
+    Key? key,
     this.note,
+    required this.onRemove,
+    required this.onSaved,
     this.showRenewable = true,
-    this.onRemove,
-    this.onSaved,
     this.header = true,
-    this.minLines,
-    this.maxLines,
+    this.minLines = 1,
+    this.maxLines = 10,
   }) : super(key: key);
 
-  final Note note;
+  final Note? note;
   final bool showRenewable;
-  final Function onRemove;
-  final Function onSaved;
+  final Function(dynamic) onRemove;
+  final Function(dynamic) onSaved;
   final bool header;
   final int minLines;
   final int maxLines;
@@ -35,9 +35,9 @@ class NoteSelectorRow extends StatefulWidget {
 class _NoteSelectorRowState extends State<NoteSelectorRow> {
   _NoteSelectorRowState({this.note});
 
-  final Note note;
+  final Note? note;
   final _formKey = GlobalKey<FormState>();
-  FocusNode _focusNode;
+  late final FocusNode _focusNode;
 
   @override
   void initState() {
@@ -45,8 +45,8 @@ class _NoteSelectorRowState extends State<NoteSelectorRow> {
     _focusNode = FocusNode();
     _focusNode.addListener(() {
       setState(() {
-        if (_focusNode.hasFocus == false && _formKey.currentState.validate()) {
-          _formKey.currentState.save();
+        if (_focusNode.hasFocus == false && _formKey.currentState!.validate()) {
+          _formKey.currentState!.save();
         }
       });
     });
@@ -72,6 +72,7 @@ class _NoteSelectorRowState extends State<NoteSelectorRow> {
           note: note,
           focusNode: _focusNode,
           onSaved: widget.onSaved,
+          validator: (dynamic) => null,
           minLines: widget.minLines,
           maxLines: widget.maxLines,
         ),
@@ -88,7 +89,7 @@ class _NoteSelectorRowState extends State<NoteSelectorRow> {
       children: [
         note != null
             ? Text(
-                '${AppLocalizations.of(context).note_last_updated}: ${dateFormat.format(note.lastUpdate)}',
+                '${AppLocalizations.of(context)!.note_last_updated}: ${dateFormat.format(note!.lastUpdate)}',
                 style: Theme.of(context)
                     .textTheme
                     .propEditorHint
@@ -116,7 +117,9 @@ class _NoteSelectorRowState extends State<NoteSelectorRow> {
                   }
                 case NoteAction.copyable:
                   {
-                    setState(() => note.copyable = !note.copyable);
+                    if (note != null) {
+                      setState(() => note!.copyable = !note!.copyable);
+                    }
                     break;
                   }
               }
@@ -132,7 +135,7 @@ class _NoteSelectorRowState extends State<NoteSelectorRow> {
       PopupMenuItem(
         value: NoteAction.delete,
         child: Text(
-            AppLocalizations.of(context).attachment_selector_action_delete),
+            AppLocalizations.of(context)!.attachment_selector_action_delete),
       )
     ];
 
@@ -140,15 +143,17 @@ class _NoteSelectorRowState extends State<NoteSelectorRow> {
       items.add(PopupMenuItem(
         value: NoteAction.copyable,
         child: Tooltip(
-          message: AppLocalizations.of(context).renewable_tooltip,
+          message: AppLocalizations.of(context)!.renewable_tooltip,
           child: Row(
             children: [
-              Text(AppLocalizations.of(context).renewable),
+              Text(AppLocalizations.of(context)!.renewable),
               const SizedBox(
                 width: 10,
               ),
               Icon(
-                note.copyable ? Icons.check_box : Icons.check_box_outline_blank,
+                (note != null && note!.copyable)
+                    ? Icons.check_box
+                    : Icons.check_box_outline_blank,
                 size: 20,
               ),
             ],

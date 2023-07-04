@@ -12,9 +12,8 @@ class MotorcycleTemplateCard extends StatefulWidget {
   final _MotorcycleTemplateCardState _state;
   final MotorcycleTemplateIndexItem template;
 
-  MotorcycleTemplateCard({Key key, @required this.template})
-      : assert(template != null),
-        _state = _MotorcycleTemplateCardState(),
+  MotorcycleTemplateCard({Key? key, required this.template})
+      : _state = _MotorcycleTemplateCardState(),
         super(key: key);
 
   @override
@@ -27,12 +26,12 @@ class MotorcycleTemplateCard extends StatefulWidget {
 
 class _MotorcycleTemplateCardState extends State<MotorcycleTemplateCard> {
   final List<MotorcycleTemplateTaskTile> _taskTiles = [];
-  Future<List<TaskTemplate>> _tasks;
+  late final Future<List<TaskTemplate>> _tasks;
 
   @override
   void initState() {
     super.initState();
-    if (widget.template.tasks == null) {
+    if (widget.template.tasks.isEmpty) {
       _tasks = _loadMotorcycleTasksFromTemplate();
     } else {
       _tasks = Future.value(widget.template.tasks);
@@ -62,7 +61,7 @@ class _MotorcycleTemplateCardState extends State<MotorcycleTemplateCard> {
             ],
           );
         } else if (snapshot.hasData) {
-          return _buildTaskList(snapshot.data);
+          return _buildTaskList(snapshot.data!);
         }
 
         return Center(
@@ -71,7 +70,7 @@ class _MotorcycleTemplateCardState extends State<MotorcycleTemplateCard> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               // FIXME Correct text
-              Text(AppLocalizations.of(context)
+              Text(AppLocalizations.of(context)!
                   .motorcycle_task_template_page_loading_templates),
               const SizedBox(height: 10),
               CircularProgressIndicator(),
@@ -103,19 +102,17 @@ class _MotorcycleTemplateCardState extends State<MotorcycleTemplateCard> {
       Padding(
         padding: const EdgeInsets.only(top: 20, bottom: 10),
         child: Text(
-          AppLocalizations.of(context)
+          AppLocalizations.of(context)!
               .motorcycle_task_template_page_select_task_header,
           textAlign: TextAlign.left,
         ),
       ),
     );
 
-    if (widget.template.tasks != null) {
-      var i = 0;
-      for (final task in widget.template.tasks) {
-        children.add(_getTaskTile(task, i));
-        i++;
-      }
+    var i = 0;
+    for (final task in widget.template.tasks) {
+      children.add(_getTaskTile(task, i));
+      i++;
     }
 
     return children;
@@ -138,7 +135,7 @@ class _MotorcycleTemplateCardState extends State<MotorcycleTemplateCard> {
     } else {
       debugPrint(
           'Failed to download motorcycle task template. Return code: ${response.statusCode}');
-      throw Exception(AppLocalizations.of(context)
+      throw Exception(AppLocalizations.of(context)!
           .motorcycle_task_template_page_error_loading_motorcycle);
     }
   }
@@ -150,10 +147,10 @@ class _MotorcycleTemplateCardState extends State<MotorcycleTemplateCard> {
               jsonDecode(jsonString) as Map<String, dynamic>)
           .templates
           .first;
-      widget.template.tasks = moto?.tasks; // Cache result
+      widget.template.tasks = moto.tasks; // Cache result
     } catch (error) {
       debugPrint('Failed to parse motorcycle task template file: ${error}');
-      throw Exception(AppLocalizations.of(context)
+      throw Exception(AppLocalizations.of(context)!
           .motorcycle_task_template_page_error_loading_motorcycle);
     }
 

@@ -26,10 +26,10 @@ abstract class MotorcycleStorage {
   Future deleteMotorcycle();
 
   /// Return a file from a motorcycle repository (picture, attachment, etc).
-  Future<File> getMotoFile(String id);
+  Future<File?> getMotoFile(String id);
 
   /// Copy a file to a motorcycle repository and return the new file id.
-  Future<String> addMotoFile(String sourcePath);
+  Future<String?> addMotoFile(String sourcePath);
 
   /// Delete a file from the motorcycle repository.
   Future deleteMotoFile(String id);

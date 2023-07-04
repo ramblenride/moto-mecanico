@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:moto_mecanico/locale/formats.dart';
 import 'package:moto_mecanico/models/distance.dart';
-import 'package:package_info/package_info.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // This class stores the global configuration of the app.
@@ -19,57 +19,51 @@ class Configuration {
   static const _PROP_VALUE_DISTANCE_UNIT_MILE = 'mile';
   static const _PROP_NAME_NOTIFICATIONS = 'notifications';
 
-  SharedPreferences _prefs;
-  Locale _systemLocale;
+  // Made available to the application here, but not store in the config.
+  PackageInfo? packageInfo;
 
-  Locale _locale;
+  final Locale _systemLocale;
 
   String _currencySymbol;
-  String _dateFormat;
-  DistanceUnit _distanceUnit;
-
   bool _notifications;
+  Locale _locale;
 
-  // Made available to the application here, but not store in the config.
-  PackageInfo packageInfo;
+  SharedPreferences? _prefs;
+  String? _dateFormat;
+  DistanceUnit? _distanceUnit;
 
-  Configuration(String systemLocale) {
-    _systemLocale = Locale(systemLocale ?? 'en');
-  }
+  Configuration(String systemLocale)
+      : _systemLocale = Locale(systemLocale),
+        _currencySymbol = _DEFAULT_CURRENCY_SYMBOL,
+        _notifications = false,
+        _locale = Locale(systemLocale);
 
-  String get currencySymbol {
-    _currencySymbol ??=
-        NumberFormat.currency(locale: _systemLocale.languageCode)
-                .currencyName ??
-            _DEFAULT_CURRENCY_SYMBOL;
-
-    return _currencySymbol;
-  }
+  String get currencySymbol => _currencySymbol;
 
   set currencySymbol(String symbol) {
     assert(_prefs != null);
     _currencySymbol = symbol;
 
-    _prefs.setString(_PROP_NAME_CURRENCY, symbol);
+    _prefs?.setString(_PROP_NAME_CURRENCY, symbol);
   }
 
   String get dateFormat {
     if (_dateFormat == null) {
       final localeDateFormat =
           DateFormat.yMd(_systemLocale.languageCode).pattern;
-      _dateFormat =
-          AppLocalSupport.supportedDateFormats.contains(localeDateFormat)
-              ? localeDateFormat
-              : 'y/M/d';
+      _dateFormat = (localeDateFormat != null &&
+              AppLocalSupport.supportedDateFormats.contains(localeDateFormat))
+          ? localeDateFormat
+          : 'y/M/d';
     }
-    return _dateFormat;
+    return _dateFormat!;
   }
 
   set dateFormat(String format) {
     assert(_prefs != null);
     _dateFormat = format;
 
-    _prefs.setString(_PROP_NAME_DATE_FORMAT, format);
+    _prefs?.setString(_PROP_NAME_DATE_FORMAT, format);
   }
 
   DistanceUnit get distanceUnit {
@@ -89,14 +83,14 @@ class Configuration {
         _distanceUnit = DistanceUnit.UnitKM;
       }
     }
-    return _distanceUnit;
+    return _distanceUnit!;
   }
 
   set distanceUnit(DistanceUnit unit) {
     assert(_prefs != null);
     _distanceUnit = unit;
 
-    _prefs.setString(
+    _prefs?.setString(
         _PROP_NAME_DISTANCE_UNIT,
         unit == DistanceUnit.UnitMile
             ? _PROP_VALUE_DISTANCE_UNIT_MILE
@@ -108,25 +102,25 @@ class Configuration {
     assert(_prefs != null);
     _locale = locale;
 
-    _prefs.setString(_PROP_NAME_LOCALE, locale.languageCode);
+    _prefs?.setString(_PROP_NAME_LOCALE, locale.languageCode);
   }
 
   bool get notifications {
-    return _notifications ?? true;
+    return _notifications;
   }
 
   set notifications(bool enabled) {
     _notifications = enabled;
 
-    _prefs.setBool(_PROP_NAME_NOTIFICATIONS, _notifications);
+    _prefs?.setBool(_PROP_NAME_NOTIFICATIONS, _notifications);
   }
 
-  void loadConfig() async {
+  Future<void> loadConfig() async {
     _prefs = await SharedPreferences.getInstance();
-    final localeStr = _prefs.getString(_PROP_NAME_LOCALE);
-    _locale = localeStr != null ? Locale(localeStr) : null;
+    final localeStr = _prefs?.getString(_PROP_NAME_LOCALE);
+    _locale = Locale(localeStr ?? 'en');
 
-    final distance = _prefs.getString(_PROP_NAME_DISTANCE_UNIT);
+    final distance = _prefs?.getString(_PROP_NAME_DISTANCE_UNIT);
     if (distance != null) {
       if (distance == _PROP_VALUE_DISTANCE_UNIT_KM) {
         _distanceUnit = DistanceUnit.UnitKM;
@@ -135,8 +129,11 @@ class Configuration {
       }
     }
 
-    _currencySymbol = _prefs.getString(_PROP_NAME_CURRENCY);
-    _dateFormat = _prefs.getString(_PROP_NAME_DATE_FORMAT);
-    _notifications = _prefs.getBool(_PROP_NAME_NOTIFICATIONS);
+    _currencySymbol = _prefs?.getString(_PROP_NAME_CURRENCY) ??
+        NumberFormat.currency(locale: _systemLocale.languageCode)
+            .currencyName ??
+        _DEFAULT_CURRENCY_SYMBOL;
+    _dateFormat = _prefs?.getString(_PROP_NAME_DATE_FORMAT) ?? 'YY/MM/DD';
+    _notifications = _prefs?.getBool(_PROP_NAME_NOTIFICATIONS) ?? true;
   }
 }

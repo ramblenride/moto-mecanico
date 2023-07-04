@@ -11,7 +11,7 @@ import 'package:moto_mecanico/widgets/config_widget.dart';
 import 'package:provider/provider.dart';
 
 class MotorcycleInfoTab extends StatelessWidget {
-  const MotorcycleInfoTab({Key key}) : super(key: key);
+  const MotorcycleInfoTab({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +52,7 @@ class MotorcycleInfoTab extends StatelessWidget {
                         AsyncSnapshot<ImageProvider> imageProvider) {
                       if (imageProvider.hasData) {
                         return Image(
-                          image: imageProvider.data,
+                          image: imageProvider.data!,
                           fit: BoxFit.contain,
                         );
                       } else if (imageProvider.hasError) {
@@ -65,7 +65,7 @@ class MotorcycleInfoTab extends StatelessWidget {
                                 color: Colors.redAccent,
                                 size: 48,
                               ),
-                              Text(AppLocalizations.of(context)
+                              Text(AppLocalizations.of(context)!
                                   .motorcycle_image_load_failed),
                             ],
                           ),
@@ -112,10 +112,10 @@ class MotorcycleInfoTab extends StatelessWidget {
                         const SizedBox(height: 5),
                         _getInfoRow(
                           context,
-                          AppLocalizations.of(context)
+                          AppLocalizations.of(context)!
                               .motorcycle_edit_page_name_prop_vin,
                           motorcycle.vin,
-                          AppLocalizations.of(context)
+                          AppLocalizations.of(context)!
                               .motorcycle_edit_page_name_prop_licence_plate,
                           motorcycle.immatriculation,
                           propNameStyle,
@@ -123,10 +123,10 @@ class MotorcycleInfoTab extends StatelessWidget {
                         const SizedBox(height: 10),
                         _getInfoRow(
                           context,
-                          AppLocalizations.of(context)
+                          AppLocalizations.of(context)!
                               .motorcycle_edit_page_name_prop_color,
                           motorcycle.color,
-                          AppLocalizations.of(context)
+                          AppLocalizations.of(context)!
                               .motorcycle_edit_page_name_prop_odometer,
                           motorcycle.odometer
                               .toUnit(distanceUnit)
@@ -136,10 +136,10 @@ class MotorcycleInfoTab extends StatelessWidget {
                         const SizedBox(height: 10),
                         _getInfoRow(
                           context,
-                          AppLocalizations.of(context)
+                          AppLocalizations.of(context)!
                               .motorcycle_edit_page_name_prop_purchase_date,
                           _getPurchaseDateStr(context, motorcycle),
-                          AppLocalizations.of(context)
+                          AppLocalizations.of(context)!
                               .motorcycle_edit_page_name_prop_purchase_odometer,
                           motorcycle.purchaseOdometer
                               .toUnit(distanceUnit)
@@ -153,7 +153,7 @@ class MotorcycleInfoTab extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Text(
-                              AppLocalizations.of(context).cost_total,
+                              AppLocalizations.of(context)!.cost_total,
                               textAlign: TextAlign.start,
                               style:
                                   Theme.of(context).textTheme.propEditorHeader,
@@ -234,14 +234,13 @@ class MotorcycleInfoTab extends StatelessWidget {
 
   Widget _getInfoProp(BuildContext context, String propName, String propValue,
       TextStyle propNameStyle) {
-    final value =
-        (propValue != null && propValue.isNotEmpty) ? propValue : '---';
+    final value = propValue.isNotEmpty ? propValue : '---';
     return InkWell(
       onLongPress: () {
         Clipboard.setData(ClipboardData(text: value)).then((result) {
           final snackBar = SnackBar(
-            content: Text(
-                AppLocalizations.of(context).snackbar_copy_to_clipboard(value)),
+            content: Text(AppLocalizations.of(context)!
+                .snackbar_copy_to_clipboard(value)),
           );
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
         });
@@ -266,7 +265,7 @@ class MotorcycleInfoTab extends StatelessWidget {
 
   String _getPurchaseDateStr(BuildContext context, Motorcycle motorcycle) {
     if (motorcycle.purchaseDate != null) {
-      return '${DateFormat(ConfigWidget.of(context).dateFormat).format(motorcycle.purchaseDate)}';
+      return '${DateFormat(ConfigWidget.of(context).dateFormat).format(motorcycle.purchaseDate!)}';
     }
     return '---';
   }
@@ -276,30 +275,30 @@ class MotorcycleInfoTab extends StatelessWidget {
     var caredFor = '';
     if (motorcycle.purchaseDate != null) {
       final difference =
-          DateTime.now().difference(motorcycle.purchaseDate).inDays.abs();
+          DateTime.now().difference(motorcycle.purchaseDate!).inDays.abs();
       if (difference > 365) {
         final years = difference / 365;
         caredFor +=
-            ' ${years.toStringAsFixed(1)} ${AppLocalizations.of(context).unit_years(years.round())}';
+            ' ${years.toStringAsFixed(1)} ${AppLocalizations.of(context)!.unit_years(years.round())}';
 
-        AppLocalizations.of(context).unit_years(years.round());
+        AppLocalizations.of(context)!.unit_years(years.round());
       } else {
         caredFor +=
-            ' ${difference.toString()} ${AppLocalizations.of(context).unit_days(difference)}';
+            ' ${difference.toString()} ${AppLocalizations.of(context)!.unit_days(difference)}';
       }
     }
 
     if (motorcycle.odometer.distance != null &&
-        motorcycle.odometer.distance > 0) {
+        motorcycle.odometer.distance! > 0) {
       if (caredFor.isNotEmpty) {
-        caredFor += ' ${AppLocalizations.of(context).info_tab_over}';
+        caredFor += ' ${AppLocalizations.of(context)!.info_tab_over}';
       }
       caredFor +=
           ' ${(motorcycle.odometer - motorcycle.purchaseOdometer).toUnit(distanceUnit).toFullString()}';
     }
 
     if (caredFor.isNotEmpty) {
-      return '${AppLocalizations.of(context).info_tab_enjoyed_for}${caredFor}.';
+      return '${AppLocalizations.of(context)!.info_tab_enjoyed_for}${caredFor}.';
     }
 
     return '';
@@ -307,13 +306,13 @@ class MotorcycleInfoTab extends StatelessWidget {
 
   List<Cost> _buildCostList(BuildContext context, Motorcycle motorcycle) {
     final purchase = Cost(
-        motorcycle.purchasePrice ?? 0, AppLocalizations.of(context).motorcycle,
+        motorcycle.purchasePrice, AppLocalizations.of(context)!.motorcycle,
         type: CostType.other);
-    var totalParts = Cost(0, AppLocalizations.of(context).cost_type_parts,
+    var totalParts = Cost(0, AppLocalizations.of(context)!.cost_type_parts,
         type: CostType.part);
-    var totalLabor = Cost(0, AppLocalizations.of(context).cost_type_labor,
+    var totalLabor = Cost(0, AppLocalizations.of(context)!.cost_type_labor,
         type: CostType.labor);
-    var totalOther = Cost(0, AppLocalizations.of(context).cost_type_other,
+    var totalOther = Cost(0, AppLocalizations.of(context)!.cost_type_other,
         type: CostType.other);
 
     motorcycle.closedTasks.forEach((task) {
@@ -331,7 +330,7 @@ class MotorcycleInfoTab extends StatelessWidget {
   int _getSpendingCost(Motorcycle motorcycle) {
     // FIXME: Reuse the totals for each type instead of going through all the
     // tasks again.
-    var spending = motorcycle.purchasePrice ?? 0;
+    var spending = motorcycle.purchasePrice;
     motorcycle.closedTasks.forEach((task) => spending += (task.cost.value));
     return spending;
   }

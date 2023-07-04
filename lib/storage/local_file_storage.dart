@@ -3,15 +3,15 @@ import 'dart:io';
 
 import 'package:moto_mecanico/storage/storage.dart';
 import 'package:moto_mecanico/storage/storage_utils.dart';
-import 'package:path/path.dart';
+import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 
 /// Wraps storage access local files.
 class LocalFileStorage extends Storage {
-  final String _baseDir;
+  final String? _baseDir;
 
-  LocalFileStorage({String baseDir}) : _baseDir = baseDir;
+  LocalFileStorage({String? baseDir}) : _baseDir = baseDir;
 
   static Future<String> getDefaultDir() async {
     final directory = await getApplicationDocumentsDirectory();
@@ -27,10 +27,11 @@ class LocalFileStorage extends Storage {
 
   @override
   Future<String> addExternalFile(String sourcePath) async {
-    if (await createDir('', recursive: true) == null) return null;
+    await createDir('', recursive: true);
+
     final destination = Uuid().v4() + getFileExtension(sourcePath);
-    final output = await copyExternalFile(sourcePath, destination);
-    return output != null ? destination : null;
+    await copyExternalFile(sourcePath, destination);
+    return destination;
   }
 
   @override
@@ -67,6 +68,6 @@ class LocalFileStorage extends Storage {
 
   Future<String> _localPath(String name) async {
     final baseDir = await getBaseDir();
-    return join(baseDir, name);
+    return path.join(baseDir, name);
   }
 }

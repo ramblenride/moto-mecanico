@@ -9,15 +9,14 @@ class Label {
   final int id;
   final Color color;
   final String name;
-  const Label({@required this.id, @required this.color, @required this.name});
+  const Label({required this.id, required this.color, required this.name});
 
-  static Label fromJson(Map<String, dynamic> json) {
-    final id = json['id'] as int;
-    final colorNum = json['color'] as int;
+  static Label? fromJson(Map<String, dynamic> json) {
+    final id = switch (json['id']) { int x => x, _ => null };
+    final colorNum = switch (json['color']) { int x => x, _ => null };
     if (id != null && colorNum != null) {
-      final id = json['id'] as int;
       final color = Color(colorNum);
-      final name = json['name'] as String;
+      final name = switch (json['name']) { String x => x, _ => null };
       return Label(id: id, color: color, name: name ?? '');
     }
     debugPrint('Failed to parse label from JSON. Missing fields.');
@@ -46,30 +45,28 @@ class LabelsModel extends ChangeNotifier {
     6: Label(id: 6, color: Colors.brown, name: ''),
   };
 
-  LabelsModel() {
+  LabelsModel() : _labels = {} {
     _labels = _DEFAULT_LABELS;
   }
 
   UnmodifiableMapView<int, Label> get labels => UnmodifiableMapView(_labels);
 
-  bool update(Label label) {
-    assert(label != null);
-
+  Future<bool> update(Label label) async {
     if (!_labels.containsKey(label.id)) return false;
 
     _labels[label.id] = label;
     notifyListeners();
 
-    _saveToStorage();
+    await _saveToStorage();
     return true;
   }
 
-  void loadFromStorage() async {
+  Future<void> loadFromStorage() async {
     final storage = LocalFileStorage();
     try {
       final json = await storage.getFromJson(_STORAGE_FILE);
       final labels = fromJson(json);
-      if (labels != null && labels.isNotEmpty) {
+      if (labels.isNotEmpty) {
         _labels = labels;
       }
     } catch (error) {
@@ -87,24 +84,21 @@ class LabelsModel extends ChangeNotifier {
   }
 
   Map<int, Label> fromJson(Map<String, dynamic> json) {
+    final labels = <int, Label>{};
     if (json['labels'] != null) {
-      final labels = <int, Label>{};
       json['labels'].forEach((dynamic v) {
         final label = Label.fromJson(v as Map<String, dynamic>);
         if (label != null) {
           labels[label.id] = label;
         }
       });
-      return labels;
     }
-    return null;
+    return labels;
   }
 
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
-    if (_labels != null) {
-      data['labels'] = _labels.values.map((v) => v.toJson()).toList();
-    }
+    data['labels'] = _labels.values.map((v) => v.toJson()).toList();
     return data;
   }
 }

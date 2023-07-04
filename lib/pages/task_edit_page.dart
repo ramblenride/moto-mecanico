@@ -31,34 +31,34 @@ enum TaskAction { close, delete, reopen }
 /// A button allows to delete or close (complete) the task.
 /// The changes are saved when the 'back' button is pressed.
 class TaskEditPage extends StatefulWidget {
-  TaskEditPage({Key key, @required this.motorcycle, this.task})
+  TaskEditPage({Key? key, required this.motorcycle, this.task})
       : super(key: key);
   final Motorcycle motorcycle;
-  final Task task;
+  final Task? task;
 
   @override
   _TaskEditPageState createState() => _TaskEditPageState(task: task);
 }
 
 class _TaskEditPageState extends State<TaskEditPage> {
-  _TaskEditPageState({this.task}) {
-    _isNew = false;
+  _TaskEditPageState({Task? task}) : _isNew = false {
     if (task == null) {
       _isNew = true;
 
       // Correctly create the task to track images/attachments
       // The task will be removed if the user leaves the page without adding it.
-      task = Task(name: '');
+      _task = Task(name: '');
     }
   }
 
   final _formKey = GlobalKey<FormState>();
-  ScrollController _scrollController;
-  Task task;
+  late final ScrollController _scrollController;
+  late final Task _task;
+  late String _currencySymbol;
+  late DistanceUnit _distanceUnit;
+  late DateFormat _dateFormat;
+
   bool _isNew;
-  String _currencySymbol;
-  DistanceUnit _distanceUnit;
-  DateFormat _dateFormat;
 
   @override
   void initState() {
@@ -73,8 +73,8 @@ class _TaskEditPageState extends State<TaskEditPage> {
   }
 
   bool _validateAndSaveTask() {
-    if (_formKey.currentState.validate()) {
-      _formKey.currentState.save();
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
       _saveTask();
       return true;
     }
@@ -101,7 +101,7 @@ class _TaskEditPageState extends State<TaskEditPage> {
           color: Colors.blueGrey,
         ),
         value: TechnicalLevel.none,
-        tooltip: AppLocalizations.of(context)
+        tooltip: AppLocalizations.of(context)!
             .task_edit_page_tooltip_button_tech_level_none,
       ),
       PopupButtonsItem(
@@ -110,7 +110,7 @@ class _TaskEditPageState extends State<TaskEditPage> {
           width: imgWidth,
         ),
         value: TechnicalLevel.easy,
-        tooltip: AppLocalizations.of(context)
+        tooltip: AppLocalizations.of(context)!
             .task_edit_page_tooltip_button_tech_level_easy,
       ),
       PopupButtonsItem(
@@ -119,7 +119,7 @@ class _TaskEditPageState extends State<TaskEditPage> {
           width: imgWidth,
         ),
         value: TechnicalLevel.intermediate,
-        tooltip: AppLocalizations.of(context)
+        tooltip: AppLocalizations.of(context)!
             .task_edit_page_tooltip_button_tech_level_intermediate,
       ),
       PopupButtonsItem(
@@ -128,7 +128,7 @@ class _TaskEditPageState extends State<TaskEditPage> {
           width: imgWidth,
         ),
         value: TechnicalLevel.pro,
-        tooltip: AppLocalizations.of(context)
+        tooltip: AppLocalizations.of(context)!
             .task_edit_page_tooltip_button_tech_level_difficult,
       ),
     ];
@@ -147,7 +147,7 @@ class _TaskEditPageState extends State<TaskEditPage> {
           color: Colors.blueGrey,
         ),
         value: EffortLevel.none,
-        tooltip: AppLocalizations.of(context)
+        tooltip: AppLocalizations.of(context)!
             .task_edit_page_tooltip_button_effort_level_none,
       ),
       PopupButtonsItem(
@@ -156,7 +156,7 @@ class _TaskEditPageState extends State<TaskEditPage> {
           width: imgWidth,
         ),
         value: EffortLevel.small,
-        tooltip: AppLocalizations.of(context)
+        tooltip: AppLocalizations.of(context)!
             .task_edit_page_tooltip_button_effort_level_small,
       ),
       PopupButtonsItem(
@@ -165,7 +165,7 @@ class _TaskEditPageState extends State<TaskEditPage> {
           width: imgWidth,
         ),
         value: EffortLevel.medium,
-        tooltip: AppLocalizations.of(context)
+        tooltip: AppLocalizations.of(context)!
             .task_edit_page_tooltip_button_effort_level_medium,
       ),
       PopupButtonsItem(
@@ -174,7 +174,7 @@ class _TaskEditPageState extends State<TaskEditPage> {
           width: imgWidth,
         ),
         value: EffortLevel.large,
-        tooltip: AppLocalizations.of(context)
+        tooltip: AppLocalizations.of(context)!
             .task_edit_page_tooltip_button_effort_level_large,
       ),
     ];
@@ -192,21 +192,24 @@ class _TaskEditPageState extends State<TaskEditPage> {
             children: [
               Expanded(
                 child: TextFormField(
-                  decoration: _valueFieldDecoration(AppLocalizations.of(context)
-                      .task_edit_page_hint_prop_name),
+                  decoration: _valueFieldDecoration(
+                      AppLocalizations.of(context)!
+                          .task_edit_page_hint_prop_name),
                   style: propValueStyle,
                   textAlign: TextAlign.center,
-                  initialValue: task.name,
+                  initialValue: _task.name,
                   inputFormatters: [LengthLimitingTextInputFormatter(32)],
                   validator: (value) {
-                    if (value.isEmpty) {
-                      return AppLocalizations.of(context)
+                    if (value == null || value.isEmpty) {
+                      return AppLocalizations.of(context)!
                           .property_name_missing_error;
                     }
                     return null;
                   },
                   onSaved: (value) {
-                    task.name = value;
+                    if (value != null) {
+                      _task.name = value;
+                    }
                   },
                 ),
               ),
@@ -217,19 +220,22 @@ class _TaskEditPageState extends State<TaskEditPage> {
             children: [
               Expanded(
                 child: TextFormField(
-                  decoration: _valueFieldDecoration(AppLocalizations.of(context)
-                      .task_edit_page_hint_prop_description),
+                  decoration: _valueFieldDecoration(
+                      AppLocalizations.of(context)!
+                          .task_edit_page_hint_prop_description),
                   style: propLargeValueStyle,
                   textAlign: TextAlign.center,
                   minLines: 1,
                   maxLines: 3,
-                  initialValue: task.description,
+                  initialValue: _task.description,
                   inputFormatters: [
                     LengthLimitingTextInputFormatter(96),
                   ],
                   textInputAction: TextInputAction.done,
                   onSaved: (value) {
-                    task.description = value;
+                    if (value != null) {
+                      _task.description = value;
+                    }
                   },
                 ),
               ),
@@ -237,43 +243,43 @@ class _TaskEditPageState extends State<TaskEditPage> {
           ),
           RnrDivider,
           PropertyEditorRow(
-            name: AppLocalizations.of(context)
+            name: AppLocalizations.of(context)!
                 .motorcycle_edit_page_name_prop_tech_level,
             inputField: PopupButtonsButton(
-              tooltip: AppLocalizations.of(context)
+              tooltip: AppLocalizations.of(context)!
                   .task_edit_page_hint_prop_tech_level,
               items: _technicalLevels(),
-              initialValue: task.technicalLevel ?? TechnicalLevel.none,
-              onSelected: (level) => task.technicalLevel = level,
+              initialValue: _task.technicalLevel,
+              onSelected: (level) => _task.technicalLevel = level,
             ),
           ),
           PropertyEditorRow(
-            name: AppLocalizations.of(context)
+            name: AppLocalizations.of(context)!
                 .motorcycle_edit_page_name_prop_effort_level,
             inputField: PopupButtonsButton(
-              tooltip: AppLocalizations.of(context)
+              tooltip: AppLocalizations.of(context)!
                   .task_edit_page_hint_prop_effort_level,
               items: _effortLevels(),
-              initialValue: task.effortLevel ?? EffortLevel.none,
-              onSelected: (level) => task.effortLevel = level,
+              initialValue: _task.effortLevel,
+              onSelected: (level) => _task.effortLevel = level,
             ),
           ),
-          LabelSelector(active_labels: task.labels),
+          LabelSelector(active_labels: _task.labels),
         ],
       ),
       RnrDivider,
-      task.closed ? _closedTaskSchedule() : _openTaskSchedule(),
+      _task.closed ? _closedTaskSchedule() : _openTaskSchedule(),
       RnrDivider,
       PropertyEditorCard(
         children: [
           CostSelector(
-            costs: task.costs,
+            costs: _task.costs,
             currencySymbol: _currencySymbol,
           ),
           const SizedBox(height: 8),
           AttachmentSelector(
-            attachments: task.attachments,
-            storage: widget.motorcycle.storage.storage,
+            attachments: _task.attachments,
+            storage: widget.motorcycle.storage!.storage,
           ),
         ],
       ),
@@ -288,7 +294,7 @@ class _TaskEditPageState extends State<TaskEditPage> {
   Widget _openTaskSchedule() {
     final propValueStyle = Theme.of(context).textTheme.propEditorValue;
     return PropertyEditorCard(
-      title: AppLocalizations.of(context).task_edit_page_header_schedule,
+      title: AppLocalizations.of(context)!.task_edit_page_header_schedule,
       icons: [
         Container(
           width: 40,
@@ -298,20 +304,20 @@ class _TaskEditPageState extends State<TaskEditPage> {
             alignment: Alignment.topCenter,
             visualDensity: VisualDensity.compact,
             iconSize: 30,
-            tooltip: AppLocalizations.of(context)
+            tooltip: AppLocalizations.of(context)!
                 .task_edit_page_tooltip_add_to_calendar,
             icon: const Icon(
               Icons.insert_invitation,
             ),
             color: Colors.white70,
             onPressed: () async {
-              final date = task.dueDate != null &&
-                      task.dueDate.compareTo(DateTime.now()) > 0
-                  ? task.dueDate
+              final date = _task.dueDate != null &&
+                      _task.dueDate!.compareTo(DateTime.now()) > 0
+                  ? _task.dueDate!
                   : DateTime.now();
               final event = Event(
-                title: task.name,
-                description: task.description,
+                title: _task.name,
+                description: _task.description,
                 startDate: DateTime(date.year, date.month, date.day, 0, 0),
                 endDate: DateTime(date.year, date.month, date.day, 23, 59),
                 allDay: true,
@@ -332,15 +338,15 @@ class _TaskEditPageState extends State<TaskEditPage> {
             icon: const Icon(
               Icons.autorenew,
             ),
-            color: !task.recurring ? Colors.white70 : Colors.green,
-            tooltip: AppLocalizations.of(context)
+            color: !_task.recurring ? Colors.white70 : Colors.green,
+            tooltip: AppLocalizations.of(context)!
                 .task_edit_page_tooltip_recurring_button,
             onPressed: () async {
               final result = await showDialog<bool>(
                   context: context,
                   builder: (BuildContext context) {
                     return RecurringTaskDialog(
-                      task: task,
+                      task: _task,
                       onResult: (result) {
                         Navigator.of(context).pop(result);
                       },
@@ -356,43 +362,45 @@ class _TaskEditPageState extends State<TaskEditPage> {
       children: [
         PropertyEditorRow(
           name:
-              AppLocalizations.of(context).motorcycle_edit_page_name_prop_date,
+              AppLocalizations.of(context)!.motorcycle_edit_page_name_prop_date,
           inputField: TextFormFieldDatePicker(
             decoration: _valueFieldDecoration(
-                AppLocalizations.of(context).task_edit_page_hint_prop_date),
+                AppLocalizations.of(context)!.task_edit_page_hint_prop_date),
             textAlign: TextAlign.end,
             style: propValueStyle,
-            initialDate: task.dueDate,
+            initialDate: _task.dueDate ?? DateTime.now(),
             firstDate: DateTime.fromMillisecondsSinceEpoch(0),
             lastDate: DateTime(2099, 12, 31),
             dateFormat: _dateFormat,
             onDateChanged: (date) {
               // Update the date immediately so that add2calender uses the correct date
-              setState(() => task.dueDate = date);
+              setState(() => _task.dueDate = date);
             },
             onSaved: (selectedDate) {
-              task.dueDate = selectedDate;
+              _task.dueDate = selectedDate;
             },
           ),
         ),
         PropertyEditorRow(
-          name: AppLocalizations.of(context)
+          name: AppLocalizations.of(context)!
               .motorcycle_edit_page_name_prop_odometer,
           inputField: TextFormField(
-            decoration: _valueFieldDecoration(AppLocalizations.of(context)
+            decoration: _valueFieldDecoration(AppLocalizations.of(context)!
                 .motorcycle_edit_page_hint_prop_odometer),
             style: propValueStyle,
             textAlign: TextAlign.end,
-            initialValue:
-                task.dueOdometer?.toUnit(_distanceUnit).toString() ?? '',
+            initialValue: _task.dueOdometer.isValid
+                ? _task.dueOdometer.toUnit(_distanceUnit).toString()
+                : '',
             keyboardType: TextInputType.number,
             inputFormatters: [
               FilteringTextInputFormatter.digitsOnly,
               LengthLimitingTextInputFormatter(7),
             ],
             onSaved: (value) {
-              task.dueOdometer = Distance(
-                  value.isNotEmpty ? int.parse(value) : null, _distanceUnit);
+              _task.dueOdometer = Distance(
+                  (value != null && value.isNotEmpty) ? int.parse(value) : null,
+                  _distanceUnit);
             },
           ),
           trailer: Text(
@@ -401,18 +409,18 @@ class _TaskEditPageState extends State<TaskEditPage> {
           ),
         ),
         PropertyEditorRow(
-          name: AppLocalizations.of(context).task_edit_page_name_prop_executor,
+          name: AppLocalizations.of(context)!.task_edit_page_name_prop_executor,
           inputField: TextFormField(
-            decoration: _valueFieldDecoration(
-                AppLocalizations.of(context).task_edit_page_hint_prop_executor),
+            decoration: _valueFieldDecoration(AppLocalizations.of(context)!
+                .task_edit_page_hint_prop_executor),
             textAlign: TextAlign.end,
             style: propValueStyle,
-            initialValue: task.executor?.toString() ?? '',
+            initialValue: _task.executor.toString(),
             inputFormatters: [
               LengthLimitingTextInputFormatter(32),
             ],
             onSaved: (value) {
-              task.executor = value;
+              _task.executor = value ?? '';
             },
           ),
         ),
@@ -425,42 +433,44 @@ class _TaskEditPageState extends State<TaskEditPage> {
     // FIXME: This is the same as what's inside the CompleteTaskDialog
     final propValueStyle = Theme.of(context).textTheme.propEditorValue;
     return PropertyEditorCard(
-      title: AppLocalizations.of(context).task_edit_page_header_closed_schedule,
+      title:
+          AppLocalizations.of(context)!.task_edit_page_header_closed_schedule,
       children: [
         PropertyEditorRow(
           name:
-              AppLocalizations.of(context).complete_task_dialog_date_prop_name,
+              AppLocalizations.of(context)!.complete_task_dialog_date_prop_name,
           inputField: TextFormFieldDatePicker(
-            decoration: _valueFieldDecoration(AppLocalizations.of(context)
+            decoration: _valueFieldDecoration(AppLocalizations.of(context)!
                 .complete_task_dialog_date_prop_hint),
             textAlign: TextAlign.end,
             style: propValueStyle,
-            initialDate: task.closedDate,
+            initialDate: _task.closedDate ?? DateTime.now(),
             firstDate: DateTime.fromMillisecondsSinceEpoch(0),
             lastDate: DateTime(2099, 12, 31),
             dateFormat: _dateFormat,
             onSaved: (selectedDate) {
-              task.closedDate = selectedDate;
+              _task.closedDate = selectedDate;
             },
           ),
         ),
         PropertyEditorRow(
-          name: AppLocalizations.of(context)
+          name: AppLocalizations.of(context)!
               .motorcycle_edit_page_name_prop_odometer,
           inputField: TextFormField(
-            decoration: _valueFieldDecoration(AppLocalizations.of(context)
+            decoration: _valueFieldDecoration(AppLocalizations.of(context)!
                 .motorcycle_edit_page_hint_prop_odometer),
             textAlign: TextAlign.end,
             style: propValueStyle,
-            initialValue: task.closedOdometer.toUnit(_distanceUnit).toString(),
+            initialValue: _task.closedOdometer.toUnit(_distanceUnit).toString(),
             keyboardType: TextInputType.number,
             inputFormatters: [
               FilteringTextInputFormatter.digitsOnly,
               LengthLimitingTextInputFormatter(7),
             ],
             onSaved: (value) {
-              task.closedOdometer = Distance(
-                  value.isNotEmpty ? int.parse(value) : null, _distanceUnit);
+              _task.closedOdometer = Distance(
+                  (value != null && value.isNotEmpty) ? int.parse(value) : null,
+                  _distanceUnit);
             },
           ),
           trailer: Text(
@@ -469,18 +479,18 @@ class _TaskEditPageState extends State<TaskEditPage> {
           ),
         ),
         PropertyEditorRow(
-          name: AppLocalizations.of(context).task_edit_page_name_prop_executor,
+          name: AppLocalizations.of(context)!.task_edit_page_name_prop_executor,
           inputField: TextFormField(
-            decoration: _valueFieldDecoration(
-                AppLocalizations.of(context).task_edit_page_hint_prop_executor),
+            decoration: _valueFieldDecoration(AppLocalizations.of(context)!
+                .task_edit_page_hint_prop_executor),
             textAlign: TextAlign.end,
             style: propValueStyle,
-            initialValue: task.executor?.toString() ?? '',
+            initialValue: _task.executor.toString(),
             inputFormatters: [
               LengthLimitingTextInputFormatter(32),
             ],
             onSaved: (value) {
-              task.executor = value;
+              _task.executor = value ?? '';
             },
           ),
         ),
@@ -498,7 +508,7 @@ class _TaskEditPageState extends State<TaskEditPage> {
           _scrollDown(key);
         }
       },
-      notes: task.notes,
+      notes: _task.notes,
     );
   }
 
@@ -535,11 +545,11 @@ class _TaskEditPageState extends State<TaskEditPage> {
         appBar: AppBar(
           title: Text(
             _isNew
-                ? AppLocalizations.of(context).task_edit_page_title_add
-                : (task.closed
-                    ? AppLocalizations.of(context)
+                ? AppLocalizations.of(context)!.task_edit_page_title_add
+                : (_task.closed
+                    ? AppLocalizations.of(context)!
                         .task_edit_page_title_edit_closed
-                    : AppLocalizations.of(context).task_edit_page_title_edit),
+                    : AppLocalizations.of(context)!.task_edit_page_title_edit),
           ),
           actions: [
             _isNew
@@ -548,7 +558,7 @@ class _TaskEditPageState extends State<TaskEditPage> {
                     child: IconButton(
                       iconSize: 30,
                       icon: Icon(Icons.add_circle_outline),
-                      tooltip: AppLocalizations.of(context).appbar_add_button,
+                      tooltip: AppLocalizations.of(context)!.appbar_add_button,
                       onPressed: _addTask,
                     ),
                   )
@@ -556,25 +566,25 @@ class _TaskEditPageState extends State<TaskEditPage> {
                     width: 40,
                     child: IconButton(
                       icon: Icon(Icons.delete_outline),
-                      tooltip: AppLocalizations.of(context)
+                      tooltip: AppLocalizations.of(context)!
                           .task_edit_page_action_delete,
                       onPressed: _deleteTaskDialog,
                     ),
                   ),
             Container(
               width: 45,
-              child: task.closed
+              child: _task.closed
                   ? IconButton(
                       iconSize: 30,
                       icon: Icon(Icons.unarchive),
-                      tooltip: AppLocalizations.of(context)
+                      tooltip: AppLocalizations.of(context)!
                           .task_edit_page_action_reopen,
                       onPressed: _reopenTask,
                     )
                   : IconButton(
                       iconSize: 30,
                       icon: Icon(Icons.archive),
-                      tooltip: AppLocalizations.of(context)
+                      tooltip: AppLocalizations.of(context)!
                           .task_edit_page_action_close,
                       onPressed: _closeTask,
                     ),
@@ -600,13 +610,13 @@ class _TaskEditPageState extends State<TaskEditPage> {
     );
   }
 
-  Future<bool> _showTaskCompleteDialog() async {
+  Future<bool?> _showTaskCompleteDialog() async {
     return await showDialog<bool>(
       context: context,
       builder: (BuildContext context) {
         return CompleteTaskDialog(
           motorcycle: widget.motorcycle,
-          tasks: [task],
+          tasks: [_task],
           onResult: (result) {
             Navigator.of(context).pop(result);
           },
@@ -625,10 +635,10 @@ class _TaskEditPageState extends State<TaskEditPage> {
     if (_validateAndSaveTask()) {
       final result = await _showTaskCompleteDialog();
       if (result != null && result) {
-        if (task.recurring) {
-          final newTask = Task.fromRenew(task);
+        if (_task.recurring) {
+          final newTask = Task.fromRenew(_task);
           if (newTask != null) {
-            final storage = widget.motorcycle.storage.storage;
+            final storage = widget.motorcycle.storage!.storage;
             await Task.transferAttachments(newTask, storage, storage);
             widget.motorcycle.addTask(newTask);
           }
@@ -641,7 +651,7 @@ class _TaskEditPageState extends State<TaskEditPage> {
 
   void _reopenTask() {
     if (_validateAndSaveTask()) {
-      task.closed = false;
+      _task.closed = false;
       widget.motorcycle.saveChanges();
       Navigator.pop(context, true);
     }
@@ -652,35 +662,35 @@ class _TaskEditPageState extends State<TaskEditPage> {
       context: context,
       builder: (BuildContext context) {
         return DeleteDialog(
-          title: AppLocalizations.of(context).task_edit_page_action_delete,
+          title: AppLocalizations.of(context)!.task_edit_page_action_delete,
           content:
-              AppLocalizations.of(context).task_delete_dialog_text(task.name),
+              AppLocalizations.of(context)!.task_delete_dialog_text(_task.name),
           onResult: (result) {
             Navigator.of(context).pop(result);
           },
         );
       },
     );
-    if (result) {
+    if (result != null && result) {
       _deleteTask();
       Navigator.pop(context, true);
     }
   }
 
   void _deleteTask() {
-    widget.motorcycle.removeTask(task);
-    task.attachments.forEach((attachment) {
+    widget.motorcycle.removeTask(_task);
+    _task.attachments.forEach((attachment) {
       // FIXME: This should be centralized
       if (attachment.type == AttachmentType.file ||
           attachment.type == AttachmentType.picture) {
-        widget.motorcycle.storage.storage.deleteFile(attachment.url);
+        widget.motorcycle.storage!.storage.deleteFile(attachment.url);
       }
     });
     widget.motorcycle.saveChanges();
   }
 
   void _saveTask() {
-    widget.motorcycle.addTask(task);
+    widget.motorcycle.addTask(_task);
     widget.motorcycle.saveChanges();
   }
 }

@@ -38,13 +38,9 @@ extension RnrThemes on ThemeData {
   ThemeData get RnrDarkTheme {
     return ThemeData(
       brightness: Brightness.dark,
-      primarySwatch: RnrColors.blue,
-      primaryColorBrightness: Brightness.dark,
       primaryColor: RnrColors.blue[800],
       primaryColorLight: RnrColors.blue,
       primaryColorDark: RnrColors.darkBlue,
-      accentColor: RnrColors.orange,
-      toggleableActiveColor: RnrColors.blue[700],
       disabledColor: Colors.white54,
       scaffoldBackgroundColor: RnrColors.blue[900],
       dialogBackgroundColor: RnrColors.darkBlue,
@@ -52,7 +48,10 @@ extension RnrThemes on ThemeData {
           iconTheme: IconThemeData(
             color: Colors.grey[200],
           ),
-          textTheme: textTheme.apply(bodyColor: Colors.grey[200])),
+          toolbarTextStyle:
+              textTheme.apply(bodyColor: Colors.grey[200]).bodyMedium,
+          titleTextStyle:
+              textTheme.apply(bodyColor: Colors.grey[200]).titleLarge),
       dialogTheme: DialogTheme(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(
@@ -79,6 +78,54 @@ extension RnrThemes on ThemeData {
         selectionColor: RnrColors.blue[300],
         selectionHandleColor: RnrColors.orange,
       ),
+      colorScheme: ColorScheme.fromSwatch(primarySwatch: RnrColors.blue)
+          .copyWith(secondary: RnrColors.orange),
+      checkboxTheme: CheckboxThemeData(
+        fillColor: MaterialStateProperty.resolveWith<Color?>(
+            (Set<MaterialState> states) {
+          if (states.contains(MaterialState.disabled)) {
+            return null;
+          }
+          if (states.contains(MaterialState.selected)) {
+            return RnrColors.blue[700];
+          }
+          return null;
+        }),
+      ),
+      radioTheme: RadioThemeData(
+        fillColor: MaterialStateProperty.resolveWith<Color?>(
+            (Set<MaterialState> states) {
+          if (states.contains(MaterialState.disabled)) {
+            return null;
+          }
+          if (states.contains(MaterialState.selected)) {
+            return RnrColors.blue[700];
+          }
+          return null;
+        }),
+      ),
+      switchTheme: SwitchThemeData(
+        thumbColor: MaterialStateProperty.resolveWith<Color?>(
+            (Set<MaterialState> states) {
+          if (states.contains(MaterialState.disabled)) {
+            return null;
+          }
+          if (states.contains(MaterialState.selected)) {
+            return RnrColors.blue[700];
+          }
+          return null;
+        }),
+        trackColor: MaterialStateProperty.resolveWith<Color?>(
+            (Set<MaterialState> states) {
+          if (states.contains(MaterialState.disabled)) {
+            return null;
+          }
+          if (states.contains(MaterialState.selected)) {
+            return RnrColors.blue[700];
+          }
+          return null;
+        }),
+      ),
     );
   }
 }
@@ -92,21 +139,21 @@ const RnrDivider = Divider(
 
 extension CustomTextStyles on TextTheme {
   TextStyle get propEditorName {
-    return headline6.copyWith(
+    return titleLarge!.copyWith(
       fontSize: 16,
       color: RnrColors.blue[600],
     );
   }
 
   TextStyle get propEditorValue {
-    return headline6.copyWith(
+    return titleLarge!.copyWith(
       color: Colors.blueGrey[100],
       fontSize: 22,
     );
   }
 
   TextStyle get propEditorHint {
-    return subtitle2.copyWith(
+    return titleSmall!.copyWith(
       color: Colors.blueGrey,
       fontSize: 16,
       fontStyle: FontStyle.italic,
@@ -120,27 +167,27 @@ extension CustomTextStyles on TextTheme {
   }
 
   TextStyle get propEditorHeader {
-    return headline6.copyWith(color: RnrColors.orange, fontSize: 20);
+    return titleLarge!.copyWith(color: RnrColors.orange, fontSize: 20);
   }
 
   TextStyle get taskCardName {
-    return headline6.copyWith(color: Colors.blueGrey[100]);
+    return titleLarge!.copyWith(color: Colors.blueGrey[100]);
   }
 
   TextStyle get taskCardDescription {
-    return subtitle2.copyWith(color: Colors.blueGrey[400], fontSize: 16);
+    return titleSmall!.copyWith(color: Colors.blueGrey[400], fontSize: 16);
   }
 
   TextStyle get appbarButton {
-    return headline6.copyWith(color: Colors.white);
+    return titleLarge!.copyWith(color: Colors.white);
   }
 
   TextStyle get labelName {
-    return subtitle1.copyWith(color: Colors.white, fontSize: 18);
+    return titleMedium!.copyWith(color: Colors.white, fontSize: 18);
   }
 
   TextStyle get dialogHeader {
-    return headline6.copyWith(color: Colors.blueGrey[100]);
+    return titleLarge!.copyWith(color: Colors.blueGrey[100]);
   }
 
   TextStyle get selectorWidgetHeader {
@@ -148,6 +195,6 @@ extension CustomTextStyles on TextTheme {
   }
 
   TextStyle get dialogButton {
-    return button.copyWith(color: Colors.blueGrey, fontSize: 16);
+    return labelLarge!.copyWith(color: Colors.blueGrey, fontSize: 16);
   }
 }

@@ -1,7 +1,6 @@
 import 'dart:collection';
 
 import 'package:flutter/foundation.dart';
-import 'package:meta/meta.dart';
 import 'package:moto_mecanico/models/attachment.dart';
 import 'package:moto_mecanico/models/distance.dart';
 import 'package:moto_mecanico/models/note.dart';
@@ -13,30 +12,27 @@ import 'package:uuid/uuid.dart';
 // The name doesn't have to be unique across motorcycles.
 class Motorcycle extends ChangeNotifier {
   Motorcycle({
-    @required this.name,
-    this.id,
+    required this.name,
+    this.id = '',
     this.odometer = const Distance(null, DistanceUnit.UnitKM),
-    this.make,
-    this.model,
+    this.make = '',
+    this.model = '',
     this.year,
-    this.color,
-    this.immatriculation,
-    this.vin,
-    this.purchasePrice,
+    this.color = '',
+    this.immatriculation = '',
+    this.vin = '',
+    this.purchasePrice = 0,
     this.purchaseDate,
     this.purchaseOdometer = const Distance(null, DistanceUnit.UnitKM),
-    this.picture,
-    this.notes,
-    this.attachments,
-    tasks,
-  }) : assert(name != null) {
-    id ??= Uuid().v4();
-    _tasks = tasks ?? [];
-    notes ??= [];
-    attachments ??= [];
+    this.picture = '',
+    this.notes = const <Note>[],
+    this.attachments = const <Attachment>[],
+    tasks = const <Task>[],
+  }) : _tasks = tasks {
+    if (id.isEmpty) id = const Uuid().v4();
   }
 
-  MotorcycleStorage _storage;
+  MotorcycleStorage? _storage;
 
   String name;
   String id; // Unique id
@@ -44,25 +40,25 @@ class Motorcycle extends ChangeNotifier {
 
   String make;
   String model;
-  int year;
+  int? year;
   String color;
   String immatriculation;
   String vin; // Usually 17 characters, could also be less for older models
 
   int purchasePrice;
-  DateTime purchaseDate;
+  DateTime? purchaseDate;
   Distance purchaseOdometer;
 
   String picture; // The name of the file that contains the picture
   List<Note> notes;
   List<Attachment> attachments;
 
-  List<Task> _tasks;
+  final List<Task> _tasks;
 
   UnmodifiableListView<Task> get tasks => UnmodifiableListView(_tasks);
 
-  MotorcycleStorage get storage => _storage;
-  set storage(MotorcycleStorage storage) => _storage = storage;
+  MotorcycleStorage? get storage => _storage;
+  set storage(MotorcycleStorage? storage) => _storage = storage;
 
   // Should be called once updating properties is over. Will trigger screen
   // updates and storage.
@@ -85,25 +81,24 @@ class Motorcycle extends ChangeNotifier {
   }
 
   List<Task> get activeTasks {
-    return _tasks?.where((task) => !(task.closed ?? false))?.toList() ?? [];
+    return _tasks.where((task) => !task.closed).toList();
   }
 
   List<Task> get closedTasks {
-    return _tasks?.where((task) => task.closed ?? false)?.toList() ?? [];
+    return _tasks.where((task) => task.closed).toList();
   }
 
   String get description {
-    final elements = <String>[year?.toString(), make, model];
-    return elements.where((elem) => elem?.isNotEmpty ?? false).join(' ');
+    final elements = <String>[year?.toString() ?? '', make, model];
+    return elements.where((elem) => elem.isNotEmpty).join(' ');
   }
 
   bool matches(String desc) {
-    assert(desc != null);
     if (desc.isEmpty) return true;
 
     var upperDesc = desc.toUpperCase();
     if ([name, color, make, model].any((item) {
-          return item?.toUpperCase()?.contains(upperDesc) ?? false;
+          return item.toUpperCase().contains(upperDesc);
         }) ==
         true) return true;
 
@@ -113,8 +108,8 @@ class Motorcycle extends ChangeNotifier {
     }));
   }
 
-  factory Motorcycle.fromJson(Map<String, dynamic> json) {
-    if (json != null && json['name'] != null && json['id'] != null) {
+  static Motorcycle? fromJson(Map<String, dynamic> json) {
+    if (json['name'] != null && json['id'] != null) {
       final moto = Motorcycle(
         name: json['name'],
         id: json['id'],
@@ -137,7 +132,9 @@ class Motorcycle extends ChangeNotifier {
       if (json['notes'] != null) {
         json['notes'].forEach((n) {
           final note = Note.fromJson(n);
-          if (note != null) moto.notes.add(note);
+          if (note.name.isNotEmpty || note.text.isNotEmpty) {
+            moto.notes.add(note);
+          }
         });
       }
       if (json['attachments'] != null) {
@@ -175,9 +172,9 @@ class Motorcycle extends ChangeNotifier {
 
     data['purchasePrice'] = purchasePrice;
     if (purchaseDate != null) {
-      data['purchaseDate'] = purchaseDate.toIso8601String();
+      data['purchaseDate'] = purchaseDate?.toIso8601String() ?? '';
     }
-    if (purchaseOdometer != null) {
+    if (purchaseOdometer.isValid) {
       data['purchaseOdometer'] = purchaseOdometer.toJson();
     }
 
@@ -201,7 +198,7 @@ class Motorcycle extends ChangeNotifier {
   int get hashCode => id.hashCode;
 
   static Future<Motorcycle> fromMotorcycle(
-      Motorcycle other, MotorcycleStorage storage) async {
+      Motorcycle other, MotorcycleStorage? storage) async {
     final moto = Motorcycle(
       name: other.name,
       id: other.id,
@@ -218,21 +215,29 @@ class Motorcycle extends ChangeNotifier {
     );
     moto.storage = storage;
 
-    if (other.picture != null) {
-      final orig = await other.storage.getMotoFile(other.picture);
-      moto.picture = await storage.addMotoFile(orig.path);
-    }
-
     for (final note in other.notes) {
       moto.notes.add(Note.from(note));
+    }
+
+    if (other.picture.isNotEmpty && storage != null && other.storage != null) {
+      final orig = await other.storage!.getMotoFile(other.picture);
+      if (orig != null) {
+        moto.picture = await storage.addMotoFile(orig.path) ?? '';
+      }
     }
 
     for (final attachment in other.attachments) {
       var url = attachment.url;
       if (attachment.type == AttachmentType.file ||
           attachment.type == AttachmentType.picture) {
-        final orig = await other.storage.getMotoFile(attachment.url);
-        url = await storage.addMotoFile(orig.path);
+        if (storage != null && other.storage != null) {
+          final orig = await other.storage!.getMotoFile(attachment.url);
+          url =
+              (orig != null) ? await storage.addMotoFile(orig.path) ?? '' : '';
+        } else {
+          // Drop the attachment since we can't cpoy it
+          url = '';
+        }
       }
 
       final newAttachment = Attachment(
@@ -245,8 +250,10 @@ class Motorcycle extends ChangeNotifier {
 
     for (final task in other.tasks) {
       final newTask = Task.from(task, ignoreCopyable: true);
-      await Task.transferAttachments(
-          newTask, other.storage.storage, storage.storage);
+      if (storage != null && other.storage != null) {
+        await Task.transferAttachments(
+            newTask, other.storage!.storage, storage.storage);
+      }
       moto.addTask(newTask);
     }
 

@@ -7,14 +7,15 @@ import 'package:moto_mecanico/widgets/config_widget.dart';
 import 'package:provider/provider.dart';
 
 class MotorcycleCard extends StatelessWidget {
-  const MotorcycleCard({Key key}) : super(key: key);
+  const MotorcycleCard({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     const image_height = 200.0;
     final theme = Theme.of(context);
-    final titleStyle = theme.textTheme.headline5.copyWith(color: Colors.white);
-    final descriptionStyle = theme.textTheme.subtitle1;
+    final titleStyle =
+        theme.textTheme.headlineSmall!.copyWith(color: Colors.white);
+    final descriptionStyle = theme.textTheme.titleMedium!;
 
     final distanceUnit = ConfigWidget.of(context).distanceUnit;
 
@@ -45,7 +46,7 @@ class MotorcycleCard extends StatelessWidget {
                             AsyncSnapshot<ImageProvider> imageProvider) {
                           if (imageProvider.hasData) {
                             return Ink.image(
-                              image: imageProvider.data,
+                              image: imageProvider.data!,
                               fit: BoxFit.cover,
                             );
                           } else {

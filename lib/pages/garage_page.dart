@@ -13,7 +13,6 @@ import 'package:moto_mecanico/widgets/app_bar_filter.dart';
 import 'package:moto_mecanico/widgets/garage_drawer.dart';
 import 'package:moto_mecanico/widgets/moto_cards_view.dart';
 import 'package:provider/provider.dart';
-import 'package:share/share.dart';
 
 /// This is the initial page shown when opening the application.
 /// It displays a list of the motorcycles in the garage.
@@ -23,7 +22,7 @@ import 'package:share/share.dart';
 /// A floating button links to the 'add motorcycle' page.
 /// A drawer contains links to settings, etc...
 class GaragePage extends StatefulWidget {
-  GaragePage({Key key}) : super(key: key);
+  GaragePage({Key? key}) : super(key: key);
 
   @override
   _GaragePageState createState() => _GaragePageState();
@@ -34,25 +33,21 @@ class _GaragePageState extends State<GaragePage> {
 
   // FIXME: Cannot show snackbar cleanly in this widget because it creates the scaffold.
   // Create a loading widget that wraps the main page and shows errors
-  Widget _snackBarMsg;
+  Widget? _snackBarMsg;
   String _search = '';
   MotorcycleSort _sort = MotorcycleSort.alarms;
 
   String _getSortMethodStr(MotorcycleSort method) {
     switch (method) {
       case MotorcycleSort.alarms:
-        return AppLocalizations.of(context).garage_page_sort_list_alarms;
+        return AppLocalizations.of(context)!.garage_page_sort_list_alarms;
       case MotorcycleSort.make:
-        return AppLocalizations.of(context).garage_page_sort_list_make;
+        return AppLocalizations.of(context)!.garage_page_sort_list_make;
       case MotorcycleSort.name:
-        return AppLocalizations.of(context).garage_page_sort_list_name;
+        return AppLocalizations.of(context)!.garage_page_sort_list_name;
       case MotorcycleSort.year:
-        return AppLocalizations.of(context).garage_page_sort_list_year;
+        return AppLocalizations.of(context)!.garage_page_sort_list_year;
     }
-
-    // FIXME: Not strictly needed but the analyzer chokes otherwise. Will be fixed
-    // by null-safety in the next version of Dart.
-    return '';
   }
 
   void _addMotorcycle() {
@@ -78,14 +73,14 @@ class _GaragePageState extends State<GaragePage> {
   List<Widget> _buildActions() {
     return <Widget>[
       PopupMenuButton<MotorcycleSort>(
-        tooltip: AppLocalizations.of(context).garage_page_sort_button_tooltip,
+        tooltip: AppLocalizations.of(context)!.garage_page_sort_button_tooltip,
         icon: const Icon(Icons.sort),
         onSelected: _updateSortMethod,
         itemBuilder: (context) {
           final list = <PopupMenuEntry<MotorcycleSort>>[
             PopupMenuItem(
               child: Text(
-                AppLocalizations.of(context).garage_page_sort_list_header,
+                AppLocalizations.of(context)!.garage_page_sort_list_header,
               ),
               value: null,
               enabled: false,
@@ -122,8 +117,8 @@ class _GaragePageState extends State<GaragePage> {
       isLoading: _isLoading,
       child: Scaffold(
         appBar: AppBarFilter(
-          title: Text(AppLocalizations.of(context).garage_page_title),
-          hintText: AppLocalizations.of(context).appbar_filter_textfield_hint,
+          title: Text(AppLocalizations.of(context)!.garage_page_title),
+          hintText: AppLocalizations.of(context)!.appbar_filter_textfield_hint,
           updateSearchQueryCb: _updateSearchQuery,
           leadingActions: _buildActions(),
         ),
@@ -134,7 +129,7 @@ class _GaragePageState extends State<GaragePage> {
         floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.library_add),
           tooltip:
-              AppLocalizations.of(context).garage_page_add_motorcycle_button,
+              AppLocalizations.of(context)!.garage_page_add_motorcycle_button,
           onPressed: _addMotorcycle,
         ),
         body: Center(
@@ -152,20 +147,18 @@ class _GaragePageState extends State<GaragePage> {
     setState(() => _isLoading = true);
     final result = await FilePicker.platform
         .pickFiles(type: FileType.custom, allowedExtensions: ['zip']);
-    if (result != null) {
-      final zipFile = File(result.files.single.path);
+    if (result?.files.single.path != null) {
+      final zipFile = File(result!.files.single.path!);
       final garage = Provider.of<GarageModel>(context, listen: false);
       try {
         final newGarage = await GarageImportExport.Import(zipFile);
-        if (newGarage != null) {
-          await _addToGarage(garage, newGarage);
-        }
+        await _addToGarage(garage, newGarage);
       } catch (error) {
         debugPrint('Import error: ${error.toString()}');
-        _snackBarMsg = Text(AppLocalizations.of(context).garage_import_error);
+        _snackBarMsg = Text(AppLocalizations.of(context)!.garage_import_error);
       }
       await zipFile.delete();
-      await GarageImportExport.RemoveTempDirectory();
+      GarageImportExport.RemoveTempDirectory();
     }
     setState(() => _isLoading = false);
   }
@@ -184,7 +177,7 @@ class _GaragePageState extends State<GaragePage> {
     if (nbIgnored > 0) {
       debugPrint('Garage import ignored ${nbIgnored} motos');
       _snackBarMsg =
-          Text(AppLocalizations.of(context).garage_import_ignored(nbIgnored));
+          Text(AppLocalizations.of(context)!.garage_import_ignored(nbIgnored));
     }
   }
 
@@ -193,17 +186,19 @@ class _GaragePageState extends State<GaragePage> {
     try {
       setState(() => _isLoading = true);
       final zipFile = await GarageImportExport.Export(garage);
+      if (zipFile == null) throw Exception('Failed to create zip file');
+      /* FIXME!!!!!
       await Share.shareFiles([zipFile.path],
           subject: 'Moto Mecanico - ' +
-              AppLocalizations.of(context).garage_page_title);
-
+              AppLocalizations.of(context)!.garage_page_title);
+*/
       await zipFile.delete();
     } catch (error) {
       debugPrint('Export error: ${error.toString()}');
-      _snackBarMsg = Text(AppLocalizations.of(context).garage_export_error);
+      _snackBarMsg = Text(AppLocalizations.of(context)!.garage_export_error);
     }
 
-    await GarageImportExport.RemoveTempDirectory();
+    GarageImportExport.RemoveTempDirectory();
     setState(() => _isLoading = false);
   }
 }

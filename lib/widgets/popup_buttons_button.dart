@@ -3,20 +3,17 @@ import 'package:moto_mecanico/themes.dart';
 
 class PopupButtonsItem<T> {
   const PopupButtonsItem({
-    @required this.value,
-    @required this.icon,
+    required this.value,
+    required this.icon,
     this.selectedIcon,
-    this.tooltip,
+    this.tooltip = '',
     this.enabled = true,
-  })  : assert(icon != null),
-        assert(value != null),
-        assert(enabled != null);
+  });
 
   /// The value that will be returned if this entry is selected.
   final T value;
 
   /// Whether the user is permitted to select this item.
-  ///
   /// Defaults to true. If this is false, then the item will not react to
   /// touches.
   final bool enabled;
@@ -26,7 +23,7 @@ class PopupButtonsItem<T> {
 
   /// The optional icon displayed for this entry when selected.
   /// If null, the icon will be used.
-  final Widget selectedIcon;
+  final Widget? selectedIcon;
 
   /// String to display over the item on long press.
   final String tooltip;
@@ -44,19 +41,18 @@ class PopupButtonsButton<T> extends StatefulWidget {
   ///
   /// The [itemBuilder] argument must not be null.
   PopupButtonsButton({
-    Key key,
-    @required this.items,
-    @required this.initialValue,
-    this.onSelected,
-    this.tooltip,
-    this.elevation,
+    Key? key,
+    required this.items,
+    required this.initialValue,
+    required this.onSelected,
+    this.tooltip = '',
+    this.elevation = 8,
     this.enabled = true,
     this.size = 42,
     this.color,
     this.borderColor,
     this.selectedColor,
-  })  : assert(items != null && items.isNotEmpty),
-        assert(initialValue != null),
+  })  : assert(items.isNotEmpty),
         super(key: key);
 
   /// The list of items to diaplay
@@ -99,14 +95,14 @@ class PopupButtonsButton<T> extends StatefulWidget {
 
   /// If provided, the background color used for the buttons.
   /// If this property is null, then [RnrColors.darkBlue] is used.
-  final Color color;
+  final Color? color;
 
   /// If provided, the border color used around the buttons.
-  final Color borderColor;
+  final Color? borderColor;
 
   /// If provided, the color used for the selected button.
   /// If this property is null, then RnrColors.orange is used.
-  final Color selectedColor;
+  final Color? selectedColor;
 
   @override
   _PopupButtonsButtonState<T> createState() => _PopupButtonsButtonState<T>();
@@ -115,10 +111,10 @@ class PopupButtonsButton<T> extends StatefulWidget {
 class _PopupButtonsButtonState<T> extends State<PopupButtonsButton<T>>
     with SingleTickerProviderStateMixin {
   bool _isOpened = false;
-  AnimationController _animationController;
-  Animation<double> _animateIcon;
-  Animation<double> _translateAnimation;
-  T _selectedValue;
+  late final AnimationController _animationController;
+  late final Animation<double> _animateIcon;
+  late final Animation<double> _translateAnimation;
+  late final T _selectedValue;
   final Curve _curve = Curves.easeOut;
   final Duration _animationDuration = Duration(milliseconds: 250);
 
@@ -176,7 +172,7 @@ class _PopupButtonsButtonState<T> extends State<PopupButtonsButton<T>>
           color: widget.color ?? RnrColors.darkBlue,
           shape: BoxShape.circle,
           border: Border.all(
-            color: widget.borderColor ?? RnrColors.blue[600],
+            color: widget.borderColor ?? RnrColors.blue[600]!,
             width: 2,
           ),
         ),
@@ -201,9 +197,8 @@ class _PopupButtonsButtonState<T> extends State<PopupButtonsButton<T>>
   }
 
   Widget _createSelected(T value) {
-    PopupButtonsItem item = widget.items
-        .firstWhere((element) => element.value == value, orElse: () => null);
-    assert(item != null);
+    PopupButtonsItem item =
+        widget.items.firstWhere((element) => element.value == value);
 
     return Container(
       padding: EdgeInsets.zero,
@@ -229,7 +224,7 @@ class _PopupButtonsButtonState<T> extends State<PopupButtonsButton<T>>
             transform: Matrix4.translationValues(
               _translateAnimation.value * -1 * num * 1.1,
               0.0,
-              widget.elevation ?? 8,
+              widget.elevation,
             ),
             child: _createButton(item)));
         num = num + 1;

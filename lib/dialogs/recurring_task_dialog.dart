@@ -11,7 +11,7 @@ import 'package:moto_mecanico/widgets/property_editor_card.dart';
 import 'package:moto_mecanico/widgets/property_editor_row.dart';
 
 class RecurringTaskDialog extends StatefulWidget {
-  RecurringTaskDialog({@required this.task, @required this.onResult});
+  RecurringTaskDialog({required this.task, required this.onResult});
 
   final Task task;
   final Function(bool) onResult;
@@ -21,7 +21,7 @@ class RecurringTaskDialog extends StatefulWidget {
 }
 
 class _RecurringTaskDialogState extends State<RecurringTaskDialog> {
-  _RecurringTaskDialogState({@required this.task});
+  _RecurringTaskDialogState({required this.task});
 
   var _distanceUnit;
   final Task task;
@@ -50,7 +50,7 @@ class _RecurringTaskDialogState extends State<RecurringTaskDialog> {
                       topRight: Radius.circular(20)),
                 ),
                 child: Text(
-                  AppLocalizations.of(context).recurring_task_dialog_title,
+                  AppLocalizations.of(context)!.recurring_task_dialog_title,
                   style: Theme.of(context).textTheme.dialogHeader,
                   textAlign: TextAlign.center,
                 ),
@@ -59,16 +59,18 @@ class _RecurringTaskDialogState extends State<RecurringTaskDialog> {
                 isDialog: true,
                 children: [
                   PropertyEditorRow(
-                    name: AppLocalizations.of(context)
+                    name: AppLocalizations.of(context)!
                         .recurring_task_dialog_duration_prop_name,
                     inputField: TextFormField(
                       decoration: _valueFieldDecoration(
                           context,
-                          AppLocalizations.of(context)
+                          AppLocalizations.of(context)!
                               .recurring_task_dialog_duration_prop_hint),
                       textAlign: TextAlign.end,
                       style: propValueStyle,
-                      initialValue: task.recurringMonths?.toString() ?? '',
+                      initialValue: task.recurringMonths > 0
+                          ? task.recurringMonths.toString()
+                          : '',
                       keyboardType: TextInputType.number,
                       inputFormatters: [
                         FilteringTextInputFormatter.digitsOnly,
@@ -76,29 +78,30 @@ class _RecurringTaskDialogState extends State<RecurringTaskDialog> {
                       ],
                       onSaved: (value) {
                         task.recurringMonths =
-                            value.isNotEmpty ? int.parse(value) : null;
+                            (value != null && value.isNotEmpty)
+                                ? int.parse(value)
+                                : 0;
                       },
                     ),
                     trailer: Text(
-                      AppLocalizations.of(context)
+                      AppLocalizations.of(context)!
                           .recurring_task_dialog_duration_months,
                       style: propValueStyle,
                     ),
                   ),
                   PropertyEditorRow(
-                    name: AppLocalizations.of(context)
+                    name: AppLocalizations.of(context)!
                         .recurring_task_dialog_distance_prop_name,
                     inputField: TextFormField(
                       decoration: _valueFieldDecoration(
                           context,
-                          AppLocalizations.of(context)
+                          AppLocalizations.of(context)!
                               .recurring_task_dialog_distance_prop_hint),
                       textAlign: TextAlign.end,
                       style: propValueStyle,
                       initialValue: task.recurringOdometer
-                              ?.toUnit(_distanceUnit)
-                              ?.toString() ??
-                          '',
+                          .toUnit(_distanceUnit)
+                          .toString(),
                       keyboardType: TextInputType.number,
                       inputFormatters: [
                         FilteringTextInputFormatter.digitsOnly,
@@ -106,7 +109,9 @@ class _RecurringTaskDialogState extends State<RecurringTaskDialog> {
                       ],
                       onSaved: (value) {
                         task.recurringOdometer = Distance(
-                            value.isNotEmpty ? int.parse(value) : null,
+                            (value != null && value.isNotEmpty)
+                                ? int.parse(value)
+                                : null,
                             _distanceUnit);
                       },
                     ),
@@ -126,19 +131,19 @@ class _RecurringTaskDialogState extends State<RecurringTaskDialog> {
                 children: <Widget>[
                   TextButton(
                     child: Text(
-                      AppLocalizations.of(context).dialog_cancel_button,
+                      AppLocalizations.of(context)!.dialog_cancel_button,
                       style: Theme.of(context).textTheme.dialogButton,
                     ),
                     onPressed: () => widget.onResult(false),
                   ),
                   TextButton(
                     child: Text(
-                      AppLocalizations.of(context).dialog_save_button,
+                      AppLocalizations.of(context)!.dialog_save_button,
                       style: Theme.of(context).textTheme.dialogButton,
                     ),
                     onPressed: () {
-                      if (_formKey.currentState.validate()) {
-                        _formKey.currentState.save();
+                      if (_formKey.currentState!.validate()) {
+                        _formKey.currentState!.save();
                         widget.onResult(true);
                       }
                     },

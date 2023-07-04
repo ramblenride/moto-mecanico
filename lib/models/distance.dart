@@ -10,7 +10,7 @@ class Distance implements Comparable<dynamic> {
   static const double KM_TO_MILES = 0.621371;
   const Distance(this.distance, [this.unit = DistanceUnit.UnitKM]);
 
-  final int distance;
+  final int? distance;
   final DistanceUnit unit;
 
   bool get isValid => distance != null;
@@ -19,9 +19,9 @@ class Distance implements Comparable<dynamic> {
     var newDistance = distance;
     if (distance != null && unit != newUnit) {
       if (newUnit == DistanceUnit.UnitKM) {
-        newDistance = (distance / KM_TO_MILES).round();
+        newDistance = (distance! / KM_TO_MILES).round();
       } else {
-        newDistance = (distance * KM_TO_MILES).round();
+        newDistance = (distance! * KM_TO_MILES).round();
       }
     }
     return Distance(newDistance, newUnit);
@@ -31,8 +31,8 @@ class Distance implements Comparable<dynamic> {
   String toString({bool compact = false}) {
     if (!isValid) return '';
 
-    return (compact && distance.abs() > 9999)
-        ? '${(distance ~/ 1000)}k'
+    return (compact && distance!.abs() > 9999)
+        ? '${(distance! ~/ 1000)}k'
         : distance.toString();
   }
 
@@ -49,39 +49,32 @@ class Distance implements Comparable<dynamic> {
 
   // Returns the addition of two distances in the current unit.
   Distance operator +(Distance other) {
-    assert(other != null);
     return Distance((distance ?? 0) + (other.toUnit(unit).distance ?? 0), unit);
   }
 
   // Returns the subtraction of other distance in the current unit.
   Distance operator -(Distance other) {
-    assert(other != null);
     return Distance((distance ?? 0) - (other.toUnit(unit).distance ?? 0), unit);
   }
 
   // Returns the multiplication of a distance with a constant.
   Distance operator *(int other) {
-    assert(other != null);
     return Distance((distance ?? 0) * other, unit);
   }
 
   bool operator >(Distance other) {
-    assert(other != null);
     return (distance ?? 0) > (other.toUnit(unit).distance ?? 0);
   }
 
   bool operator >=(Distance other) {
-    assert(other != null);
     return (distance ?? 0) >= (other.toUnit(unit).distance ?? 0);
   }
 
   bool operator <(Distance other) {
-    assert(other != null);
     return (distance ?? 0) < (other.toUnit(unit).distance ?? 0);
   }
 
   bool operator <=(Distance other) {
-    assert(other != null);
     return (distance ?? 0) <= (other.toUnit(unit).distance ?? 0);
   }
 
@@ -91,7 +84,7 @@ class Distance implements Comparable<dynamic> {
   }
 
   @override
-  int get hashCode => toUnit(DistanceUnit.UnitKM).distance;
+  int get hashCode => toUnit(DistanceUnit.UnitKM).distance ?? 0;
 
   @override
   int compareTo(dynamic other) {
@@ -110,7 +103,7 @@ class Distance implements Comparable<dynamic> {
   }
 
   factory Distance.fromJson(Map<String, dynamic> json) {
-    if (json != null && json.containsKey('distance') && json['unit'] != null) {
+    if (json.containsKey('distance') && json['unit'] != null) {
       return Distance(json['distance'],
           json['unit'] == 'mile' ? DistanceUnit.UnitMile : DistanceUnit.UnitKM);
     }

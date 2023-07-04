@@ -12,7 +12,7 @@ import 'package:moto_mecanico/widgets/property_editor_card.dart';
 import 'package:moto_mecanico/widgets/property_editor_row.dart';
 
 class SettingsPage extends StatefulWidget {
-  SettingsPage({Key key}) : super(key: key);
+  SettingsPage({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _SettingsPageState();
@@ -23,15 +23,16 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     final config = ConfigWidget.of(context);
 
-    return WillPopScope(
-      onWillPop: () async {
+    return PopScope(
+      canPop: true,
+      onPopInvoked: (bool didPop) {
+        if (!didPop) return;
         // Reload the app with the new language
         MotoLogApp.applyConfiguration(context);
-        return true;
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(AppLocalizations.of(context).settings_page_title),
+          title: Text(AppLocalizations.of(context)!.settings_page_title),
         ),
         body: DismissKeyboardOnTap(
           child: Padding(
@@ -41,7 +42,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 runSpacing: 10,
                 children: [
                   PropertyEditorCard(
-                    title: AppLocalizations.of(context)
+                    title: AppLocalizations.of(context)!
                         .settings_page_localization_header,
                     children: [
                       _getLanguageRow(config),
@@ -53,7 +54,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     ],
                   ),
                   PropertyEditorCard(
-                    title: AppLocalizations.of(context)
+                    title: AppLocalizations.of(context)!
                         .settings_page_labels_header,
                     children: [
                       const SizedBox(height: 10),
@@ -70,24 +71,22 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Widget _getLanguageRow(Configuration config) {
-    assert(config != null);
     return PropertyEditorRow(
-      name: AppLocalizations.of(context).settings_page_language_prop_name,
+      name: AppLocalizations.of(context)!.settings_page_language_prop_name,
       inputField: Align(
         alignment: Alignment.centerRight,
         child: DropdownButton<String>(
-          value: config.locale?.languageCode ??
-              Localizations.localeOf(context)
-                  .languageCode
-                  .split(RegExp(r'[_-]'))[0],
+          value: _getLocale(config),
           items: AppLocalSupport.supportedLanguages.keys.map((key) {
             return DropdownMenuItem<String>(
-              child: Text(AppLocalSupport.supportedLanguages[key]),
+              child: Text(AppLocalSupport.supportedLanguages[key]!),
               value: key,
             );
           }).toList(),
           onChanged: (newLocale) {
-            setState(() => config.locale = Locale(newLocale));
+            if (newLocale != null && newLocale.isNotEmpty) {
+              setState(() => config.locale = Locale(newLocale));
+            }
           },
         ),
       ),
@@ -95,9 +94,8 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Widget _getDateRow(Configuration config) {
-    assert(config != null);
     return PropertyEditorRow(
-      name: AppLocalizations.of(context).settings_page_date_format_prop_name,
+      name: AppLocalizations.of(context)!.settings_page_date_format_prop_name,
       inputField: Align(
         alignment: Alignment.centerRight,
         child: DropdownButton<String>(
@@ -111,17 +109,19 @@ class _SettingsPageState extends State<SettingsPage> {
                 value: item);
             return widget;
           }).toList(),
-          onChanged: (newFormat) =>
-              setState(() => config.dateFormat = newFormat),
+          onChanged: (newFormat) {
+            if (newFormat != null) {
+              setState(() => config.dateFormat = newFormat);
+            }
+          },
         ),
       ),
     );
   }
 
   Widget _getCurrencyRow(Configuration config) {
-    assert(config != null);
     return PropertyEditorRow(
-      name: AppLocalizations.of(context).settings_page_currency_prop_name,
+      name: AppLocalizations.of(context)!.settings_page_currency_prop_name,
       inputField: Align(
         alignment: Alignment.centerRight,
         child: DropdownButton<String>(
@@ -135,18 +135,21 @@ class _SettingsPageState extends State<SettingsPage> {
               value: item,
             );
           }).toList(),
-          onChanged: (newCurrency) => setState(() {
-            setState(() => config.currencySymbol = newCurrency);
-          }),
+          onChanged: (newCurrency) {
+            if (newCurrency != null) {
+              setState(() {
+                setState(() => config.currencySymbol = newCurrency);
+              });
+            }
+          },
         ),
       ),
     );
   }
 
   Widget _getDistanceRow(Configuration config) {
-    assert(config != null);
     return PropertyEditorRow(
-      name: AppLocalizations.of(context).settings_page_distance_prop_name,
+      name: AppLocalizations.of(context)!.settings_page_distance_prop_name,
       inputField: Align(
         alignment: Alignment.centerRight,
         child: DropdownButton<DistanceUnit>(
@@ -154,19 +157,33 @@ class _SettingsPageState extends State<SettingsPage> {
           items: [
             DropdownMenuItem(
               value: DistanceUnit.UnitKM,
-              child: Text(
-                AppLocalSupport.distanceUnits[DistanceUnit.UnitKM],
-              ),
+              child: Text(AppLocalSupport.distanceUnits[DistanceUnit.UnitKM]!),
             ),
             DropdownMenuItem(
               value: DistanceUnit.UnitMile,
-              child: Text(AppLocalSupport.distanceUnits[DistanceUnit.UnitMile]),
+              child:
+                  Text(AppLocalSupport.distanceUnits[DistanceUnit.UnitMile]!),
             ),
           ],
-          onChanged: (newUnit) => setState(() => config.distanceUnit = newUnit),
+          onChanged: (newUnit) {
+            if (newUnit != null) {
+              setState(() => config.distanceUnit = newUnit);
+            }
+          },
         ),
       ),
     );
+  }
+
+  String _getLocale(Configuration config) {
+    return config.locale.languageCode;
+    /*
+     FIXME: Need to know if the locale has been configured or not
+     ??
+              Localizations.localeOf(context)
+                  .languageCode
+                  .split(RegExp(r'[_-]'))[0]
+    */
   }
 
 /*

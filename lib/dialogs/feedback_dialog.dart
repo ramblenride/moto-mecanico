@@ -3,16 +3,16 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:moto_mecanico/assets.dart';
 import 'package:moto_mecanico/themes.dart';
 import 'package:moto_mecanico/widgets/config_widget.dart';
-import 'package:package_info/package_info.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class FeedbackDialog extends StatelessWidget {
-  FeedbackDialog({Key key}) : super(key: key);
+  FeedbackDialog({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).textTheme;
-    final pkgInfo = ConfigWidget.of(context).packageInfo;
+    final pkgInfo = ConfigWidget.of(context).packageInfo!;
 
     return Dialog(
       child: SingleChildScrollView(
@@ -29,7 +29,7 @@ class FeedbackDialog extends StatelessWidget {
                     topRight: Radius.circular(20.0)),
               ),
               child: Text(
-                AppLocalizations.of(context).feedback_page_title,
+                AppLocalizations.of(context)!.feedback_page_title,
                 style: theme.dialogHeader,
                 textAlign: TextAlign.center,
               ),
@@ -48,7 +48,7 @@ class FeedbackDialog extends StatelessWidget {
                   ),
                   ListTile(
                     leading: const Icon(Icons.email),
-                    title: Text(AppLocalizations.of(context).feedback_email),
+                    title: Text(AppLocalizations.of(context)!.feedback_email),
                     onTap: () {
                       _sendToEmail(pkgInfo);
                       Navigator.of(context).pop();
@@ -56,7 +56,7 @@ class FeedbackDialog extends StatelessWidget {
                   ),
                   ListTile(
                       leading: const Icon(Icons.apps),
-                      title: Text(AppLocalizations.of(context).feedback_rate),
+                      title: Text(AppLocalizations.of(context)!.feedback_rate),
                       onTap: () {
                         _ratePlayStore();
                         Navigator.of(context).pop();
@@ -65,7 +65,7 @@ class FeedbackDialog extends StatelessWidget {
                   Align(
                     alignment: Alignment.center,
                     child: Text(
-                      AppLocalizations.of(context).feedback_page_thanks,
+                      AppLocalizations.of(context)!.feedback_page_thanks,
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -75,7 +75,7 @@ class FeedbackDialog extends StatelessWidget {
                     children: [
                       TextButton(
                         child: Text(
-                          AppLocalizations.of(context).dialog_cancel_button,
+                          AppLocalizations.of(context)!.dialog_cancel_button,
                           style: theme.dialogButton,
                         ),
                         onPressed: () => Navigator.of(context).pop(),
@@ -101,15 +101,15 @@ class FeedbackDialog extends StatelessWidget {
         'mailto:$EMAIL_FEEBACK?subject=$appName Feedback&body=Package: $packageName\\n\\r'
         'App Version: $version\\n\\rBuild: $buildNumber\\n\\r';
 
-    await launch(emailUrl);
+    await launchUrlString(emailUrl);
   }
 
   void _sendToTwitter() async {
-    await launch(TWITTER_FEEDBACK_URL);
+    await launchUrlString(TWITTER_FEEDBACK_URL);
   }
 
   void _ratePlayStore() async {
     // FIXME: Use play app instead of URL?
-    await launch(GOOGLE_PLAY_URL);
+    await launchUrlString(GOOGLE_PLAY_URL);
   }
 }

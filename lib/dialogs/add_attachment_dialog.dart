@@ -7,9 +7,9 @@ import 'package:moto_mecanico/models/attachment.dart';
 import 'package:moto_mecanico/themes.dart';
 
 class AddAttachmentDialog extends StatefulWidget {
-  AddAttachmentDialog({@required this.onResult});
+  const AddAttachmentDialog({super.key, required this.onResult});
 
-  final Function(Attachment) onResult;
+  final Function(Attachment?) onResult;
 
   @override
   State<StatefulWidget> createState() => _AddAttachmentDialogState();
@@ -38,7 +38,7 @@ class _AddAttachmentDialogState extends State<AddAttachmentDialog> {
                   topLeft: Radius.circular(20), topRight: Radius.circular(20)),
             ),
             child: Text(
-              AppLocalizations.of(context).add_attachment_dialog_title,
+              AppLocalizations.of(context)!.add_attachment_dialog_title,
               style: theme.dialogHeader,
               textAlign: TextAlign.center,
             ),
@@ -53,26 +53,26 @@ class _AddAttachmentDialogState extends State<AddAttachmentDialog> {
               children: [
                 _attachmentItem(
                   Icons.photo_camera,
-                  AppLocalizations.of(context)
+                  AppLocalizations.of(context)!
                       .add_attachment_dialog_add_new_picture,
                   () async =>
                       widget.onResult(await _selectPicture(ImageSource.camera)),
                 ),
                 _attachmentItem(
                   Icons.insert_photo,
-                  AppLocalizations.of(context)
+                  AppLocalizations.of(context)!
                       .add_attachment_dialog_add_picture,
                   () async => widget
                       .onResult(await _selectPicture(ImageSource.gallery)),
                 ),
                 _attachmentItem(
                   Icons.attach_file,
-                  AppLocalizations.of(context).add_attachment_dialog_add_file,
+                  AppLocalizations.of(context)!.add_attachment_dialog_add_file,
                   () async => widget.onResult(await _selectFile()),
                 ),
                 _attachmentItem(
                   Icons.insert_link,
-                  AppLocalizations.of(context).add_attachment_dialog_add_link,
+                  AppLocalizations.of(context)!.add_attachment_dialog_add_link,
                   () async => widget.onResult(await _selectLink()),
                 ),
                 Row(
@@ -80,7 +80,7 @@ class _AddAttachmentDialogState extends State<AddAttachmentDialog> {
                   children: [
                     TextButton(
                       child: Text(
-                        AppLocalizations.of(context).dialog_cancel_button,
+                        AppLocalizations.of(context)!.dialog_cancel_button,
                         style: theme.dialogButton,
                       ),
                       onPressed: () => widget.onResult(null),
@@ -95,7 +95,7 @@ class _AddAttachmentDialogState extends State<AddAttachmentDialog> {
     );
   }
 
-  Widget _attachmentItem(IconData icon, String title, Function action) {
+  Widget _attachmentItem(IconData icon, String title, Function()? action) {
     return InkWell(
       onTap: action,
       child: Row(
@@ -114,37 +114,41 @@ class _AddAttachmentDialogState extends State<AddAttachmentDialog> {
     );
   }
 
-  Future<Attachment> _selectPicture(ImageSource source) async {
-    final pickedFile = await picker.getImage(
+  Future<Attachment?> _selectPicture(ImageSource source) async {
+    final name = AppLocalizations.of(context)!
+        .add_attachment_dialog_default_name_picture;
+
+    final pickedFile = await picker.pickImage(
       source: source,
       maxHeight: 1080,
     );
     if (pickedFile != null) {
       return Attachment(
         type: AttachmentType.picture,
-        name: AppLocalizations.of(context)
-            .add_attachment_dialog_default_name_picture,
+        name: name,
         url: pickedFile.path,
       );
     }
     return null;
   }
 
-  Future<Attachment> _selectFile() async {
+  Future<Attachment?> _selectFile() async {
+    final name =
+        AppLocalizations.of(context)!.add_attachment_dialog_default_name_file;
+
     final result = await FilePicker.platform.pickFiles();
-    if (result != null) {
+    if (result?.files.single.path != null) {
       return Attachment(
         type: AttachmentType.file,
-        name: AppLocalizations.of(context)
-            .add_attachment_dialog_default_name_file,
-        url: result.files.single.path,
+        name: name,
+        url: result!.files.single.path!,
       );
     }
     return null;
   }
 
-  Future<Attachment> _selectLink() async {
-    return await showDialog<Attachment>(
+  Future<Attachment?> _selectLink() async {
+    return await showDialog<Attachment?>(
       context: context,
       builder: (BuildContext context) {
         return AddLinkAttachmentDialog(

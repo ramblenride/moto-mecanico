@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:moto_mecanico/dialogs/add_cost_dialog.dart';
@@ -8,10 +7,8 @@ import 'package:moto_mecanico/themes.dart';
 import 'package:moto_mecanico/widgets/cost_selector_row.dart';
 
 class CostSelector extends StatefulWidget {
-  CostSelector({Key key, @required this.costs, @required this.currencySymbol})
-      : assert(costs != null),
-        assert(currencySymbol != null),
-        super(key: key);
+  CostSelector({Key? key, required this.costs, required this.currencySymbol})
+      : super(key: key);
 
   final List<Cost> costs;
   final String currencySymbol;
@@ -21,7 +18,7 @@ class CostSelector extends StatefulWidget {
 }
 
 class _CostSelectorState extends State<CostSelector> {
-  Map<Key, CostSelectorRow> _costRows;
+  late final Map<Key, CostSelectorRow> _costRows;
   bool _expanded = false;
 
   @override
@@ -59,7 +56,7 @@ class _CostSelectorState extends State<CostSelector> {
             child: Row(
               children: [
                 Text(
-                  AppLocalizations.of(context).cost_selector_title,
+                  AppLocalizations.of(context)!.cost_selector_title,
                   style: Theme.of(context).textTheme.propEditorHeader,
                 ),
                 const SizedBox(width: 8),
@@ -87,7 +84,7 @@ class _CostSelectorState extends State<CostSelector> {
                           alignment: Alignment.bottomCenter,
                           padding: EdgeInsets.zero,
                           color: Colors.blueGrey[100],
-                          tooltip: AppLocalizations.of(context)
+                          tooltip: AppLocalizations.of(context)!
                               .cost_selector_add_cost,
                           onPressed: _addCost,
                         )
@@ -172,7 +169,7 @@ class _CostSelectorState extends State<CostSelector> {
     if (_costRows.isEmpty) {
       return [
         Text(
-          AppLocalizations.of(context).cost_selector_empty_list,
+          AppLocalizations.of(context)!.cost_selector_empty_list,
           style: Theme.of(context).textTheme.propEditorHint,
         )
       ];

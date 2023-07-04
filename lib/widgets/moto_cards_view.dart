@@ -12,10 +12,10 @@ import 'package:provider/provider.dart';
 class MotoCardsView extends StatefulWidget {
   final String search;
   final MotorcycleSort sortMethod;
-  final Widget snackBarMsg;
+  final Widget? snackBarMsg;
 
   MotoCardsView({
-    Key key,
+    Key? key,
     this.search = '',
     this.sortMethod = MotorcycleSort.alarms,
     this.snackBarMsg,
@@ -33,7 +33,7 @@ class _MotoCardsViewState extends State<MotoCardsView> {
     garage.onErrorCb = ((error) {
       final snackBar = SnackBar(
         content: Text(
-          AppLocalizations.of(context).snackbar_storage_error +
+          AppLocalizations.of(context)!.snackbar_storage_error +
               ': ${error.toString()}',
         ),
       );
@@ -48,7 +48,7 @@ class _MotoCardsViewState extends State<MotoCardsView> {
 
   Widget _createEmptyGarage() {
     return Tooltip(
-        message: AppLocalizations.of(context).garage_page_empty_garage,
+        message: AppLocalizations.of(context)!.garage_page_empty_garage,
         child: Image.asset(IMG_ROADSIGN_MOTO_PARKING, width: 140));
   }
 
@@ -64,8 +64,8 @@ class _MotoCardsViewState extends State<MotoCardsView> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text(
-          AppLocalizations.of(context).garage_page_loading,
-          style: Theme.of(context).textTheme.bodyText2,
+          AppLocalizations.of(context)!.garage_page_loading,
+          style: Theme.of(context).textTheme.bodyMedium,
         ),
         const SizedBox(height: 10),
         const CircularProgressIndicator(),
@@ -131,7 +131,7 @@ class _MotoCardsViewState extends State<MotoCardsView> {
     if (widget.snackBarMsg != null) {
       // FIXME: This is terrible
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        final snackBar = SnackBar(content: widget.snackBarMsg);
+        final snackBar = SnackBar(content: widget.snackBarMsg!);
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       });
     }

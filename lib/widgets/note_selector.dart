@@ -6,23 +6,22 @@ import 'package:moto_mecanico/widgets/note_selector_row.dart';
 
 class NoteSelector extends StatefulWidget {
   NoteSelector({
-    Key key,
-    @required this.notes,
+    Key? key,
+    required this.notes,
     this.onExpansionChanged,
     this.showRenewable = true,
-  })  : assert(notes != null),
-        super(key: key);
+  }) : super(key: key);
 
   final List<Note> notes;
   final bool showRenewable;
-  final ValueChanged<bool> onExpansionChanged;
+  final ValueChanged<bool>? onExpansionChanged;
 
   @override
   State<StatefulWidget> createState() => _NoteSelectorState();
 }
 
 class _NoteSelectorState extends State<NoteSelector> {
-  Map<Key, NoteSelectorRow> _noteRows;
+  final Map<Key, NoteSelectorRow> _noteRows = {};
   bool _expanded = true;
   bool _expansionSignaled = true;
 
@@ -35,8 +34,8 @@ class _NoteSelectorState extends State<NoteSelector> {
   void _notifyExpand() {
     // This event must be signalled after the widget is redrawn
     if (_expansionSignaled == false && widget.onExpansionChanged != null) {
-      WidgetsBinding.instance
-          .addPostFrameCallback((_) => widget.onExpansionChanged(_expanded));
+      WidgetsBinding.instance.addPostFrameCallback(
+          (_) => widget.onExpansionChanged!.call(_expanded));
     }
     _expansionSignaled = true;
   }
@@ -61,7 +60,7 @@ class _NoteSelectorState extends State<NoteSelector> {
             child: Row(
               children: [
                 Text(
-                  AppLocalizations.of(context)
+                  AppLocalizations.of(context)!
                       .motorcycle_edit_page_section_header_notes,
                   style: Theme.of(context).textTheme.propEditorHeader,
                 ),
@@ -79,7 +78,7 @@ class _NoteSelectorState extends State<NoteSelector> {
                           alignment: Alignment.bottomCenter,
                           padding: EdgeInsets.zero,
                           color: Colors.blueGrey[100],
-                          tooltip: AppLocalizations.of(context)
+                          tooltip: AppLocalizations.of(context)!
                               .note_selector_add_note,
                           onPressed: () async {
                             final note = Note(
@@ -134,18 +133,17 @@ class _NoteSelectorState extends State<NoteSelector> {
   }
 
   void _buildRows() {
-    _noteRows = {};
     for (final note in widget.notes) {
       final key = UniqueKey();
       _noteRows[key] = NoteSelectorRow(
-        key: key,
-        note: note,
-        showRenewable: widget.showRenewable,
-        onRemove: (note) => setState(() {
-          widget.notes.remove(note);
-          _buildRows();
-        }),
-      );
+          key: key,
+          note: note,
+          showRenewable: widget.showRenewable,
+          onRemove: (note) => setState(() {
+                widget.notes.remove(note);
+                _buildRows();
+              }),
+          onSaved: (note) => {});
     }
   }
 
@@ -154,7 +152,7 @@ class _NoteSelectorState extends State<NoteSelector> {
     if (_noteRows.isEmpty) {
       return [
         Text(
-          AppLocalizations.of(context).note_selector_empty_list,
+          AppLocalizations.of(context)!.note_selector_empty_list,
           style: Theme.of(context).textTheme.propEditorHint,
         )
       ];

@@ -13,11 +13,8 @@ import 'package:provider/provider.dart';
 // separate because we're playing around with the look a lot.
 // Merge/reuse when happy with results.
 class ClosedTaskCard extends StatelessWidget {
-  const ClosedTaskCard(
-      {Key key, @required this.motorcycle, @required this.task})
-      : assert(motorcycle != null),
-        assert(task != null),
-        super(key: key);
+  const ClosedTaskCard({Key? key, required this.motorcycle, required this.task})
+      : super(key: key);
 
   final Motorcycle motorcycle;
   final Task task;
@@ -86,7 +83,7 @@ class ClosedTaskCard extends StatelessWidget {
         name: ConfigWidget.of(context).currencySymbol,
         decimalDigits: 0,
       );
-      return AppLocalizations.of(context).closed_task_card_cost +
+      return AppLocalizations.of(context)!.closed_task_card_cost +
           ': ' +
           currencyFormat.format(task.cost.value);
     }
@@ -94,8 +91,8 @@ class ClosedTaskCard extends StatelessWidget {
   }
 
   String _getWorkDoneByStr(context) {
-    if (task.executor?.isNotEmpty == true) {
-      return AppLocalizations.of(context).closed_task_card_executor +
+    if (task.executor.isNotEmpty == true) {
+      return AppLocalizations.of(context)!.closed_task_card_executor +
           ': ' +
           '${task.executor}';
     }
@@ -110,7 +107,7 @@ class ClosedTaskCard extends StatelessWidget {
         : (motorcycle.odometer - task.closedOdometer);
     final daysElapsed = task.closedDate == null
         ? null
-        : DateTime.now().difference(task.closedDate).inDays;
+        : DateTime.now().difference(task.closedDate!).inDays;
 
     final remaining = <Widget>[];
     var daysUnit;
@@ -119,22 +116,23 @@ class ClosedTaskCard extends StatelessWidget {
       if (daysElapsed.abs() > 365) {
         final years = daysElapsed / 365;
         daysStr = years.toStringAsFixed(1);
-        daysUnit = AppLocalizations.of(context).unit_years(years.abs().round());
+        daysUnit =
+            AppLocalizations.of(context)!.unit_years(years.abs().round());
       } else {
         daysStr = '$daysElapsed';
-        daysUnit = AppLocalizations.of(context).unit_days(daysElapsed.abs());
+        daysUnit = AppLocalizations.of(context)!.unit_days(daysElapsed.abs());
       }
     }
     if (daysStr != null) {
       remaining.add(Text(daysUnit,
           style: Theme.of(context)
               .textTheme
-              .subtitle2
+              .titleSmall!
               .copyWith(color: Colors.blueGrey[200], fontSize: 13)));
       remaining.add(Text(daysStr,
           style: Theme.of(context)
               .textTheme
-              .subtitle2
+              .titleSmall!
               .copyWith(color: Colors.blueGrey[100], fontSize: 16)));
     }
 
@@ -156,12 +154,12 @@ class ClosedTaskCard extends StatelessWidget {
       remaining.add(Text(distanceStr,
           style: Theme.of(context)
               .textTheme
-              .subtitle2
+              .titleSmall!
               .copyWith(color: Colors.blueGrey[100], fontSize: 16)));
-      remaining.add(Text(AppLocalSupport.distanceUnitsCompact[distanceUnit],
+      remaining.add(Text(AppLocalSupport.distanceUnitsCompact[distanceUnit]!,
           style: Theme.of(context)
               .textTheme
-              .subtitle2
+              .titleSmall!
               .copyWith(color: Colors.blueGrey[200], fontSize: 13)));
     }
 
@@ -181,7 +179,7 @@ class ClosedTaskCard extends StatelessWidget {
 
     return task.labels.map((id) {
       return Container(
-          width: 8, height: 65 / num_labels, color: labels[id].color);
+          width: 8, height: 65 / num_labels, color: labels[id]!.color);
     }).toList();
   }
 }

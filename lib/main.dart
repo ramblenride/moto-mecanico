@@ -10,7 +10,7 @@ import 'package:moto_mecanico/storage/garage_storage.dart';
 import 'package:moto_mecanico/storage/local_file_storage.dart';
 import 'package:moto_mecanico/themes.dart';
 import 'package:moto_mecanico/widgets/config_widget.dart';
-import 'package:package_info/package_info.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -18,7 +18,7 @@ void main() {
   loadMotoMecanico();
 }
 
-void loadMotoMecanico() async {
+Future<void> loadMotoMecanico() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await _deleteCacheDir();
@@ -44,16 +44,16 @@ class MotoLogApp extends StatefulWidget {
   static void applyConfiguration(BuildContext context) {
     final state = context.findAncestorStateOfType<_MotoLogAppState>();
 
-    state.applyConfiguration();
+    state?.applyConfiguration();
   }
 }
 
 class _MotoLogAppState extends State<MotoLogApp> {
-  Future _initialized;
-  Configuration _config;
-  LabelsModel _labels;
-  GarageModel _garage;
-  Locale _locale;
+  Configuration _config = Configuration('');
+  Future? _initialized;
+  LabelsModel? _labels;
+  GarageModel? _garage;
+  Locale? _locale;
 
   void applyConfiguration() {
     setState(() {
@@ -70,7 +70,7 @@ class _MotoLogAppState extends State<MotoLogApp> {
 
   Future<void> _loadLabels() async {
     _labels = LabelsModel();
-    await _labels.loadFromStorage();
+    await _labels?.loadFromStorage();
   }
 
   Future<void> _setGarage() async {
@@ -78,7 +78,7 @@ class _MotoLogAppState extends State<MotoLogApp> {
     final garageStorage = GarageStorage();
     garageStorage.storage =
         LocalFileStorage(baseDir: await GarageStorage.getBaseDir());
-    _garage.storage = garageStorage;
+    _garage?.storage = garageStorage;
   }
 
   Future<bool> _initConfiguration() async {
@@ -112,7 +112,7 @@ class _MotoLogAppState extends State<MotoLogApp> {
                   ),
                 ],
                 child: MaterialApp(
-                  title: _config.packageInfo.appName,
+                  title: _config.packageInfo?.appName ?? '',
                   darkTheme: Theme.of(context).RnrDarkTheme,
                   themeMode: ThemeMode.dark,
                   home: GaragePage(),
@@ -128,7 +128,8 @@ class _MotoLogAppState extends State<MotoLogApp> {
             return Center(
                 child: Directionality(
               textDirection: TextDirection.ltr,
-              child: Text('Initialization Error: ' + snapshot.error),
+              child: Text('Initialization Error: ' +
+                  (snapshot.error?.toString() ?? '')),
             ));
           } else {
             return LoadingPage();
@@ -136,7 +137,8 @@ class _MotoLogAppState extends State<MotoLogApp> {
         });
   }
 
-  Locale _getLocale(Locale deviceLocale, Iterable<Locale> supportedLocales) {
+  Locale? _getLocale(Locale? deviceLocale, Iterable<Locale> supportedLocales) {
+    if (deviceLocale == null) return null;
     return supportedLocales.contains(deviceLocale)
         ? deviceLocale
         : supportedLocales.firstWhere(

@@ -7,9 +7,9 @@ import 'package:moto_mecanico/models/cost.dart';
 import 'package:moto_mecanico/themes.dart';
 
 class AddCostDialog extends StatefulWidget {
-  AddCostDialog({@required this.onResult});
+  const AddCostDialog({super.key, required this.onResult});
 
-  final Function(Cost) onResult;
+  final Function(Cost?) onResult;
 
   @override
   State<StatefulWidget> createState() => _AddCostDialogState();
@@ -40,7 +40,7 @@ class _AddCostDialogState extends State<AddCostDialog> {
               ),
             ),
             child: Text(
-              AppLocalizations.of(context).add_cost_type_dialog_title,
+              AppLocalizations.of(context)!.add_cost_type_dialog_title,
               style: theme.dialogHeader,
               textAlign: TextAlign.center,
             ),
@@ -53,17 +53,17 @@ class _AddCostDialogState extends State<AddCostDialog> {
               children: [
                 _CostItem(
                   Image.asset(IMG_COST_PART),
-                  AppLocalizations.of(context).cost_type_parts,
+                  AppLocalizations.of(context)!.cost_type_parts,
                   () => _addCost(CostType.part),
                 ),
                 _CostItem(
                   Image.asset(IMG_COST_LABOR),
-                  AppLocalizations.of(context).cost_type_labor,
+                  AppLocalizations.of(context)!.cost_type_labor,
                   () => _addCost(CostType.labor),
                 ),
                 _CostItem(
                   Image.asset(IMG_COST_OTHER),
-                  AppLocalizations.of(context).cost_type_other,
+                  AppLocalizations.of(context)!.cost_type_other,
                   () => _addCost(CostType.other),
                 ),
               ],
@@ -74,7 +74,7 @@ class _AddCostDialogState extends State<AddCostDialog> {
             children: [
               TextButton(
                 child: Text(
-                  AppLocalizations.of(context).dialog_cancel_button,
+                  AppLocalizations.of(context)!.dialog_cancel_button,
                   style: theme.dialogButton,
                 ),
                 onPressed: () => widget.onResult(null),
@@ -101,7 +101,7 @@ class _AddCostDialogState extends State<AddCostDialog> {
     widget.onResult(result);
   }
 
-  Widget _CostItem(Image icon, String title, Function action) {
+  Widget _CostItem(Image icon, String title, Function()? action) {
     return InkWell(
       onTap: action,
       child: Column(

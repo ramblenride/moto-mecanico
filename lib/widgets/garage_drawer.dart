@@ -5,14 +5,12 @@ import 'package:moto_mecanico/dialogs/feedback_dialog.dart';
 import 'package:moto_mecanico/pages/settings_page.dart';
 import 'package:moto_mecanico/themes.dart';
 import 'package:moto_mecanico/widgets/config_widget.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 typedef DrawerMethodCallback = void Function();
 
 class GarageDrawer extends StatefulWidget {
-  GarageDrawer({@required this.onImport, @required this.onExport})
-      : assert(onImport != null),
-        assert(onExport != null);
+  GarageDrawer({required this.onImport, required this.onExport});
 
   final DrawerMethodCallback onImport;
   final DrawerMethodCallback onExport;
@@ -36,7 +34,7 @@ class _GarageDrawerState extends State<GarageDrawer> {
                 Icons.settings,
                 color: iconColor,
               ),
-              title: Text(AppLocalizations.of(context).settings_page_title),
+              title: Text(AppLocalizations.of(context)!.settings_page_title),
               onTap: _openSettings,
             ),
             ListTile(
@@ -44,7 +42,7 @@ class _GarageDrawerState extends State<GarageDrawer> {
                 Icons.feedback,
                 color: iconColor,
               ),
-              title: Text(AppLocalizations.of(context).feedback_page_title),
+              title: Text(AppLocalizations.of(context)!.feedback_page_title),
               onTap: _showFeedbackDialog,
             ),
             ListTile(
@@ -52,7 +50,7 @@ class _GarageDrawerState extends State<GarageDrawer> {
                 Icons.info,
                 color: iconColor,
               ),
-              title: Text(AppLocalizations.of(context).about_page_title),
+              title: Text(AppLocalizations.of(context)!.about_page_title),
               onTap: _openAboutDialog,
             ),
             Divider(),
@@ -61,7 +59,7 @@ class _GarageDrawerState extends State<GarageDrawer> {
                 Icons.import_export,
                 color: iconColor,
               ),
-              title: Text(AppLocalizations.of(context).garage_import),
+              title: Text(AppLocalizations.of(context)!.garage_import),
               onTap: () {
                 Navigator.of(context).pop();
                 widget.onImport();
@@ -72,7 +70,7 @@ class _GarageDrawerState extends State<GarageDrawer> {
                 Icons.import_export,
                 color: iconColor,
               ),
-              title: Text(AppLocalizations.of(context).garage_export),
+              title: Text(AppLocalizations.of(context)!.garage_export),
               onTap: () {
                 Navigator.of(context).pop();
                 widget.onExport();
@@ -110,17 +108,17 @@ class _GarageDrawerState extends State<GarageDrawer> {
   void _openAboutDialog() async {
     Navigator.of(context).pop();
     final pkgInfo = ConfigWidget.of(context).packageInfo;
-    await showAboutDialog(
-      applicationName: pkgInfo.appName ?? '',
-      applicationVersion: pkgInfo.version ?? '',
-      applicationLegalese: AppLocalizations.of(context).copyright,
+    showAboutDialog(
+      applicationName: pkgInfo?.appName ?? '',
+      applicationVersion: pkgInfo?.version ?? '',
+      applicationLegalese: AppLocalizations.of(context)!.copyright,
       children: [
         ListTile(
           leading: Icon(
             Icons.open_in_new,
             color: Colors.grey[200],
           ),
-          title: Text(AppLocalizations.of(context).homepage),
+          title: Text(AppLocalizations.of(context)!.homepage),
           onTap: () => _openHomePage(),
         ),
         ListTile(
@@ -128,8 +126,8 @@ class _GarageDrawerState extends State<GarageDrawer> {
             Icons.security,
             color: Colors.grey[200],
           ),
-          title: Text(AppLocalizations.of(context).privacy_policy),
-          onTap: () => launch(PRIVACY_POLICY_URL),
+          title: Text(AppLocalizations.of(context)!.privacy_policy),
+          onTap: () => launchUrlString(PRIVACY_POLICY_URL),
         ),
       ],
       context: context,
@@ -137,7 +135,7 @@ class _GarageDrawerState extends State<GarageDrawer> {
   }
 
   void _openHomePage() async {
-    await launch(MOTO_MECANICO_HOMEPAGE);
+    await launchUrlString(MOTO_MECANICO_HOMEPAGE);
   }
 
   void _showFeedbackDialog() async {

@@ -6,9 +6,9 @@ import 'package:moto_mecanico/themes.dart';
 import 'package:moto_mecanico/widgets/dissmiss_keyboard_ontap.dart';
 
 class AddLinkAttachmentDialog extends StatefulWidget {
-  AddLinkAttachmentDialog({@required this.onResult});
+  const AddLinkAttachmentDialog({super.key, required this.onResult});
 
-  final Function(Attachment) onResult;
+  final Function(Attachment?) onResult;
 
   @override
   State<StatefulWidget> createState() => _AddLinkAttachmentDialogState();
@@ -19,8 +19,8 @@ class _AddLinkAttachmentDialogState extends State<AddLinkAttachmentDialog> {
 
   final _formKey = GlobalKey<FormState>();
 
-  String link_name;
-  String link_url;
+  String? link_name;
+  String? link_url;
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +44,7 @@ class _AddLinkAttachmentDialogState extends State<AddLinkAttachmentDialog> {
                     topRight: Radius.circular(20)),
               ),
               child: Text(
-                AppLocalizations.of(context).add_link_attachment_dialog_title,
+                AppLocalizations.of(context)!.add_link_attachment_dialog_title,
                 style: theme.dialogHeader,
                 textAlign: TextAlign.center,
               ),
@@ -60,13 +60,13 @@ class _AddLinkAttachmentDialogState extends State<AddLinkAttachmentDialog> {
                       runSpacing: 10,
                       children: [
                         Text(
-                          AppLocalizations.of(context)
+                          AppLocalizations.of(context)!
                               .add_link_attachment_dialog_property_name_link_name,
                           style: theme.propEditorName,
                         ),
                         TextFormField(
                           decoration: InputDecoration(
-                            hintText: AppLocalizations.of(context)
+                            hintText: AppLocalizations.of(context)!
                                 .add_link_attachment_dialog_property_hint_link_name,
                             hintStyle: propHintStyle,
                           ),
@@ -77,8 +77,8 @@ class _AddLinkAttachmentDialogState extends State<AddLinkAttachmentDialog> {
                             LengthLimitingTextInputFormatter(32),
                           ],
                           validator: (value) {
-                            if (value.isEmpty) {
-                              return AppLocalizations.of(context)
+                            if (value != null && value.isEmpty) {
+                              return AppLocalizations.of(context)!
                                   .property_name_missing_error;
                             }
                             return null;
@@ -88,13 +88,13 @@ class _AddLinkAttachmentDialogState extends State<AddLinkAttachmentDialog> {
                           },
                         ),
                         Text(
-                          AppLocalizations.of(context)
+                          AppLocalizations.of(context)!
                               .add_link_attachment_dialog_property_name_link_value,
                           style: theme.propEditorName,
                         ),
                         TextFormField(
                           decoration: InputDecoration(
-                            hintText: AppLocalizations.of(context)
+                            hintText: AppLocalizations.of(context)!
                                 .add_link_attachment_dialog_property_hint_link_value,
                             hintStyle: propHintStyle,
                           ),
@@ -105,8 +105,8 @@ class _AddLinkAttachmentDialogState extends State<AddLinkAttachmentDialog> {
                             LengthLimitingTextInputFormatter(64),
                           ],
                           validator: (value) {
-                            if (value.isEmpty) {
-                              return AppLocalizations.of(context)
+                            if (value == null || value.isEmpty) {
+                              return AppLocalizations.of(context)!
                                   .add_link_attachment_error_url_missing;
                             }
                             try {
@@ -114,11 +114,11 @@ class _AddLinkAttachmentDialogState extends State<AddLinkAttachmentDialog> {
                               if (scheme.toLowerCase().compareTo('http') != 0 &&
                                   scheme.toLowerCase().compareTo('https') !=
                                       0) {
-                                return AppLocalizations.of(context)
+                                return AppLocalizations.of(context)!
                                     .add_link_attachment_error_not_supported;
                               }
                             } on FormatException {
-                              return AppLocalizations.of(context)
+                              return AppLocalizations.of(context)!
                                   .add_link_attachment_error_not_supported;
                             }
 
@@ -149,14 +149,14 @@ class _AddLinkAttachmentDialogState extends State<AddLinkAttachmentDialog> {
       children: [
         TextButton(
           child: Text(
-            AppLocalizations.of(context).dialog_cancel_button,
+            AppLocalizations.of(context)!.dialog_cancel_button,
             style: buttonTheme,
           ),
           onPressed: () => widget.onResult(null),
         ),
         TextButton(
           child: Text(
-            AppLocalizations.of(context).dialog_add_button,
+            AppLocalizations.of(context)!.dialog_add_button,
             style: buttonTheme,
           ),
           onPressed: () {
@@ -170,15 +170,16 @@ class _AddLinkAttachmentDialogState extends State<AddLinkAttachmentDialog> {
     );
   }
 
-  Attachment _getLink() {
-    if (_formKey.currentState.validate()) {
-      _formKey.currentState.save();
-      return Attachment(
-        type: AttachmentType.link,
-        name: link_name,
-        url: link_url,
-      );
+  Attachment? _getLink() {
+    if (!_formKey.currentState!.validate()) {
+      return null;
     }
-    return null;
+
+    _formKey.currentState!.save();
+    return Attachment(
+      type: AttachmentType.link,
+      name: link_name ?? '',
+      url: link_url ?? '',
+    );
   }
 }

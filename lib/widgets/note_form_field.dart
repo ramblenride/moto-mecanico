@@ -6,10 +6,10 @@ import 'package:moto_mecanico/themes.dart';
 class NoteFormField extends FormField<Note> {
   static const int maxLength = 2000;
 
-  final Note note;
+  final Note? note;
 
   NoteFormField({
-    Key key,
+    Key? key,
     this.note,
     minLines = 1,
     maxLines = 10,
@@ -20,8 +20,8 @@ class NoteFormField extends FormField<Note> {
         borderSide: BorderSide(color: RnrColors.blue),
       ),
     ),
-    FormFieldSetter onSaved,
-    FormFieldValidator validator,
+    required FormFieldSetter onSaved,
+    required FormFieldValidator validator,
   }) : super(
           key: key,
           onSaved: onSaved,
@@ -43,17 +43,15 @@ class NoteFormField extends FormField<Note> {
                     ],
                     onSaved: (value) {
                       if (note == null) {
-                        if (value.isNotEmpty) {
-                          if (onSaved != null) {
-                            onSaved(Note(
-                              name: DateTime.now().toIso8601String(),
-                              text: value,
-                            ));
-                          }
+                        if (value != null && value.isNotEmpty) {
+                          onSaved(Note(
+                            name: DateTime.now().toIso8601String(),
+                            text: value,
+                          ));
                         }
                       } else {
-                        note.text = value;
-                        if (onSaved != null) onSaved(note);
+                        note.text = value ?? '';
+                        onSaved(note);
                       }
                     },
                   ),

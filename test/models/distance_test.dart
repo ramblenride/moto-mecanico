@@ -12,15 +12,15 @@ void main() {
 
   group('Distance Model Tests', () {
     test('distance isValid', () {
-      final invalid = Distance(null);
-      final valid = Distance(0);
+      const invalid = Distance(null);
+      const valid = Distance(0);
 
       expect(invalid.isValid, equals(false));
       expect(valid.isValid, equals(true));
     });
 
     test('convert km to km', () {
-      final km = Distance(100000, DistanceUnit.UnitKM);
+      const km = Distance(100000, DistanceUnit.UnitKM);
       expect(km.unit, equals(DistanceUnit.UnitKM));
       expect(km.distance, equals(100000));
 
@@ -30,7 +30,7 @@ void main() {
     });
 
     test('convert km to miles', () {
-      final km = Distance(100000, DistanceUnit.UnitKM);
+      const km = Distance(100000, DistanceUnit.UnitKM);
 
       final mile = km.toUnit(DistanceUnit.UnitMile);
       expect(mile.unit, equals(DistanceUnit.UnitMile));
@@ -38,7 +38,7 @@ void main() {
     });
 
     test('convert km to miles rounds value', () {
-      final km = Distance(1, DistanceUnit.UnitKM);
+      const km = Distance(1, DistanceUnit.UnitKM);
 
       final mile = km.toUnit(DistanceUnit.UnitMile);
       expect(mile.unit, equals(DistanceUnit.UnitMile));
@@ -46,7 +46,7 @@ void main() {
     });
 
     test('convert miles to km', () {
-      final miles = Distance(50, DistanceUnit.UnitMile);
+      const miles = Distance(50, DistanceUnit.UnitMile);
 
       final km = miles.toUnit(DistanceUnit.UnitKM);
       expect(km.unit, equals(DistanceUnit.UnitKM));
@@ -54,8 +54,8 @@ void main() {
     });
 
     test('add miles to km', () {
-      final miles = Distance(50, DistanceUnit.UnitMile);
-      final km = Distance(80, DistanceUnit.UnitKM);
+      const miles = Distance(50, DistanceUnit.UnitMile);
+      const km = Distance(80, DistanceUnit.UnitKM);
 
       final result = km + miles;
       expect(result.unit, equals(DistanceUnit.UnitKM));
@@ -63,9 +63,9 @@ void main() {
     });
 
     test('compare km and miles', () {
-      final miles = Distance(50, DistanceUnit.UnitMile);
-      final km = Distance(80, DistanceUnit.UnitKM);
-      final small = Distance(1, DistanceUnit.UnitKM);
+      const miles = Distance(50, DistanceUnit.UnitMile);
+      const km = Distance(80, DistanceUnit.UnitKM);
+      const small = Distance(1, DistanceUnit.UnitKM);
 
       expect(small, lessThan(km));
       expect(small, lessThan(miles));
@@ -84,7 +84,7 @@ void main() {
     });
 
     test('JSON round trip (miles)', () {
-      final distance = Distance(32, DistanceUnit.UnitMile);
+      const distance = Distance(32, DistanceUnit.UnitMile);
       final distanceParsed = Distance.fromJson(distance.toJson());
       expect(distanceParsed, isNotNull);
       expect(distanceParsed.unit, equals(DistanceUnit.UnitMile));
@@ -92,7 +92,7 @@ void main() {
     });
 
     test('JSON round trip (km)', () {
-      final distance = Distance(23, DistanceUnit.UnitKM);
+      const distance = Distance(23, DistanceUnit.UnitKM);
       final distanceParsed = Distance.fromJson(distance.toJson());
       expect(distanceParsed, isNotNull);
       expect(distanceParsed.unit, equals(DistanceUnit.UnitKM));
@@ -101,11 +101,11 @@ void main() {
 
     test('JSON parse missing fields', () {
       var distance = Distance.fromJson(jsonDecode('{}'));
-      expect(distance, equals(Distance(null)));
+      expect(distance, equals(const Distance(null)));
 
       // Both distance and unit must be filled for a distance to be valid
       distance = Distance.fromJson(jsonDecode('{"distance": 12}'));
-      expect(distance, equals(Distance(null)));
+      expect(distance, equals(const Distance(null)));
 
       distance =
           Distance.fromJson(jsonDecode('{"distance": 12, "unit": "mile"}'));

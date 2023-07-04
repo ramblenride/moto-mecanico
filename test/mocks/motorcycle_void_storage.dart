@@ -11,7 +11,7 @@ class MotorcycleVoidStorage extends MotorcycleStorage {
   MotorcycleVoidStorage();
 
   @override
-  Future<bool> connect({String baseDir}) async {
+  Future<bool> connect({String? baseDir}) async {
     return true;
   }
 
@@ -39,13 +39,13 @@ class MotorcycleVoidStorage extends MotorcycleStorage {
   }
 
   @override
-  Future<File> getMotoFile(String id) async {
+  Future<File?> getMotoFile(String id) async {
     return null;
   }
 
   @override
-  Future<String> addMotoFile(String sourcePath) async {
-    return '';
+  Future<String?> addMotoFile(String sourcePath) async {
+    return null;
   }
 
   @override
@@ -53,7 +53,7 @@ class MotorcycleVoidStorage extends MotorcycleStorage {
     return;
   }
 
-  Future<Motorcycle> loadMotorcycle(String id) async {
+  Future<Motorcycle?> loadMotorcycle(String id) async {
     return null;
   }
 }

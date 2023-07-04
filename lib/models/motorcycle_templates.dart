@@ -8,27 +8,26 @@ class MotorcycleTemplate {
   List<TaskTemplate> tasks;
 
   MotorcycleTemplate({
-    @required this.description,
-    @required this.name,
-    @required this.tasks,
-  })  : assert(name != null),
-        assert(description != null),
-        assert(tasks != null);
+    required this.description,
+    required this.name,
+    required this.tasks,
+  });
 
-  MotorcycleTemplate.fromJson(Map<String, dynamic> json) {
-    description = json['description'];
-    name = json['name'];
+  static MotorcycleTemplate? fromJson(Map<String, dynamic> json) {
+    var tasks = <TaskTemplate>[];
     if (json['tasks'] != null) {
-      tasks = <TaskTemplate>[];
       json['tasks'].forEach((v) {
         final task = TaskTemplate.fromJson(v);
         if (task != null &&
-            (task.name?.isNotEmpty ?? false) &&
-            (task.description?.isNotEmpty ?? false)) {
+            (task.name.isNotEmpty) &&
+            (task.description.isNotEmpty)) {
           tasks.add(task);
         }
       });
     }
+
+    return MotorcycleTemplate(
+        description: json['description'], name: json['name'], tasks: tasks);
   }
 }
 
@@ -44,47 +43,47 @@ class TaskTemplate {
   TechnicalLevel technicalLevel;
 
   TaskTemplate({
-    @required this.description,
-    @required this.name,
+    required this.description,
+    required this.name,
     this.distance = const Distance(null, DistanceUnit.UnitKM),
     this.intervalDistance = const Distance(null, DistanceUnit.UnitKM),
-    this.intervalMonths,
+    this.intervalMonths = 0,
     this.links = const [],
-    this.months,
+    this.months = 0,
     this.notes = '',
-    this.technicalLevel,
-  })  : assert(description != null),
-        assert(name != null);
+    this.technicalLevel = TechnicalLevel.none,
+  });
 
-  TaskTemplate.fromJson(Map<String, dynamic> json) {
+  static TaskTemplate? fromJson(Map<String, dynamic> json) {
     try {
-      description = json['description'];
-      distance = Distance(json['km'], DistanceUnit.UnitKM);
-      intervalDistance = Distance(json['intervalKm'], DistanceUnit.UnitKM);
-      intervalMonths = json['intervalMonths'];
-      months = json['months'];
-      name = json['name'];
-      notes = json['notes'] ?? '';
-      technicalLevel = _parseTechnicalLevel(json['technicalLevel']);
-
+      var links = <TaskLink>[];
       if (json['links'] != null) {
-        links = <TaskLink>[];
         json['links'].forEach((v) {
           final link = TaskLink.fromJson(v);
-          if (link != null && link.name != null && link.url != null) {
+          if (link != null && link.name.isNotEmpty && link.url.isNotEmpty) {
             links.add(link);
           }
         });
+
+        return TaskTemplate(
+            description: json['description'],
+            distance: Distance(json['km'], DistanceUnit.UnitKM),
+            intervalDistance: Distance(json['interalKm'], DistanceUnit.UnitKM),
+            intervalMonths: json['intervalMonths'],
+            months: json['months'],
+            name: json['name'],
+            notes: json['notes'] ?? '',
+            technicalLevel: _parseTechnicalLevel(json['technicalLevel']),
+            links: links);
       }
     } catch (e) {
       debugPrint('Failed to parse task template from JSON');
       debugPrint(e.toString());
-      name = null;
-      description = null;
     }
+    return null;
   }
 
-  TechnicalLevel _parseTechnicalLevel(String levelStr) {
+  static TechnicalLevel _parseTechnicalLevel(String levelStr) {
     switch (levelStr) {
       case 'easy':
         return TechnicalLevel.easy;
@@ -93,7 +92,7 @@ class TaskTemplate {
       case 'pro':
         return TechnicalLevel.pro;
       default:
-        return null;
+        return TechnicalLevel.none;
     }
   }
 }
@@ -103,18 +102,17 @@ class TaskLink {
   String url;
 
   TaskLink({
-    @required this.name,
-    @required this.url,
-  })  : assert(name != null),
-        assert(url != null);
+    required this.name,
+    required this.url,
+  });
 
-  TaskLink.fromJson(Map<String, dynamic> json) {
+  static TaskLink? fromJson(Map<String, dynamic> json) {
     try {
-      name = json['name'];
-      url = json['url'];
+      return TaskLink(name: json['name'], url: json['url']);
     } catch (e) {
       debugPrint('Failed to parse JSON link');
       debugPrint(e.toString());
+      return null;
     }
   }
 }
@@ -126,15 +124,15 @@ class MotorcycleTemplates {
     this.templates = const [],
   });
 
-  MotorcycleTemplates.fromJson(Map<String, dynamic> json) {
-    templates = <MotorcycleTemplate>[];
+  MotorcycleTemplates.fromJson(Map<String, dynamic> json)
+      : templates = <MotorcycleTemplate>[] {
     if (json['motorcycles'] != null) {
       json['motorcycles'].forEach((m) {
         try {
           final moto = MotorcycleTemplate.fromJson(m);
           if (moto != null &&
-              (moto.name?.isNotEmpty ?? false) &&
-              (moto.description?.isNotEmpty ?? false)) {
+              (moto.name.isNotEmpty) &&
+              (moto.description.isNotEmpty)) {
             templates.add(moto);
           }
         } catch (e) {

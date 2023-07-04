@@ -14,21 +14,19 @@ import 'package:moto_mecanico/widgets/textformfield_date_picker.dart';
 
 class RenewTaskDialog extends StatefulWidget {
   RenewTaskDialog({
-    @required this.task,
-    @required this.onResult,
+    required this.task,
+    required this.onResult,
   });
 
   final Task task;
-  final Function(Task) onResult;
+  final Function(Task?) onResult;
 
   @override
   State<StatefulWidget> createState() => _RenewTaskDialogState(task: task);
 }
 
 class _RenewTaskDialogState extends State<RenewTaskDialog> {
-  _RenewTaskDialogState({@required task}) {
-    newTask = Task.fromRenew(task);
-  }
+  _RenewTaskDialogState({required task}) : newTask = Task.fromRenew(task)!;
 
   var _distanceUnit;
   Task newTask;
@@ -58,7 +56,7 @@ class _RenewTaskDialogState extends State<RenewTaskDialog> {
                       topRight: Radius.circular(20)),
                 ),
                 child: Text(
-                  AppLocalizations.of(context).renew_task_dialog_title,
+                  AppLocalizations.of(context)!.renew_task_dialog_title,
                   style: Theme.of(context).textTheme.dialogHeader,
                   textAlign: TextAlign.center,
                 ),
@@ -67,11 +65,11 @@ class _RenewTaskDialogState extends State<RenewTaskDialog> {
                 isDialog: true,
                 children: [
                   PropertyEditorRow(
-                    name: AppLocalizations.of(context)
+                    name: AppLocalizations.of(context)!
                         .renew_task_dialog_date_prop_name,
                     inputField: TextFormFieldDatePicker(
                       decoration: _valueFieldDecoration(
-                          AppLocalizations.of(context)
+                          AppLocalizations.of(context)!
                               .renew_task_dialog_date_prop_hint),
                       textAlign: TextAlign.end,
                       style: propValueStyle,
@@ -85,11 +83,11 @@ class _RenewTaskDialogState extends State<RenewTaskDialog> {
                     ),
                   ),
                   PropertyEditorRow(
-                    name: AppLocalizations.of(context)
+                    name: AppLocalizations.of(context)!
                         .renew_task_dialog_odometer_prop_name,
                     inputField: TextFormField(
                       decoration: _valueFieldDecoration(
-                          AppLocalizations.of(context)
+                          AppLocalizations.of(context)!
                               .renew_task_dialog_odometer_prop_hint),
                       textAlign: TextAlign.end,
                       style: propValueStyle,
@@ -101,7 +99,9 @@ class _RenewTaskDialogState extends State<RenewTaskDialog> {
                       ],
                       onSaved: (value) {
                         newTask.dueOdometer = Distance(
-                            value.isNotEmpty ? int.parse(value) : null,
+                            (value != null && value.isNotEmpty)
+                                ? int.parse(value)
+                                : null,
                             _distanceUnit);
                       },
                     ),
@@ -120,16 +120,16 @@ class _RenewTaskDialogState extends State<RenewTaskDialog> {
                 children: <Widget>[
                   TextButton(
                     child: Text(
-                        AppLocalizations.of(context).dialog_cancel_button,
+                        AppLocalizations.of(context)!.dialog_cancel_button,
                         style: Theme.of(context).textTheme.dialogButton),
                     onPressed: () => widget.onResult(null),
                   ),
                   TextButton(
-                    child: Text(AppLocalizations.of(context).dialog_add_button,
+                    child: Text(AppLocalizations.of(context)!.dialog_add_button,
                         style: Theme.of(context).textTheme.dialogButton),
                     onPressed: () {
-                      if (_formKey.currentState.validate()) {
-                        _formKey.currentState.save();
+                      if (_formKey.currentState!.validate()) {
+                        _formKey.currentState!.save();
                         widget.onResult(newTask);
                       }
                     },
@@ -158,7 +158,7 @@ class _RenewTaskDialogState extends State<RenewTaskDialog> {
     return newTask.dueOdometer.toUnit(_distanceUnit).toString();
   }
 
-  DateTime _getInitialDate() {
+  DateTime? _getInitialDate() {
     return newTask.dueDate;
   }
 }

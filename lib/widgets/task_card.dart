@@ -11,12 +11,10 @@ import 'package:provider/provider.dart';
 
 class TaskCard extends StatelessWidget {
   const TaskCard({
-    Key key,
-    @required this.motorcycle,
-    @required this.task,
-  })  : assert(motorcycle != null),
-        assert(task != null),
-        super(key: key);
+    Key? key,
+    required this.motorcycle,
+    required this.task,
+  }) : super(key: key);
 
   final Motorcycle motorcycle;
   final Task task;
@@ -94,7 +92,7 @@ class TaskCard extends StatelessWidget {
         ? RnrColors.red
         : alarm == TaskAlarm.yellow
             ? Colors.orange
-            : Colors.blueGrey[100];
+            : Colors.blueGrey[100]!;
   }
 
   Widget _buildReminderBox(BuildContext context) {
@@ -105,7 +103,7 @@ class TaskCard extends StatelessWidget {
         : task.dueOdometer - motorcycle.odometer;
     final daysRemaining = task.dueDate == null
         ? null
-        : task.dueDate
+        : task.dueDate!
             .add(Duration(hours: 23, minutes: 59))
             .difference(DateTime.now())
             .inDays
@@ -123,10 +121,10 @@ class TaskCard extends StatelessWidget {
       if (daysRemaining > 365) {
         final years = daysRemaining / 365;
         daysStr = years.toStringAsFixed(1);
-        daysUnit = AppLocalizations.of(context).unit_years(years.round());
+        daysUnit = AppLocalizations.of(context)!.unit_years(years.round());
       } else {
         daysStr = '$daysRemaining';
-        daysUnit = AppLocalizations.of(context).unit_days(daysRemaining);
+        daysUnit = AppLocalizations.of(context)!.unit_days(daysRemaining);
       }
     }
     if (daysStr != null) {
@@ -134,14 +132,14 @@ class TaskCard extends StatelessWidget {
         daysUnit,
         style: Theme.of(context)
             .textTheme
-            .subtitle2
+            .titleSmall!
             .copyWith(color: Colors.blueGrey[200], fontSize: 13),
       ));
       remaining.add(Text(
         daysStr,
         style: Theme.of(context)
             .textTheme
-            .subtitle2
+            .titleSmall!
             .copyWith(color: durationColor, fontSize: 16),
       ));
     }
@@ -165,14 +163,14 @@ class TaskCard extends StatelessWidget {
         distanceStr,
         style: Theme.of(context)
             .textTheme
-            .subtitle2
+            .titleSmall!
             .copyWith(color: distanceColor, fontSize: 16),
       ));
       remaining.add(Text(
-        AppLocalSupport.distanceUnitsCompact[distanceUnit],
+        AppLocalSupport.distanceUnitsCompact[distanceUnit]!,
         style: Theme.of(context)
             .textTheme
-            .subtitle2
+            .titleSmall!
             .copyWith(color: Colors.blueGrey[200], fontSize: 13),
       ));
     }
@@ -194,7 +192,7 @@ class TaskCard extends StatelessWidget {
 
     return task.labels.map((id) {
       return Container(
-          width: 8, height: 65 / num_labels, color: labels[id].color);
+          width: 8, height: 65 / num_labels, color: labels[id]!.color);
     }).toList();
   }
 }

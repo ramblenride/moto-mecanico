@@ -1,7 +1,4 @@
 import 'dart:math';
-
-import 'package:flutter/foundation.dart';
-import 'package:meta/meta.dart';
 import 'package:moto_mecanico/models/attachment.dart';
 import 'package:moto_mecanico/models/cost.dart';
 import 'package:moto_mecanico/models/distance.dart';
@@ -10,75 +7,76 @@ import 'package:moto_mecanico/storage/storage.dart';
 import 'package:uuid/uuid.dart';
 
 enum TechnicalLevel { none, easy, intermediate, pro }
+
 enum EffortLevel { none, small, medium, large }
 
 // Defines a motorcycle task. All objects are optional except for the name.
 class Task implements Comparable<dynamic> {
   Task({
-    @required this.name,
+    required this.name,
     this.description = '',
-    this.effortLevel,
-    this.technicalLevel,
-    this.notes,
-    this.labels,
+    this.effortLevel = EffortLevel.none,
+    this.technicalLevel = TechnicalLevel.none,
+    this.notes = const [],
+    this.labels = const [],
     this.dueDate,
     this.dueOdometer = const Distance(null),
-    this.recurringMonths,
+    this.recurringMonths = 0,
     this.recurringOdometer = const Distance(null),
     this.closed = false,
     this.closedDate,
     this.closedOdometer = const Distance(null),
-    this.costs,
+    this.costs = const [],
     this.executor = '',
-    this.attachments,
-  }) : assert(name != null) {
-    notes ??= [];
-    labels ??= [];
-    costs ??= [];
-    attachments ??= [];
-  }
+    this.attachments = const [],
+  });
 
   // Clones a task ignoring (or not) the costs/attachments marked as non-copyable
   // Copied attachments are not transfered to the local storage.
-  Task.from(Task task, {bool ignoreCopyable = false}) {
-    name = task.name;
-    description = task.description;
-    effortLevel = task.effortLevel;
-    technicalLevel = task.technicalLevel;
-    notes = [];
-    labels = List<int>.from(task.labels);
-    dueDate = task.dueDate;
-    dueOdometer = task.dueOdometer;
-    recurringMonths = task.recurringMonths;
-    recurringOdometer = task.recurringOdometer;
-    closed = task.closed;
-    closedDate = task.closedDate;
-    closedOdometer = task.closedOdometer;
-    executor = task.executor;
-    costs = [];
-    attachments = [];
+  factory Task.from(Task task, {bool ignoreCopyable = false}) {
+    var newTask = Task(
+        name: task.name,
+        description: task.description,
+        effortLevel: task.effortLevel,
+        technicalLevel: task.technicalLevel,
+        notes: [],
+        labels: List<int>.from(task.labels),
+        dueDate: task.dueDate,
+        dueOdometer: task.dueOdometer,
+        recurringMonths: task.recurringMonths,
+        recurringOdometer: task.recurringOdometer,
+        closed: task.closed,
+        closedDate: task.closedDate,
+        closedOdometer: task.closedOdometer,
+        executor: task.executor,
+        costs: [],
+        attachments: []);
 
     for (final note in task.notes) {
       if (note.copyable || ignoreCopyable) {
-        notes.add(Note.from(note));
+        newTask.notes.add(Note.from(note));
       }
     }
 
     for (final cost in task.costs) {
       if (cost.copyable || ignoreCopyable) {
-        costs.add(Cost.from(cost));
+        newTask.costs.add(Cost.from(cost));
       }
     }
 
     for (final attachment in task.attachments) {
       if (attachment.copyable || ignoreCopyable) {
-        attachments.add(Attachment.from(attachment));
+        newTask.attachments.add(Attachment.from(attachment));
       }
     }
+
+    return newTask;
   }
 
-  String name; // Name / title / theme / part.
   final String id = Uuid().v4(); // Unique id
+
+  String name; // Name / title / theme / part.
+
   String description; // Short description
   // The duration of the effort required.
   EffortLevel effortLevel;
@@ -88,14 +86,14 @@ class Task implements Comparable<dynamic> {
   List<Note> notes;
   List<int> labels;
 
-  DateTime dueDate;
+  DateTime? dueDate;
   Distance dueOdometer;
 
   int recurringMonths;
   Distance recurringOdometer;
 
   bool closed;
-  DateTime closedDate;
+  DateTime? closedDate;
   Distance closedOdometer;
 
   List<Cost> costs;
@@ -104,17 +102,17 @@ class Task implements Comparable<dynamic> {
 
   Cost get cost => Cost.total(costs, null);
   bool get recurring =>
-      (recurringOdometer.isValid && recurringOdometer.distance > 0) ||
-      (recurringMonths != null && recurringMonths > 0);
+      (recurringOdometer.isValid && recurringOdometer.distance! > 0) ||
+      (recurringMonths > 0);
 
   @override
-  int compareTo(dynamic other, {Distance odometer}) {
+  int compareTo(dynamic other, {Distance? odometer}) {
     assert(other != null);
     if (!(other is Task)) {
       return 0;
     }
 
-    Task otherTask = other;
+    var otherTask = other;
 
     // FIXME: Find a better way to determine this value. Based on history?
     const _DISTANCE_PER_DAY = Distance(33, DistanceUnit.UnitKM);
@@ -122,21 +120,21 @@ class Task implements Comparable<dynamic> {
     var distanceThis =
         dueOdometer.toUnit(DistanceUnit.UnitKM).distance ?? 999999;
     if (odometer?.distance != null) {
-      distanceThis -= odometer.toUnit(DistanceUnit.UnitKM).distance ?? 0;
+      distanceThis -= odometer!.toUnit(DistanceUnit.UnitKM).distance ?? 0;
     }
     final distanceDateThis = dueDate != null
-        ? _DISTANCE_PER_DAY.distance *
-            (dueDate.difference(DateTime.now()).inDays)
+        ? _DISTANCE_PER_DAY.distance! *
+            (dueDate!.difference(DateTime.now()).inDays)
         : 999999;
 
     var distanceOther =
         otherTask.dueOdometer.toUnit(DistanceUnit.UnitKM).distance ?? 999999;
     if (odometer?.distance != null) {
-      distanceOther -= odometer.toUnit(DistanceUnit.UnitKM).distance ?? 0;
+      distanceOther -= odometer!.toUnit(DistanceUnit.UnitKM).distance ?? 0;
     }
     final distanceDateOther = otherTask.dueDate != null
-        ? _DISTANCE_PER_DAY.distance *
-            (otherTask.dueDate.difference(DateTime.now()).inDays)
+        ? _DISTANCE_PER_DAY.distance! *
+            (otherTask.dueDate!.difference(DateTime.now()).inDays)
         : 999999;
 
     final minThis = min(distanceThis, distanceDateThis);
@@ -147,7 +145,6 @@ class Task implements Comparable<dynamic> {
   }
 
   bool matches(String desc) {
-    assert(desc != null);
     if (desc.isEmpty) return true;
 
     final upperDesc = desc.toUpperCase();
@@ -158,7 +155,7 @@ class Task implements Comparable<dynamic> {
           ...attachments.map((a) => a.name),
           ...costs.map((c) => c.description),
         ].any((item) {
-          return item?.toUpperCase()?.contains(upperDesc) ?? false;
+          return item.toUpperCase().contains(upperDesc);
         }) ==
         true) return true;
 
@@ -170,7 +167,7 @@ class Task implements Comparable<dynamic> {
 
   // Return a new task based on the information of the old task
   // Reset fields that should not be part of a new task
-  factory Task.fromRenew(Task task) {
+  static Task? fromRenew(Task task) {
     if (task.recurring == false) return null;
 
     final newTask = Task.from(task);
@@ -180,20 +177,21 @@ class Task implements Comparable<dynamic> {
     newTask.closedDate = null;
     newTask.closedOdometer = Distance(null);
 
-    if ((task.recurringMonths ?? 0) > 0) {
+    if (task.recurringMonths > 0) {
       final closedDate = task.closedDate ?? DateTime.now();
       newTask.dueDate =
           closedDate.add(Duration(days: task.recurringMonths * 30));
     }
-    if (task.recurringOdometer.isValid && task.recurringOdometer.distance > 0) {
+    if (task.recurringOdometer.isValid &&
+        task.recurringOdometer.distance! > 0) {
       newTask.dueOdometer = task.closedOdometer + task.recurringOdometer;
     }
 
     return newTask;
   }
 
-  factory Task.fromJson(Map<String, dynamic> json) {
-    if (json != null && json['name'] != null) {
+  static Task? fromJson(Map<String, dynamic> json) {
+    if (json['name'] != null) {
       final task = Task(
         name: json['name'],
         description: json['description'],
@@ -205,7 +203,9 @@ class Task implements Comparable<dynamic> {
       if (json['notes'] != null) {
         json['notes'].forEach((n) {
           final note = Note.fromJson(n);
-          if (note != null) task.notes.add(note);
+          if (note.name.isNotEmpty || note.text.isNotEmpty) {
+            task.notes.add(note);
+          }
         });
       }
       if (json['labels'] != null) {
@@ -227,14 +227,23 @@ class Task implements Comparable<dynamic> {
       task.closedOdometer = Distance.fromJson(json['closedOdometer']);
 
       if (json['costs'] != null) {
-        json['costs'].forEach((cost) => task.costs.add(Cost.fromJson(cost)));
+        json['costs'].forEach((cost) {
+          var newCost = Cost.fromJson(cost);
+          if (newCost != null) {
+            task.costs.add(newCost);
+          }
+        });
       }
 
       task.executor = json['executor'];
 
       if (json['attachments'] != null) {
-        json['attachments'].forEach((attachment) =>
-            task.attachments.add(Attachment.fromJson(attachment)));
+        json['attachments'].forEach((attachment) {
+          var newAttachment = Attachment.fromJson(attachment);
+          if (newAttachment != null) {
+            task.attachments.add(newAttachment);
+          }
+        });
       }
 
       return task;
@@ -248,47 +257,43 @@ class Task implements Comparable<dynamic> {
     data['name'] = name;
     data['description'] = description;
 
-    if (effortLevel != null) {
-      switch (effortLevel) {
-        case EffortLevel.none:
-          {
-            break;
-          }
-        case EffortLevel.small:
-          data['effortLevel'] = 'small';
+    switch (effortLevel) {
+      case EffortLevel.none:
+        {
           break;
-        case EffortLevel.medium:
-          data['effortLevel'] = 'medium';
-          break;
-        case EffortLevel.large:
-          data['effortLevel'] = 'large';
-          break;
-      }
+        }
+      case EffortLevel.small:
+        data['effortLevel'] = 'small';
+        break;
+      case EffortLevel.medium:
+        data['effortLevel'] = 'medium';
+        break;
+      case EffortLevel.large:
+        data['effortLevel'] = 'large';
+        break;
     }
 
-    if (technicalLevel != null) {
-      switch (technicalLevel) {
-        case TechnicalLevel.none:
-          {
-            break;
-          }
-        case TechnicalLevel.easy:
-          data['technicalLevel'] = 'easy';
+    switch (technicalLevel) {
+      case TechnicalLevel.none:
+        {
           break;
-        case TechnicalLevel.intermediate:
-          data['technicalLevel'] = 'intermediate';
-          break;
-        case TechnicalLevel.pro:
-          data['technicalLevel'] = 'pro';
-          break;
-      }
+        }
+      case TechnicalLevel.easy:
+        data['technicalLevel'] = 'easy';
+        break;
+      case TechnicalLevel.intermediate:
+        data['technicalLevel'] = 'intermediate';
+        break;
+      case TechnicalLevel.pro:
+        data['technicalLevel'] = 'pro';
+        break;
     }
 
     data['notes'] = notes.map((note) => note.toJson()).toList();
     data['labels'] = labels;
 
     if (dueDate != null) {
-      data['dueDate'] = dueDate.toIso8601String();
+      data['dueDate'] = dueDate!.toIso8601String();
     }
     data['dueOdometer'] = dueOdometer.toJson();
 
@@ -345,12 +350,14 @@ class Task implements Comparable<dynamic> {
       if (attachment.type == AttachmentType.file ||
           attachment.type == AttachmentType.picture) {
         final origFile = await oldStorage.getFile(attachment.url);
-        final url = await newStorage.addExternalFile(origFile.path);
+        final url = origFile != null
+            ? await newStorage.addExternalFile(origFile.path)
+            : null;
 
         toAdd.add(Attachment(
           name: attachment.name,
           type: attachment.type,
-          url: url,
+          url: url ?? '',
           copyable: attachment.copyable,
         ));
 

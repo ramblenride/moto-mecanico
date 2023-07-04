@@ -4,8 +4,8 @@ import 'package:flutter/widgets.dart';
 /// the user taps on this widget.
 class DismissKeyboardOnTap extends StatelessWidget {
   const DismissKeyboardOnTap({
-    Key key,
-    this.child,
+    Key? key,
+    required this.child,
   }) : super(key: key);
 
   final Widget child;
@@ -14,7 +14,7 @@ class DismissKeyboardOnTap extends StatelessWidget {
     final currentFocus = FocusScope.of(context);
 
     if (!currentFocus.hasPrimaryFocus && currentFocus.hasFocus) {
-      FocusManager.instance.primaryFocus.unfocus();
+      FocusManager.instance.primaryFocus?.unfocus();
     }
   }
 

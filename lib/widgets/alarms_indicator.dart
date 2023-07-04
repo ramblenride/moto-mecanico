@@ -1,12 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:moto_mecanico/models/motorcycle.dart';
 import 'package:moto_mecanico/motorcycle_alarms.dart';
 import 'package:moto_mecanico/themes.dart';
 
 class AlarmsIndicator extends StatelessWidget {
-  AlarmsIndicator({@required this.motorcycle}) : assert(motorcycle != null);
+  AlarmsIndicator({required this.motorcycle});
 
   final Motorcycle motorcycle;
 

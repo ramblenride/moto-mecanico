@@ -4,27 +4,27 @@ import 'package:intl/intl.dart';
 class TextFormFieldDatePicker extends StatefulWidget {
   final DateTime firstDate;
   final DateTime lastDate;
-  final DateTime initialDate;
+  final DateTime? initialDate;
   final bool enabled;
   final String labelText;
   final TextAlign textAlign;
-  final TextStyle style;
-  final Icon prefixIcon;
-  final Icon suffixIcon;
-  final String resetTooltip;
-  final DateFormat dateFormat;
-  final InputDecoration decoration;
-  final FocusNode focusNode;
-  final ValueChanged<DateTime> onDateChanged;
-  final FormFieldSetter<DateTime> onSaved;
+  final TextStyle? style;
+  final Icon? prefixIcon;
+  final Icon? suffixIcon;
+  final String? resetTooltip;
+  final DateFormat? dateFormat;
+  final InputDecoration? decoration;
+  final FocusNode? focusNode;
+  final ValueChanged<DateTime?>? onDateChanged;
+  final FormFieldSetter<DateTime?>? onSaved;
 
   TextFormFieldDatePicker({
-    Key key,
-    @required this.lastDate,
-    @required this.firstDate,
+    Key? key,
+    required this.lastDate,
+    required this.firstDate,
     this.initialDate,
-    this.enabled,
-    this.labelText,
+    this.enabled = false,
+    this.labelText = '',
     this.textAlign = TextAlign.start,
     this.style,
     this.prefixIcon,
@@ -35,9 +35,7 @@ class TextFormFieldDatePicker extends StatefulWidget {
     this.focusNode,
     this.onDateChanged,
     this.onSaved,
-  })  : assert(firstDate != null),
-        assert(lastDate != null),
-        assert(!firstDate.isAfter(lastDate),
+  })  : assert(!firstDate.isAfter(lastDate),
             'lastDate must be on or after firstDate'),
         super(key: key);
 
@@ -46,20 +44,20 @@ class TextFormFieldDatePicker extends StatefulWidget {
 }
 
 class _TextFormFieldDatePicker extends State<TextFormFieldDatePicker> {
-  TextEditingController _controllerDate;
-  DateFormat _dateFormat;
-  DateTime _selectedDate;
+  late final TextEditingController _controllerDate;
+  late final DateFormat _dateFormat;
+  DateTime? _selectedDate;
 
   @override
   void initState() {
     super.initState();
 
     _dateFormat = widget.dateFormat ?? DateFormat.MMMEd();
-    _selectedDate = widget.initialDate;
+    _selectedDate = widget.initialDate ?? DateTime.now();
 
     _controllerDate = TextEditingController();
     if (_selectedDate != null) {
-      _controllerDate.text = _dateFormat.format(_selectedDate);
+      _controllerDate.text = _dateFormat.format(_selectedDate!);
     }
   }
 
@@ -102,7 +100,7 @@ class _TextFormFieldDatePicker extends State<TextFormFieldDatePicker> {
                 _selectedDate = null;
               });
               if (widget.onDateChanged != null) {
-                widget.onDateChanged(_selectedDate);
+                widget.onDateChanged!.call(_selectedDate);
               }
             },
           ),
@@ -122,7 +120,7 @@ class _TextFormFieldDatePicker extends State<TextFormFieldDatePicker> {
           onTap: () => _selectDate(context),
           onSaved: (value) {
             if (widget.onSaved != null) {
-              widget.onSaved(_selectedDate);
+              widget.onSaved!.call(_selectedDate);
             }
           },
           readOnly: true,
@@ -150,16 +148,16 @@ class _TextFormFieldDatePicker extends State<TextFormFieldDatePicker> {
     if (pickedDate != null && pickedDate != _selectedDate) {
       setState(() {
         _selectedDate = pickedDate;
-        _controllerDate.text = _dateFormat.format(_selectedDate);
+        _controllerDate.text = _dateFormat.format(_selectedDate!);
       });
 
       if (widget.onDateChanged != null) {
-        widget.onDateChanged(_selectedDate);
+        widget.onDateChanged!.call(_selectedDate);
       }
     }
 
     if (widget.focusNode != null) {
-      widget.focusNode.nextFocus();
+      widget.focusNode!.nextFocus();
     }
   }
 }

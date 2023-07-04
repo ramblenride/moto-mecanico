@@ -17,9 +17,9 @@ import 'package:moto_mecanico/widgets/textformfield_date_picker.dart';
 
 class CompleteTaskDialog extends StatefulWidget {
   CompleteTaskDialog({
-    @required this.motorcycle,
-    @required this.tasks,
-    @required this.onResult,
+    required this.motorcycle,
+    required this.tasks,
+    required this.onResult,
   });
 
   final Motorcycle motorcycle;
@@ -31,7 +31,7 @@ class CompleteTaskDialog extends StatefulWidget {
 }
 
 class _CompleteTaskDialogState extends State<CompleteTaskDialog> {
-  _CompleteTaskDialogState({@required this.tasks});
+  _CompleteTaskDialogState({required this.tasks});
 
   final List<Task> tasks;
   final _formKey = GlobalKey<FormState>();
@@ -58,7 +58,7 @@ class _CompleteTaskDialogState extends State<CompleteTaskDialog> {
                       topRight: Radius.circular(20)),
                 ),
                 child: Text(
-                  AppLocalizations.of(context)
+                  AppLocalizations.of(context)!
                       .complete_task_dialog_title(tasks.length),
                   style: Theme.of(context).textTheme.dialogHeader,
                   textAlign: TextAlign.center,
@@ -74,11 +74,11 @@ class _CompleteTaskDialogState extends State<CompleteTaskDialog> {
                         isDialog: true,
                         children: [
                           PropertyEditorRow(
-                            name: AppLocalizations.of(context)
+                            name: AppLocalizations.of(context)!
                                 .complete_task_dialog_date_prop_name,
                             inputField: TextFormFieldDatePicker(
                               decoration: _valueFieldDecoration(
-                                  AppLocalizations.of(context)
+                                  AppLocalizations.of(context)!
                                       .complete_task_dialog_date_prop_hint),
                               textAlign: TextAlign.end,
                               style: propValueStyle,
@@ -94,11 +94,11 @@ class _CompleteTaskDialogState extends State<CompleteTaskDialog> {
                             ),
                           ),
                           PropertyEditorRow(
-                            name: AppLocalizations.of(context)
+                            name: AppLocalizations.of(context)!
                                 .motorcycle_edit_page_name_prop_odometer,
                             inputField: TextFormField(
                               decoration: _valueFieldDecoration(
-                                  AppLocalizations.of(context)
+                                  AppLocalizations.of(context)!
                                       .motorcycle_edit_page_hint_prop_odometer),
                               textAlign: TextAlign.end,
                               style: propValueStyle,
@@ -112,7 +112,9 @@ class _CompleteTaskDialogState extends State<CompleteTaskDialog> {
                               ],
                               onSaved: (value) {
                                 final closedValue = Distance(
-                                    value.isNotEmpty ? int.parse(value) : null,
+                                    (value != null && value.isNotEmpty)
+                                        ? int.parse(value)
+                                        : null,
                                     distanceUnit);
                                 for (final task in tasks) {
                                   task.closedOdometer = closedValue;
@@ -125,22 +127,23 @@ class _CompleteTaskDialogState extends State<CompleteTaskDialog> {
                             ),
                           ),
                           PropertyEditorRow(
-                            name: AppLocalizations.of(context)
+                            name: AppLocalizations.of(context)!
                                 .task_edit_page_name_prop_executor,
                             inputField: TextFormField(
                               decoration: _valueFieldDecoration(
-                                  AppLocalizations.of(context)
+                                  AppLocalizations.of(context)!
                                       .task_edit_page_hint_prop_executor),
                               textAlign: TextAlign.end,
                               style: propValueStyle,
-                              initialValue:
-                                  tasks.first?.executor?.toString() ?? '',
+                              initialValue: tasks.first.executor.toString(),
                               inputFormatters: [
                                 LengthLimitingTextInputFormatter(32),
                               ],
                               onSaved: (value) {
-                                for (final task in tasks) {
-                                  task.executor = value;
+                                if (value != null) {
+                                  for (final task in tasks) {
+                                    task.executor = value;
+                                  }
                                 }
                               },
                             ),
@@ -148,21 +151,21 @@ class _CompleteTaskDialogState extends State<CompleteTaskDialog> {
                         ],
                       ),
                       PropertyEditorCard(
-                        title: AppLocalizations.of(context)
+                        title: AppLocalizations.of(context)!
                             .motorcycle_edit_page_section_header_notes,
                         children: [
                           NoteSelectorRow(
-                            header: false,
-                            minLines: 3,
-                            maxLines: 5,
-                            onSaved: (value) {
-                              if (value != null) {
-                                for (final task in tasks) {
-                                  task.notes.add(Note.from(value));
+                              header: false,
+                              minLines: 3,
+                              maxLines: 5,
+                              onSaved: (value) {
+                                if (value != null) {
+                                  for (final task in tasks) {
+                                    task.notes.add(Note.from(value));
+                                  }
                                 }
-                              }
-                            },
-                          ),
+                              },
+                              onRemove: (value) {}),
                         ],
                       ),
                       Row(
@@ -170,7 +173,7 @@ class _CompleteTaskDialogState extends State<CompleteTaskDialog> {
                         children: <Widget>[
                           TextButton(
                             child: Text(
-                                AppLocalizations.of(context)
+                                AppLocalizations.of(context)!
                                     .dialog_cancel_button,
                                 style:
                                     Theme.of(context).textTheme.dialogButton),
@@ -178,16 +181,16 @@ class _CompleteTaskDialogState extends State<CompleteTaskDialog> {
                           ),
                           TextButton(
                             child: Text(
-                                AppLocalizations.of(context)
+                                AppLocalizations.of(context)!
                                     .dialog_complete_button,
                                 style:
                                     Theme.of(context).textTheme.dialogButton),
                             onPressed: () {
-                              if (_formKey.currentState.validate()) {
+                              if (_formKey.currentState!.validate()) {
                                 for (final task in tasks) {
                                   task.closed = true;
                                 }
-                                _formKey.currentState.save();
+                                _formKey.currentState!.save();
                                 widget.onResult(true);
                               }
                             },

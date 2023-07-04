@@ -11,14 +11,11 @@ enum AttachmentAction { delete, rename, copyable }
 
 class AttachmentSelectorRow extends StatefulWidget {
   AttachmentSelectorRow({
-    Key key,
-    @required this.attachment,
-    @required this.storage,
-    @required this.onRemove,
-  })  : assert(attachment != null),
-        assert(storage != null),
-        assert(onRemove != null),
-        super(key: key);
+    Key? key,
+    required this.attachment,
+    required this.storage,
+    required this.onRemove,
+  }) : super(key: key);
 
   final Attachment attachment;
   final Storage storage;
@@ -30,8 +27,7 @@ class AttachmentSelectorRow extends StatefulWidget {
 }
 
 class _AttachmentSelectorRowState extends State<AttachmentSelectorRow> {
-  _AttachmentSelectorRowState({@required this.attachment})
-      : assert(attachment != null);
+  _AttachmentSelectorRowState({required this.attachment});
 
   final Attachment attachment;
   bool _rename = false;
@@ -68,21 +64,21 @@ class _AttachmentSelectorRowState extends State<AttachmentSelectorRow> {
                 PopupMenuItem(
                   enabled: !_rename,
                   value: AttachmentAction.rename,
-                  child: Text(AppLocalizations.of(context)
+                  child: Text(AppLocalizations.of(context)!
                       .attachment_selector_action_rename),
                 ),
                 PopupMenuItem(
                   value: AttachmentAction.delete,
-                  child: Text(AppLocalizations.of(context)
+                  child: Text(AppLocalizations.of(context)!
                       .attachment_selector_action_delete),
                 ),
                 PopupMenuItem(
                   value: AttachmentAction.copyable,
                   child: Tooltip(
-                    message: AppLocalizations.of(context).renewable_tooltip,
+                    message: AppLocalizations.of(context)!.renewable_tooltip,
                     child: Row(
                       children: [
-                        Text(AppLocalizations.of(context).renewable),
+                        Text(AppLocalizations.of(context)!.renewable),
                         SizedBox(
                           width: 10,
                         ),
@@ -188,15 +184,16 @@ class _AttachmentSelectorRowState extends State<AttachmentSelectorRow> {
   }
 
   void _launchURL(String url) async {
-    if (await canLaunch(url)) {
-      final result = await launch(url);
+    final uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      final result = await launchUrl(uri);
       if (!result) {
-        _showOpenAttachmentError(AppLocalizations.of(context)
+        _showOpenAttachmentError(AppLocalizations.of(context)!
                 .attachment_selector_attachment_error_link_open_failed +
             '\n\n${url}');
       }
     } else {
-      _showOpenAttachmentError(AppLocalizations.of(context)
+      _showOpenAttachmentError(AppLocalizations.of(context)!
               .attachment_selector_attachment_error_link_unsupported +
           '\n\n${url}');
     }
@@ -204,27 +201,29 @@ class _AttachmentSelectorRowState extends State<AttachmentSelectorRow> {
 
   void _openFile(String url) async {
     final file = await widget.storage.getFile(url);
+    if (file == null) return;
+
     final result = await OpenFile.open(file.path);
     if (result.type != ResultType.done) {
       String errorMessage;
       switch (result.type) {
         case ResultType.fileNotFound:
-          errorMessage = AppLocalizations.of(context)
+          errorMessage = AppLocalizations.of(context)!
               .attachment_selector_attachment_error_file_not_found;
           break;
         case ResultType.noAppToOpen:
-          errorMessage = AppLocalizations.of(context)
+          errorMessage = AppLocalizations.of(context)!
               .attachment_selector_attachment_error_no_app_to_open;
           break;
         case ResultType.permissionDenied:
-          errorMessage = AppLocalizations.of(context)
+          errorMessage = AppLocalizations.of(context)!
               .attachment_selector_attachment_error_permission_denied;
           break;
         default:
           errorMessage = result.message;
           break;
       }
-      _showOpenAttachmentError(AppLocalizations.of(context)
+      _showOpenAttachmentError(AppLocalizations.of(context)!
               .attachment_selector_attachment_error_file_open_failed +
           '\n\n$url\n\n$errorMessage');
     }
@@ -234,7 +233,7 @@ class _AttachmentSelectorRowState extends State<AttachmentSelectorRow> {
     await showDialog(
       context: context,
       builder: (BuildContext context) => AlertDialog(
-        title: Text(AppLocalizations.of(context)
+        title: Text(AppLocalizations.of(context)!
             .attachment_selector_attachment_error_dialog_title),
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -245,7 +244,7 @@ class _AttachmentSelectorRowState extends State<AttachmentSelectorRow> {
         ),
         actions: [
           TextButton(
-            child: Text(AppLocalizations.of(context).dialog_ok_button),
+            child: Text(AppLocalizations.of(context)!.dialog_ok_button),
             onPressed: () {
               Navigator.of(context).pop();
             },

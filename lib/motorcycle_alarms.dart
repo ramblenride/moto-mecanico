@@ -30,7 +30,7 @@ extension MotoAlarmExt on Motorcycle {
     if (task.dueDate == null || task.closed) {
       return TaskAlarm.none;
     }
-    final remaining = task.dueDate
+    final remaining = task.dueDate!
         .add(Duration(hours: 23, minutes: 59))
         .difference(DateTime.now());
 
@@ -57,23 +57,18 @@ extension MotoAlarmExt on Motorcycle {
   }
 
   List<Task> getRedAlerts() {
-    return tasks
-            ?.where((task) => getAlarmLevel(task) == TaskAlarm.red)
-            ?.toList() ??
-        [];
+    return tasks.where((task) => getAlarmLevel(task) == TaskAlarm.red).toList();
   }
 
   List<Task> getYellowAlerts() {
     return tasks
-            ?.where((task) => getAlarmLevel(task) == TaskAlarm.yellow)
-            ?.toList() ??
-        [];
+        .where((task) => getAlarmLevel(task) == TaskAlarm.yellow)
+        .toList();
   }
 
   List<Task> getAlerts() {
     return tasks
-            ?.where((task) => getAlarmLevel(task) != TaskAlarm.none)
-            ?.toList() ??
-        [];
+        .where((task) => getAlarmLevel(task) != TaskAlarm.none)
+        .toList();
   }
 }

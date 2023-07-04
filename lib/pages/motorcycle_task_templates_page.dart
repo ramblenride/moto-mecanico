@@ -13,7 +13,7 @@ import 'package:moto_mecanico/models/note.dart';
 import 'package:moto_mecanico/models/task.dart';
 import 'package:moto_mecanico/themes.dart';
 import 'package:moto_mecanico/widgets/motorcycle_template_card.dart';
-import 'package:searchable_dropdown/searchable_dropdown.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// This page allows to populate a motorcycle task list using tasks
@@ -22,7 +22,7 @@ import 'package:url_launcher/url_launcher.dart';
 /// It's possible to select which task from a given template will be imported.
 /// Templates are added to the motorcycle as tasks when the 'add' button is pressed.
 class MotorcycleTaskTemplatePage extends StatefulWidget {
-  MotorcycleTaskTemplatePage({Key key, @required this.motorcycle})
+  MotorcycleTaskTemplatePage({Key? key, required this.motorcycle})
       : super(key: key);
   final Motorcycle motorcycle;
 
@@ -35,10 +35,10 @@ class _MotorcycleTaskTemplatePageState
     extends State<MotorcycleTaskTemplatePage> {
   _MotorcycleTaskTemplatePageState() : _clearSelected = false;
 
-  Future<MotorcycleTemplateIndex> _templateIndex;
-  MotorcycleTemplateIndexItem _selected;
   bool _clearSelected;
-  MotorcycleTemplateCard _motoCard;
+  late final Future<MotorcycleTemplateIndex> _templateIndex;
+  MotorcycleTemplateIndexItem? _selected;
+  MotorcycleTemplateCard? _motoCard;
 
   @override
   void initState() {
@@ -51,11 +51,11 @@ class _MotorcycleTaskTemplatePageState
     return Scaffold(
       appBar: AppBar(
         title: Text(
-            AppLocalizations.of(context).motorcycle_task_template_page_title),
+            AppLocalizations.of(context)!.motorcycle_task_template_page_title),
         actions: [
           TextButton(
               child: Text(
-                AppLocalizations.of(context)
+                AppLocalizations.of(context)!
                     .motorcycle_task_template_page_add_button,
                 style: Theme.of(context).textTheme.appbarButton,
               ),
@@ -88,7 +88,7 @@ class _MotorcycleTaskTemplatePageState
                 ],
               );
             } else if (snapshot.hasData) {
-              return _buildTemplateSelector(snapshot.data.templates);
+              return _buildTemplateSelector(snapshot.data!.templates);
             }
 
             return Center(
@@ -97,9 +97,9 @@ class _MotorcycleTaskTemplatePageState
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    AppLocalizations.of(context)
+                    AppLocalizations.of(context)!
                         .motorcycle_task_template_page_loading_templates,
-                    style: Theme.of(context).textTheme.bodyText2,
+                    style: Theme.of(context).textTheme.bodyMedium,
                   ),
                   const SizedBox(height: 10),
                   const CircularProgressIndicator(),
@@ -113,32 +113,34 @@ class _MotorcycleTaskTemplatePageState
   }
 
   Widget _buildTemplateSelector(List<MotorcycleTemplateIndexItem> templates) {
-    final items = <DropdownMenuItem<MotorcycleTemplateIndexItem>>[];
-    List<Widget> children;
+    final items = <String>[];
 
     for (final template in templates) {
-      items.add(DropdownMenuItem(
-        child: Text(template.name),
-        value: template,
-      ));
+      items.add(template.name);
+      //items.add(DropdownMenuItem(
+      //  child: Text(template.name),
+      //  value: template,
+      //));
     }
 
-    children = <Widget>[
+    final children = <Widget>[
       const Padding(padding: EdgeInsets.only(top: 8)),
-      SearchableDropdown.single(
+      DropdownSearch<String>(
         items: items,
-        hint: AppLocalizations.of(context)
-            .motorcycle_task_template_page_search_hint,
-        searchHint: AppLocalizations.of(context)
-            .motorcycle_task_template_page_search_hint,
-        isCaseSensitiveSearch: false,
-        value: _getInitialSelection(templates),
-        onChanged: (MotorcycleTemplateIndexItem value) {
+        dropdownDecoratorProps: DropDownDecoratorProps(
+          dropdownSearchDecoration: InputDecoration(
+            hintText: AppLocalizations.of(context)!
+                .motorcycle_task_template_page_search_hint,
+          ),
+        ),
+        //selectedItem: _getInitialSelection(templates),
+        onChanged: (value) {
           setState(() {
             if (value == null) _clearSelected = true;
-            _setSelection(value);
+            //_setSelection(value);
           });
         },
+        /*
         searchFn: (String keyword,
             List<DropdownMenuItem<MotorcycleTemplateIndexItem>> items) {
           var result = <int>[];
@@ -156,29 +158,28 @@ class _MotorcycleTaskTemplatePageState
             result = Iterable<int>.generate(items.length).toList();
           }
           return result;
-        },
-        isExpanded: true,
+        }*/
       ),
     ];
     if (_selected != null) {
       _motoCard = MotorcycleTemplateCard(
         key: UniqueKey(),
-        template: _selected,
+        template: _selected!,
       );
       children.add(
         Text(
-          _selected.description,
+          _selected!.description,
           maxLines: 3,
           overflow: TextOverflow.ellipsis,
           style: Theme.of(context).textTheme.taskCardDescription,
         ),
       );
-      children.add(_motoCard);
+      children.add(_motoCard!);
     }
     children.add(const SizedBox(height: 16));
     children.add(
       Text(
-        AppLocalizations.of(context).motorcycle_task_template_page_disclaimer,
+        AppLocalizations.of(context)!.motorcycle_task_template_page_disclaimer,
         textAlign: TextAlign.center,
         style:
             Theme.of(context).textTheme.propEditorHint.copyWith(fontSize: 13),
@@ -207,15 +208,12 @@ class _MotorcycleTaskTemplatePageState
 
   void _addSelectedTasks() {
     if (_selected?.tasks == null || _motoCard == null) return;
-    for (final template in _motoCard.getSelectedTasks()) {
+    for (final template in _motoCard!.getSelectedTasks()) {
       _addTemplateTaskToMoto(widget.motorcycle, template);
     }
   }
 
   void _addTemplateTaskToMoto(Motorcycle moto, TaskTemplate templateTask) {
-    assert(moto != null);
-    assert(templateTask != null);
-
     final motoTask = Task(
       name: templateTask.name,
       description: templateTask.description,
@@ -223,7 +221,7 @@ class _MotorcycleTaskTemplatePageState
       notes: templateTask.notes.isNotEmpty
           ? [
               Note(
-                name: AppLocalizations.of(context)
+                name: AppLocalizations.of(context)!
                     .motorcycle_task_template_page_note_name,
                 text: templateTask.notes,
                 copyable: true,
@@ -236,17 +234,15 @@ class _MotorcycleTaskTemplatePageState
       recurringOdometer: templateTask.intervalDistance,
     );
 
-    if (templateTask.links != null) {
-      for (final link in templateTask.links) {
-        motoTask.attachments.add(
-          Attachment(
-            type: AttachmentType.link,
-            name: link.name,
-            url: link.url,
-            copyable: true,
-          ),
-        );
-      }
+    for (final link in templateTask.links) {
+      motoTask.attachments.add(
+        Attachment(
+          type: AttachmentType.link,
+          name: link.name,
+          url: link.url,
+          copyable: true,
+        ),
+      );
     }
 
     moto.addTask(motoTask);
@@ -256,25 +252,25 @@ class _MotorcycleTaskTemplatePageState
     _selected = template;
   }
 
-  MotorcycleTemplateIndexItem _getInitialSelection(
-      List<MotorcycleTemplateIndexItem> templates) {
+  String _getInitialSelection(List<MotorcycleTemplateIndexItem> templates) {
     if (_clearSelected == false &&
         _selected == null &&
-        templates?.isNotEmpty == true &&
-        widget.motorcycle?.make?.isNotEmpty == true &&
-        widget.motorcycle?.model?.isNotEmpty == true) {
+        templates.isNotEmpty == true &&
+        widget.motorcycle.make.isNotEmpty == true &&
+        widget.motorcycle.model.isNotEmpty == true) {
       _selected = templates.firstWhere(
-          (template) =>
-              template.name
-                  .toLowerCase()
-                  .contains(widget.motorcycle.make.toLowerCase()) &&
-              template.name
-                  .toLowerCase()
-                  .contains(widget.motorcycle.model.toLowerCase()),
-          orElse: () => null);
-      _setSelection(_selected);
+        (template) =>
+            template.name
+                .toLowerCase()
+                .contains(widget.motorcycle.make.toLowerCase()) &&
+            template.name
+                .toLowerCase()
+                .contains(widget.motorcycle.model.toLowerCase()),
+        //orElse: () => null);
+      );
+      _setSelection(_selected!);
     }
-    return _selected;
+    return _selected!.name;
   }
 
   // Returns the next scheduled service based on distance.
@@ -298,24 +294,24 @@ class _MotorcycleTaskTemplatePageState
   // Use the first interval if it's not passed yet.
   // Otherwise add the recurring interval (if any) to the current odometer
   // If not, return the first interval even if it has passed.
-  DateTime _getDueDate(Motorcycle motorcycle, TaskTemplate templateTask) {
+  DateTime? _getDueDate(Motorcycle motorcycle, TaskTemplate templateTask) {
     const daysPerMonth = 30; // Precision is not so important here
 
     // Use the time for the first service if it hasn't passed yet.
     if (motorcycle.purchaseDate != null) {
-      if ((templateTask.months ?? 0) > 0) {
+      if (templateTask.months > 0) {
         final templateDuration =
             Duration(days: templateTask.months * daysPerMonth);
-        if (DateTime.now().difference(motorcycle.purchaseDate) <
+        if (DateTime.now().difference(motorcycle.purchaseDate!) <
             templateDuration) {
-          return motorcycle.purchaseDate.add(templateDuration);
+          return motorcycle.purchaseDate!.add(templateDuration);
         }
       }
     }
 
     // Otherwise add the time interval to the current date if available
     // (given that we don't know the last service date)
-    if ((templateTask.intervalMonths ?? 0) > 0) {
+    if (templateTask.intervalMonths > 0) {
       return DateTime.now()
           .add(Duration(days: templateTask.intervalMonths * daysPerMonth));
     }
@@ -329,7 +325,7 @@ class _MotorcycleTaskTemplatePageState
     if (response.statusCode == 200) {
       return response.body;
     } else {
-      throw Exception(AppLocalizations.of(context)
+      throw Exception(AppLocalizations.of(context)!
           .motorcycle_task_template_page_error_loading_index);
     }
   }
@@ -341,7 +337,7 @@ class _MotorcycleTaskTemplatePageState
           jsonDecode(jsonString) as Map<String, dynamic>);
     } catch (error) {
       debugPrint('Failed to parse motorcycle index: ${error}');
-      throw Exception(AppLocalizations.of(context)
+      throw Exception(AppLocalizations.of(context)!
           .motorcycle_task_template_page_error_loading_index);
     }
   }
@@ -353,19 +349,19 @@ class _MotorcycleTaskTemplatePageState
         return SimpleDialog(
           contentPadding: EdgeInsets.fromLTRB(8, 12, 8, 16),
           title: Text(
-            AppLocalizations.of(context)
+            AppLocalizations.of(context)!
                 .motorcycle_task_template_page_help_dialog_title,
             textAlign: TextAlign.center,
           ),
           children: [
             Text(
-              AppLocalizations.of(context)
+              AppLocalizations.of(context)!
                   .motorcycle_task_template_page_help_dialog,
               textAlign: TextAlign.center,
               style: Theme.of(context)
                   .textTheme
-                  .subtitle1
-                  .copyWith(color: Colors.blueGrey[200]),
+                  .titleMedium!
+                  .copyWith(color: Colors.blueGrey[200]!),
             ),
             IconButton(
               icon: Icon(Icons.open_in_browser),
@@ -378,6 +374,6 @@ class _MotorcycleTaskTemplatePageState
   }
 
   void _openMotoServiceDbUrl() {
-    launch(MOTO_SERVICE_DB_WEB);
+    launchUrl(Uri.parse(MOTO_SERVICE_DB_WEB));
   }
 }

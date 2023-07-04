@@ -51,7 +51,7 @@ void main() {
     final config = Configuration('en');
     await config.loadConfig();
 
-    expect(config.locale, equals(Locale('fr_CA')));
+    expect(config.locale, equals(const Locale('fr_CA')));
     expect(config.currencySymbol, equals('BRP'));
     expect(config.dateFormat, isNot(null));
     expect(

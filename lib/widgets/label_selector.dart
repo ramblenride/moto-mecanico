@@ -5,9 +5,7 @@ import 'package:moto_mecanico/themes.dart';
 import 'package:provider/provider.dart';
 
 class LabelSelector extends StatefulWidget {
-  LabelSelector({Key key, @required this.active_labels})
-      : assert(active_labels != null),
-        super(key: key);
+  LabelSelector({Key? key, required this.active_labels}) : super(key: key);
 
   final List<int> active_labels;
 
@@ -17,7 +15,7 @@ class LabelSelector extends StatefulWidget {
 }
 
 class _LabelSelectorState extends State<LabelSelector> {
-  _LabelSelectorState({@required this.active_labels});
+  _LabelSelectorState({required this.active_labels});
 
   List<int> active_labels;
   bool _expanded = false;
@@ -36,7 +34,7 @@ class _LabelSelectorState extends State<LabelSelector> {
               children: [
                 const SizedBox(height: 45), // Force uniform height
                 Text(
-                  AppLocalizations.of(context)
+                  AppLocalizations.of(context)!
                       .label_selector_title
                       .toUpperCase(),
                   style: Theme.of(context).textTheme.propEditorName,
@@ -75,7 +73,7 @@ class _LabelSelectorState extends State<LabelSelector> {
       indicators.add(
         Container(
           decoration: BoxDecoration(
-            color: labels[id].color,
+            color: labels[id]!.color,
             border: Border.all(
               color: Colors.black,
               width: 1.0,

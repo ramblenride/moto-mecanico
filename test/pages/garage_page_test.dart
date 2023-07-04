@@ -15,6 +15,7 @@ import '../mocks/motorcycle_void_storage.dart';
 import '../mocks/void_storage.dart';
 
 Future<Widget> createGaragePage(GarageModel garage) async {
+  WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences.setMockInitialValues({});
 
   final config = Configuration('en');
@@ -36,14 +37,14 @@ Future<Widget> createGaragePage(GarageModel garage) async {
 
 void addMotos(GarageModel garage, int n, bool reverseSort) async {
   final motos = [];
-  await Iterable<int>.generate(n).forEach((i) async {
+  Iterable<int>.generate(n).toList().forEach((i) {
     final moto = Motorcycle(
       name: reverseSort ? 'Moto-${n - 1 - i}' : 'Moto-$i',
     );
     moto.storage = MotorcycleVoidStorage();
     motos.add(moto);
   });
-  motos.forEach((moto) => garage.add(moto));
+  motos.toList().forEach((moto) => garage.add(moto));
 }
 
 void main() async {
@@ -80,13 +81,13 @@ void main() async {
 
   testWidgets('large garage can scroll', (WidgetTester tester) async {
     final garage = GarageModel();
-    await addMotos(garage, 5, false);
+    addMotos(garage, 5, false);
 
     await tester.pumpWidget(await createGaragePage(garage));
     await tester.pumpAndSettle();
 
     expect(find.widgetWithText(MotorcycleCard, 'Moto-0'), findsOneWidget);
-    await tester.fling(find.byType(ListView), Offset(0, -200), 3000);
+    await tester.fling(find.byType(ListView), const Offset(0, -200), 3000);
     await tester.pumpAndSettle();
     expect(find.widgetWithText(MotorcycleCard, 'Moto-0'), findsNothing);
     expect(find.text('Moto-3'), findsOneWidget);
@@ -95,7 +96,7 @@ void main() async {
   testWidgets('tapping card opens motorcycle view page',
       (WidgetTester tester) async {
     final garage = GarageModel();
-    await addMotos(garage, 1, false);
+    addMotos(garage, 1, false);
 
     await tester.pumpWidget(await createGaragePage(garage));
     await tester.pumpAndSettle();
@@ -117,8 +118,8 @@ void main() async {
       (WidgetTester tester) async {
     final garage = GarageModel();
     garage.storage = GarageStorage();
-    garage.storage.storage = VoidStorage();
-    await addMotos(garage, 1, false);
+    garage.storage!.storage = VoidStorage();
+    addMotos(garage, 1, false);
 
     await tester.pumpWidget(await createGaragePage(garage));
     await tester.pumpAndSettle();
@@ -135,7 +136,7 @@ void main() async {
 
   testWidgets('sorting moto cards by name', (WidgetTester tester) async {
     final garage = GarageModel();
-    await addMotos(garage, 5, true);
+    addMotos(garage, 5, true);
 
     await tester.pumpWidget(await createGaragePage(garage));
     await tester.pumpAndSettle();
@@ -152,7 +153,7 @@ void main() async {
 
   testWidgets('filtering moto cards', (WidgetTester tester) async {
     final garage = GarageModel();
-    await addMotos(garage, 6, false);
+    addMotos(garage, 6, false);
 
     await tester.pumpWidget(await createGaragePage(garage));
     await tester.pumpAndSettle();

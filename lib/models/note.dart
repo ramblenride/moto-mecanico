@@ -1,19 +1,14 @@
-import 'package:flutter/foundation.dart';
-
 class Note {
   String _name;
   String _text;
   bool _copyable;
   DateTime _lastUpdate;
 
-  Note({@required name, @required text, copyable = false})
-      : assert(name != null),
-        assert(text != null),
-        _lastUpdate = DateTime.now() {
-    _name = name;
-    _text = text;
-    _copyable = copyable;
-  }
+  Note({required name, required text, copyable = false})
+      : _lastUpdate = DateTime.now(),
+        _name = name,
+        _text = text,
+        _copyable = copyable;
 
   String get name => _name;
   String get text => _text;
@@ -21,15 +16,15 @@ class Note {
   DateTime get lastUpdate => _lastUpdate;
 
   set name(String name) {
-    if ((name ?? '') != (_name ?? '')) {
-      _name = name ?? '';
+    if (name != _name) {
+      _name = name;
       _lastUpdate = DateTime.now();
     }
   }
 
   set text(String text) {
-    if ((text ?? '') != (_text ?? '')) {
-      _text = text ?? '';
+    if (text != _text) {
+      _text = text;
       _lastUpdate = DateTime.now();
     }
   }
@@ -38,22 +33,26 @@ class Note {
     _copyable = copyable;
   }
 
-  Note.from(Note note) {
-    _name = note.name;
-    _text = note.text;
-    _copyable = note.copyable;
-    _lastUpdate = note.lastUpdate;
-  }
+  Note.from(Note note)
+      : _name = note.name,
+        _text = note.text,
+        _copyable = note.copyable,
+        _lastUpdate = note.lastUpdate;
 
-  Note.fromJson(Map<String, dynamic> json) {
-    _name = json['name'] ?? '';
-    _text = json['text'] ?? '';
-    _copyable = json['copyable'] ?? false;
+  factory Note.fromJson(Map<String, dynamic> json) {
+    var newNote = Note(
+        name: json['name'] ?? '',
+        text: json['text'] ?? '',
+        copyable: json['copyable'] ?? false);
 
+    DateTime? lastUpdate;
     if (json['lastUpdate'] != null) {
-      _lastUpdate = DateTime.tryParse(json['lastUpdate']);
+      lastUpdate = DateTime.tryParse(json['lastUpdate']);
     }
-    _lastUpdate ??= DateTime.now();
+
+    newNote._lastUpdate = lastUpdate ?? DateTime.now();
+
+    return newNote;
   }
 
   Map<String, dynamic> toJson() {

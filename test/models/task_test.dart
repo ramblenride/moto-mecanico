@@ -4,12 +4,12 @@ import 'package:moto_mecanico/models/task.dart';
 
 void main() {
   test('sorting tasks by odometer, null goes last', () {
-    final task1 = Task(name: '1', dueOdometer: Distance(100));
-    final task2 = Task(name: '2', dueOdometer: Distance(null));
+    final task1 = Task(name: '1', dueOdometer: const Distance(100));
+    final task2 = Task(name: '2', dueOdometer: const Distance(null));
     final task3 =
-        Task(name: '3', dueOdometer: Distance(2, DistanceUnit.UnitKM));
+        Task(name: '3', dueOdometer: const Distance(2, DistanceUnit.UnitKM));
     final task4 =
-        Task(name: '4', dueOdometer: Distance(2, DistanceUnit.UnitMile));
+        Task(name: '4', dueOdometer: const Distance(2, DistanceUnit.UnitMile));
 
     final tasks = [task1, task2, task3, task4];
     tasks.sort();
@@ -18,7 +18,7 @@ void main() {
 
   test('sorting tasks by date, null goes last', () {
     final task1 =
-        Task(name: '1', dueDate: DateTime.now().add(Duration(days: 5)));
+        Task(name: '1', dueDate: DateTime.now().add(const Duration(days: 5)));
     final task2 = Task(name: '2', dueDate: null);
     final task3 = Task(name: '3', dueDate: DateTime.now());
 
@@ -28,24 +28,24 @@ void main() {
   });
 
   test('sorting tasks with distance and date', () {
-    final odometer = Distance(1200);
+    const odometer = Distance(1200);
     final task1 = Task(
         name: '1',
-        dueDate: DateTime.now().add(Duration(days: 365))); // Far future
+        dueDate: DateTime.now().add(const Duration(days: 365))); // Far future
     final task2 = Task(name: '2'); // Not scheduled
     final task3 = Task(name: '3', dueDate: DateTime.now()); // Today
-    final task4 =
-        Task(name: '4', dueOdometer: odometer + Distance(5)); // Near future
-    final task5 =
-        Task(name: '5', dueOdometer: Distance(100)); // The past (odometer)
+    final task4 = Task(
+        name: '4', dueOdometer: odometer + const Distance(5)); // Near future
+    final task5 = Task(
+        name: '5', dueOdometer: const Distance(100)); // The past (odometer)
     final task6 = Task(
         name: '6',
-        dueDate:
-            DateTime.now().subtract(Duration(days: 100))); // The past (date)
+        dueDate: DateTime.now()
+            .subtract(const Duration(days: 100))); // The past (date)
 
     final tasks = [task1, task2, task3, task4, task5, task6];
     tasks.sort((a, b) {
-      return a.compareTo(b, odometer: Distance(1200));
+      return a.compareTo(b, odometer: const Distance(1200));
     });
 
     expect(tasks, equals([task6, task5, task3, task4, task1, task2]));

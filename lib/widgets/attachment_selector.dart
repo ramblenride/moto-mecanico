@@ -8,10 +8,8 @@ import 'package:moto_mecanico/widgets/attachment_selector_row.dart';
 
 class AttachmentSelector extends StatefulWidget {
   AttachmentSelector(
-      {Key key, @required this.attachments, @required this.storage})
-      : assert(attachments != null),
-        assert(storage != null),
-        super(key: key);
+      {Key? key, required this.attachments, required this.storage})
+      : super(key: key);
 
   final List<Attachment> attachments;
   final Storage storage;
@@ -21,7 +19,7 @@ class AttachmentSelector extends StatefulWidget {
 }
 
 class _AttachmentSelectorState extends State<AttachmentSelector> {
-  Map<Key, AttachmentSelectorRow> _attachmentRows;
+  late final Map<Key, AttachmentSelectorRow> _attachmentRows;
   bool _expanded = false;
 
   @override
@@ -47,7 +45,7 @@ class _AttachmentSelectorState extends State<AttachmentSelector> {
             child: Row(
               children: [
                 Text(
-                  AppLocalizations.of(context).attachment_selector_title,
+                  AppLocalizations.of(context)!.attachment_selector_title,
                   style: Theme.of(context).textTheme.propEditorHeader,
                 ),
                 const Spacer(),
@@ -64,7 +62,7 @@ class _AttachmentSelectorState extends State<AttachmentSelector> {
                           alignment: Alignment.bottomCenter,
                           padding: EdgeInsets.zero,
                           color: Colors.blueGrey[100],
-                          tooltip: AppLocalizations.of(context)
+                          tooltip: AppLocalizations.of(context)!
                               .attachment_selector_add_attachment,
                           onPressed: _addAttachment,
                         )
@@ -133,7 +131,7 @@ class _AttachmentSelectorState extends State<AttachmentSelector> {
       builder: (BuildContext context) {
         return AddAttachmentDialog(
           onResult: (result) {
-            Navigator.of(context).pop(result);
+            result ?? Navigator.of(context).pop(result);
           },
         );
       },
@@ -144,10 +142,11 @@ class _AttachmentSelectorState extends State<AttachmentSelector> {
         if (result.type == AttachmentType.file ||
             result.type == AttachmentType.picture) {
           final id = await widget.storage.addExternalFile(result.url);
+          assert(id != null, 'Failed to add file');
           attachment = Attachment(
             type: result.type,
             name: result.name,
-            url: id,
+            url: id ?? '',
           );
         } else {
           attachment = result;
@@ -162,7 +161,7 @@ class _AttachmentSelectorState extends State<AttachmentSelector> {
         debugPrint('Failed to add attachment: ${error.toString()}');
         final snackBar = SnackBar(
           content: Text(
-            AppLocalizations.of(context).snackbar_storage_error +
+            AppLocalizations.of(context)!.snackbar_storage_error +
                 ': ${error.toString()}',
           ),
         );
@@ -176,7 +175,7 @@ class _AttachmentSelectorState extends State<AttachmentSelector> {
     if (_attachmentRows.isEmpty) {
       return [
         Text(
-          AppLocalizations.of(context).attachment_selector_empty_list,
+          AppLocalizations.of(context)!.attachment_selector_empty_list,
           style: Theme.of(context).textTheme.propEditorHint,
         )
       ];

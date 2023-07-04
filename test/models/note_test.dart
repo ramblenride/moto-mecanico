@@ -5,8 +5,8 @@ import 'package:moto_mecanico/models/note.dart';
 
 void main() {
   test('JSON round trip', () {
-    final text = 'this is a note';
-    final name = 'this is a name';
+    const text = 'this is a note';
+    const name = 'this is a name';
     final note = Note(name: name, text: text);
     final noteParsed = Note.fromJson(jsonDecode(jsonEncode(note.toJson())));
     expect(noteParsed, isNotNull);

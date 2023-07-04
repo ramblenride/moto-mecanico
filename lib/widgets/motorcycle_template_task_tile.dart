@@ -9,12 +9,10 @@ class MotorcycleTemplateTaskTile extends StatefulWidget {
   final bool _fixedTime;
   final _MotorcycleTemplateTaskTileState _state;
 
-  MotorcycleTemplateTaskTile({Key key, @required this.task})
-      : assert(task != null),
-        _renew = (task.intervalDistance.distance ?? 0) > 0 ||
-            (task.intervalMonths ?? 0) > 0,
-        _fixedTime =
-            (task.distance.distance ?? 0) > 0 || (task.months ?? 0) > 0,
+  MotorcycleTemplateTaskTile({Key? key, required this.task})
+      : _renew = (task.intervalDistance.distance ?? 0) > 0 ||
+            task.intervalMonths > 0,
+        _fixedTime = (task.distance.distance ?? 0) > 0 || task.months > 0,
         _state = _MotorcycleTemplateTaskTileState(),
         super(key: key);
 
@@ -22,17 +20,18 @@ class MotorcycleTemplateTaskTile extends StatefulWidget {
   State<StatefulWidget> createState() => _state;
 
   bool isEnabled() {
-    return _state?.isEnabled() ?? false;
+    return _state.isEnabled();
   }
 }
 
 class _MotorcycleTemplateTaskTileState
     extends State<MotorcycleTemplateTaskTile> {
   bool _isEnabled = true;
-  EdgeInsets _propTilePadding;
-  Text _propTitle;
-  Text _propSubtitle;
-  Widget _propLeading;
+
+  late final EdgeInsets _propTilePadding;
+  late final Text _propTitle;
+  late final Text _propSubtitle;
+  late final Widget _propLeading;
 
   @override
   void didChangeDependencies() {
@@ -55,7 +54,7 @@ class _MotorcycleTemplateTaskTileState
       width: 24,
       child: widget._renew
           ? Tooltip(
-              message: AppLocalizations.of(context)
+              message: AppLocalizations.of(context)!
                   .motorcycle_task_template_page_task_icon_tooltip_recurring,
               child: Icon(
                 Icons.autorenew,
@@ -65,7 +64,7 @@ class _MotorcycleTemplateTaskTileState
             )
           : widget._fixedTime
               ? Tooltip(
-                  message: AppLocalizations.of(context)
+                  message: AppLocalizations.of(context)!
                       .motorcycle_task_template_page_task_icon_tooltip_fixed,
                   child: Icon(
                     Icons.schedule,
@@ -87,7 +86,7 @@ class _MotorcycleTemplateTaskTileState
           child: _buildTaskTile(),
         ),
         Tooltip(
-          message: AppLocalizations.of(context)
+          message: AppLocalizations.of(context)!
               .motorcycle_task_template_page_task_add_switch_tooltip,
           child: Switch(
             activeColor: RnrColors.orange,
@@ -128,7 +127,7 @@ class _MotorcycleTemplateTaskTileState
             widget.task.notes,
             maxLines: 4,
             overflow: TextOverflow.ellipsis,
-            style: Theme.of(context).textTheme.subtitle2.copyWith(
+            style: Theme.of(context).textTheme.titleSmall!.copyWith(
                   color: Colors.blueGrey[200],
                 ),
           ),

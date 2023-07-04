@@ -1,17 +1,13 @@
-import 'package:flutter/foundation.dart';
-import 'package:meta/meta.dart';
-
 enum AttachmentType { file, link, picture }
 
 // Defines a generic attachment.
 class Attachment {
   Attachment({
-    @required this.type,
-    @required this.url,
-    this.name,
+    required this.type,
+    required this.url,
+    this.name = '',
     this.copyable = false,
-  })  : assert(type != null),
-        assert(url != null);
+  });
 
   final AttachmentType type;
   final String url;
@@ -27,7 +23,7 @@ class Attachment {
     );
   }
 
-  factory Attachment.fromJson(Map<String, dynamic> json) {
+  static Attachment? fromJson(Map<String, dynamic> json) {
     if (json['type'] != null && json['url'] != null) {
       var type;
       switch (json['type']) {
