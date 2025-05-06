@@ -4,9 +4,9 @@ import 'package:flutter/widgets.dart';
 /// the user taps on this widget.
 class DismissKeyboardOnTap extends StatelessWidget {
   const DismissKeyboardOnTap({
-    Key? key,
+    super.key,
     required this.child,
-  }) : super(key: key);
+  });
 
   final Widget child;
 

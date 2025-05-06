@@ -11,7 +11,8 @@ import 'package:moto_mecanico/widgets/property_editor_card.dart';
 import 'package:moto_mecanico/widgets/property_editor_row.dart';
 
 class RecurringTaskDialog extends StatefulWidget {
-  RecurringTaskDialog({required this.task, required this.onResult});
+  const RecurringTaskDialog(
+      {super.key, required this.task, required this.onResult});
 
   final Task task;
   final Function(bool) onResult;
@@ -23,7 +24,7 @@ class RecurringTaskDialog extends StatefulWidget {
 class _RecurringTaskDialogState extends State<RecurringTaskDialog> {
   _RecurringTaskDialogState({required this.task});
 
-  var _distanceUnit;
+  DistanceUnit _distanceUnit = DistanceUnit.unitKm;
   final Task task;
   final _formKey = GlobalKey<FormState>();
 
@@ -42,7 +43,7 @@ class _RecurringTaskDialogState extends State<RecurringTaskDialog> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Container(
-                padding: EdgeInsets.only(top: 15, bottom: 10),
+                padding: const EdgeInsets.only(top: 15, bottom: 10),
                 decoration: BoxDecoration(
                   color: RnrColors.blue[800],
                   borderRadius: const BorderRadius.only(

@@ -37,10 +37,10 @@ enum PopupEditAction {
 /// - Motorcycle info
 /// A button in the app bar allows updating the motorycle odometer.
 class MotorcycleViewPage extends StatefulWidget {
-  MotorcycleViewPage({Key? key}) : super(key: key);
+  const MotorcycleViewPage({super.key});
 
   @override
-  _MotorcycleViewPageState createState() => _MotorcycleViewPageState();
+  State<StatefulWidget> createState() => _MotorcycleViewPageState();
 }
 
 class _MotorcycleViewPageState extends State<MotorcycleViewPage>
@@ -102,15 +102,15 @@ class _MotorcycleViewPageState extends State<MotorcycleViewPage>
               children: [
                 _getActiveTasks(motorcycle),
                 _getClosedTasks(motorcycle),
-                MotorcycleInfoTab(),
+                const MotorcycleInfoTab(),
               ],
             ),
             floatingActionButton: _currentTab != 2
                 ? FloatingActionButton(
-                    child: Icon(Icons.library_add),
                     tooltip: AppLocalizations.of(context)!
                         .motorcycle_view_task_button_add_task_tooltip,
                     onPressed: () => _showAddEditTask(null, motorcycle),
+                    child: const Icon(Icons.library_add),
                   )
                 : null,
           );
@@ -142,20 +142,20 @@ class _MotorcycleViewPageState extends State<MotorcycleViewPage>
             .motorcycle_view_page_appbar_title_tasks_selected(
                 _selectedTasks.length)),
         actions: [
-          Container(
+          SizedBox(
             width: 40,
             child: IconButton(
-              icon: Icon(Icons.delete_outline),
+              icon: const Icon(Icons.delete_outline),
               tooltip: AppLocalizations.of(context)!
                   .motorcycle_view_page_appbar_tooltip_icon_delete,
               onPressed: () => _showTaskDeleteDialog(motorcycle),
             ),
           ),
-          Container(
+          SizedBox(
             width: 45,
             child: IconButton(
               iconSize: 30,
-              icon: Icon(Icons.archive),
+              icon: const Icon(Icons.archive),
               tooltip: AppLocalizations.of(context)!
                   .motorcycle_view_page_appbar_tooltip_icon_close,
               onPressed: () => _showTaskCompleteDialog(motorcycle),
@@ -166,7 +166,7 @@ class _MotorcycleViewPageState extends State<MotorcycleViewPage>
     }
 
     return PreferredSize(
-      preferredSize: Size.fromHeight(80.0),
+      preferredSize: const Size.fromHeight(80.0),
       child: AppBarFilter(
         hintText: AppLocalizations.of(context)!
             .motorcycle_view_page_appbar_filter_hint,
@@ -187,7 +187,7 @@ class _MotorcycleViewPageState extends State<MotorcycleViewPage>
           PopupMenuButton<PopupEditAction>(
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
-                side: BorderSide(
+                side: const BorderSide(
                   color: RnrColors.orange,
                   width: 2,
                 )),
@@ -195,7 +195,7 @@ class _MotorcycleViewPageState extends State<MotorcycleViewPage>
             padding: EdgeInsets.zero,
             tooltip: AppLocalizations.of(context)!
                 .motorcycle_view_page_appbar_icon_odometer,
-            icon: Icon(Icons.speed),
+            icon: const Icon(Icons.speed),
             itemBuilder: (context) => [
               PopupMenuItem(
                 value: PopupEditAction.odometer,
@@ -314,16 +314,16 @@ class _MotorcycleViewPageState extends State<MotorcycleViewPage>
       },
     );
     if (result != null && result) {
-      _selectedTasks.forEach((task) {
+      for (var task in _selectedTasks) {
         motorcycle.removeTask(task);
-        task.attachments.forEach((attachment) {
+        for (var attachment in task.attachments) {
           // FIXME: This should be centralized
           if (attachment.type == AttachmentType.file ||
               attachment.type == AttachmentType.picture) {
             motorcycle.storage!.storage.deleteFile(attachment.url);
           }
-        });
-      });
+        }
+      }
       _selectedTasks.clear();
       motorcycle.saveChanges();
     }
@@ -334,7 +334,7 @@ class _MotorcycleViewPageState extends State<MotorcycleViewPage>
       message:
           AppLocalizations.of(context)!.motorcycle_view_page_tooltip_no_task,
       child: Center(
-        child: Image.asset(IMG_ROADSIGN_RESERVED_PARKING, width: 120),
+        child: Image.asset(imgRoadsignReservedParking, width: 120),
       ),
     );
   }
@@ -344,7 +344,7 @@ class _MotorcycleViewPageState extends State<MotorcycleViewPage>
       message:
           AppLocalizations.of(context)!.motorcycle_view_page_tooltip_no_task,
       child: Center(
-        child: Image.asset(IMG_ROADSIGN_COMPLETED_TASKS, width: 120),
+        child: Image.asset(imgRoadsignCompletedTasks, width: 120),
       ),
     );
   }
@@ -405,12 +405,13 @@ class _MotorcycleViewPageState extends State<MotorcycleViewPage>
 
     activeCards.sort(
       (a, b) {
-        return a.task.compareTo(b.task, odometer: motorcycle.odometer);
+        return a.task
+            .compareTimeAndDistance(b.task, odometer: motorcycle.odometer);
       },
     );
 
     return ListView(
-      padding: EdgeInsets.fromLTRB(4, 6, 4, 64),
+      padding: const EdgeInsets.fromLTRB(4, 6, 4, 64),
       children: activeCards.map((card) {
         final isSelected = _selectedTasks.contains(card.task);
         return InkWell(
@@ -452,7 +453,7 @@ class _MotorcycleViewPageState extends State<MotorcycleViewPage>
     );
 
     return ListView(
-      padding: EdgeInsets.fromLTRB(4, 6, 4, 64),
+      padding: const EdgeInsets.fromLTRB(4, 6, 4, 64),
       children: closedTaskCards.map((card) {
         return InkWell(
           onTap: () => _showAddEditTask(card.task, motorcycle),

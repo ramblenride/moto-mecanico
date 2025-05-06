@@ -4,7 +4,7 @@ import 'package:moto_mecanico/themes.dart';
 
 class AppBarFilter extends StatefulWidget implements PreferredSizeWidget {
   AppBarFilter(
-      {Key? key,
+      {super.key,
       required this.updateSearchQueryCb,
       this.title,
       this.hintText,
@@ -13,8 +13,7 @@ class AppBarFilter extends StatefulWidget implements PreferredSizeWidget {
       this.trailingActions = const [],
       this.bottom})
       : preferredSize = Size.fromHeight(
-            kToolbarHeight + (bottom?.preferredSize.height ?? 0.0)),
-        super(key: key);
+            kToolbarHeight + (bottom?.preferredSize.height ?? 0.0));
   final Function(String) updateSearchQueryCb;
   final Widget? title;
   final String? hintText;
@@ -126,7 +125,7 @@ class _AppBarFilterState extends State<AppBarFilter> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      leading: _isSearching ? BackButton() : widget.leading,
+      leading: _isSearching ? const BackButton() : widget.leading,
       title: _isSearching ? _buildSearchField() : widget.title,
       actions: _buildActions(),
       bottom: widget.bottom,

@@ -15,6 +15,6 @@ Future<ImageProvider> getMotoPicture(Motorcycle moto) async {
     }
   }
 
-  provider ??= AssetImage(IMG_MOTO_DEFAULT);
+  provider ??= const AssetImage(imgMotoDefault);
   return provider;
 }

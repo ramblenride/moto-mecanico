@@ -45,8 +45,8 @@ class TaskTemplate {
   TaskTemplate({
     required this.description,
     required this.name,
-    this.distance = const Distance(null, DistanceUnit.UnitKM),
-    this.intervalDistance = const Distance(null, DistanceUnit.UnitKM),
+    this.distance = const Distance(null, DistanceUnit.unitKm),
+    this.intervalDistance = const Distance(null, DistanceUnit.unitKm),
     this.intervalMonths = 0,
     this.links = const [],
     this.months = 0,
@@ -67,8 +67,8 @@ class TaskTemplate {
 
         return TaskTemplate(
             description: json['description'],
-            distance: Distance(json['km'], DistanceUnit.UnitKM),
-            intervalDistance: Distance(json['interalKm'], DistanceUnit.UnitKM),
+            distance: Distance(json['km'], DistanceUnit.unitKm),
+            intervalDistance: Distance(json['interalKm'], DistanceUnit.unitKm),
             intervalMonths: json['intervalMonths'],
             months: json['months'],
             name: json['name'],

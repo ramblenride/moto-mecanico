@@ -97,7 +97,7 @@ class GarageStorage {
           moto.storage = motoStorage;
           await garage.add(moto);
         } else {
-          debugPrint('Failed to load motorcycle ${id} from storage');
+          debugPrint('Failed to load motorcycle $id from storage');
         }
       } else {
         debugPrint('Failed to find motorcycle info in index file');

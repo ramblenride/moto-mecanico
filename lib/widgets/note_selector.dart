@@ -5,19 +5,19 @@ import 'package:moto_mecanico/themes.dart';
 import 'package:moto_mecanico/widgets/note_selector_row.dart';
 
 class NoteSelector extends StatefulWidget {
-  NoteSelector({
-    Key? key,
+  const NoteSelector({
+    super.key,
     required this.notes,
     this.onExpansionChanged,
     this.showRenewable = true,
-  }) : super(key: key);
+  });
 
   final List<Note> notes;
   final bool showRenewable;
   final ValueChanged<bool>? onExpansionChanged;
 
   @override
-  State<StatefulWidget> createState() => _NoteSelectorState();
+  State<NoteSelector> createState() => _NoteSelectorState();
 }
 
 class _NoteSelectorState extends State<NoteSelector> {
@@ -56,7 +56,7 @@ class _NoteSelectorState extends State<NoteSelector> {
           },
           child: ConstrainedBox(
             // Force a uniform height
-            constraints: BoxConstraints(minHeight: 35),
+            constraints: const BoxConstraints(minHeight: 35),
             child: Row(
               children: [
                 Text(
@@ -73,7 +73,7 @@ class _NoteSelectorState extends State<NoteSelector> {
                   height: 26,
                   child: _expanded
                       ? IconButton(
-                          icon: Icon(Icons.add_circle_outline),
+                          icon: const Icon(Icons.add_circle_outline),
                           visualDensity: VisualDensity.compact,
                           alignment: Alignment.bottomCenter,
                           padding: EdgeInsets.zero,
@@ -122,7 +122,7 @@ class _NoteSelectorState extends State<NoteSelector> {
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(left: 5),
+          padding: const EdgeInsets.only(left: 5),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [..._buildNoteList()],

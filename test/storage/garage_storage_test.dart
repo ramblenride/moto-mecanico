@@ -6,16 +6,24 @@ import 'package:moto_mecanico/storage/garage_storage.dart';
 import 'package:moto_mecanico/storage/local_file_storage.dart';
 import 'package:moto_mecanico/storage/motorcycle_local_storage.dart';
 
+import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
+import 'package:plugin_platform_interface/plugin_platform_interface.dart';
+
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   group('Storage Tests', () {
-    void _removeStorageFiles() async {
+    void removeStorageFiles() async {
       final storage =
           LocalFileStorage(baseDir: await GarageStorage.getBaseDir());
       await storage.removeDir('');
     }
 
-    setUp(_removeStorageFiles);
-    tearDown(_removeStorageFiles);
+    setUp(() async {
+      PathProviderPlatform.instance = FakePathProviderPlatform();
+      removeStorageFiles();
+    });
+    tearDown(removeStorageFiles);
 
     test('garage storage can save and reload garage', () async {
       // Save garage
@@ -47,4 +55,13 @@ void main() {
       expect(task2.name, equals(task.name));
     });
   });
+}
+
+class FakePathProviderPlatform extends Fake
+    with MockPlatformInterfaceMixin
+    implements PathProviderPlatform {
+  @override
+  Future<String?> getApplicationDocumentsPath() async {
+    return "/tmp";
+  }
 }

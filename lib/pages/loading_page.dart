@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:moto_mecanico/themes.dart';
 
 class LoadingPage extends StatelessWidget {
+  const LoadingPage({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Material(
+    return const Material(
       color: RnrColors.darkBlue,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -12,7 +14,7 @@ class LoadingPage extends StatelessWidget {
         children: <Widget>[
           Directionality(
             textDirection: TextDirection.ltr,
-            child: const Text(
+            child: Text(
               'Initialization...',
               style: TextStyle(
                 color: Colors.white,
@@ -21,8 +23,8 @@ class LoadingPage extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 20),
-          const CircularProgressIndicator()
+          SizedBox(height: 20),
+          CircularProgressIndicator()
         ],
       ),
     );

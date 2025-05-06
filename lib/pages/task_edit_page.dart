@@ -31,13 +31,12 @@ enum TaskAction { close, delete, reopen }
 /// A button allows to delete or close (complete) the task.
 /// The changes are saved when the 'back' button is pressed.
 class TaskEditPage extends StatefulWidget {
-  TaskEditPage({Key? key, required this.motorcycle, this.task})
-      : super(key: key);
+  const TaskEditPage({super.key, required this.motorcycle, this.task});
   final Motorcycle motorcycle;
   final Task? task;
 
   @override
-  _TaskEditPageState createState() => _TaskEditPageState(task: task);
+  State<StatefulWidget> createState() => _TaskEditPageState(task: task);
 }
 
 class _TaskEditPageState extends State<TaskEditPage> {
@@ -96,7 +95,7 @@ class _TaskEditPageState extends State<TaskEditPage> {
           Icons.close,
           color: Colors.blueGrey[100],
         ),
-        selectedIcon: Icon(
+        selectedIcon: const Icon(
           Icons.more_horiz,
           color: Colors.blueGrey,
         ),
@@ -105,8 +104,8 @@ class _TaskEditPageState extends State<TaskEditPage> {
             .task_edit_page_tooltip_button_tech_level_none,
       ),
       PopupButtonsItem(
-        icon: Image(
-          image: AssetImage(IMG_TASK_SMALL),
+        icon: const Image(
+          image: AssetImage(imgTaskSmall),
           width: imgWidth,
         ),
         value: TechnicalLevel.easy,
@@ -114,8 +113,8 @@ class _TaskEditPageState extends State<TaskEditPage> {
             .task_edit_page_tooltip_button_tech_level_easy,
       ),
       PopupButtonsItem(
-        icon: Image(
-          image: AssetImage(IMG_TASK_MEDIUM),
+        icon: const Image(
+          image: AssetImage(imgTaskMedium),
           width: imgWidth,
         ),
         value: TechnicalLevel.intermediate,
@@ -123,8 +122,8 @@ class _TaskEditPageState extends State<TaskEditPage> {
             .task_edit_page_tooltip_button_tech_level_intermediate,
       ),
       PopupButtonsItem(
-        icon: Image(
-          image: AssetImage(IMG_TASK_LARGE),
+        icon: const Image(
+          image: AssetImage(imgTaskLarge),
           width: imgWidth,
         ),
         value: TechnicalLevel.pro,
@@ -142,7 +141,7 @@ class _TaskEditPageState extends State<TaskEditPage> {
           Icons.close,
           color: Colors.blueGrey[100],
         ),
-        selectedIcon: Icon(
+        selectedIcon: const Icon(
           Icons.more_horiz,
           color: Colors.blueGrey,
         ),
@@ -151,8 +150,8 @@ class _TaskEditPageState extends State<TaskEditPage> {
             .task_edit_page_tooltip_button_effort_level_none,
       ),
       PopupButtonsItem(
-        icon: Image(
-          image: AssetImage(IMG_EFFORT_SMALL),
+        icon: const Image(
+          image: AssetImage(imgEffortSmall),
           width: imgWidth,
         ),
         value: EffortLevel.small,
@@ -160,8 +159,8 @@ class _TaskEditPageState extends State<TaskEditPage> {
             .task_edit_page_tooltip_button_effort_level_small,
       ),
       PopupButtonsItem(
-        icon: Image(
-          image: AssetImage(IMG_EFFORT_MEDIUM),
+        icon: const Image(
+          image: AssetImage(imgEffortMedium),
           width: imgWidth,
         ),
         value: EffortLevel.medium,
@@ -169,8 +168,8 @@ class _TaskEditPageState extends State<TaskEditPage> {
             .task_edit_page_tooltip_button_effort_level_medium,
       ),
       PopupButtonsItem(
-        icon: Image(
-          image: AssetImage(IMG_EFFORT_LARGE),
+        icon: const Image(
+          image: AssetImage(imgEffortLarge),
           width: imgWidth,
         ),
         value: EffortLevel.large,
@@ -264,7 +263,7 @@ class _TaskEditPageState extends State<TaskEditPage> {
               onSelected: (level) => _task.effortLevel = level,
             ),
           ),
-          LabelSelector(active_labels: _task.labels),
+          LabelSelector(activeLabels: _task.labels),
         ],
       ),
       RnrDivider,
@@ -296,7 +295,7 @@ class _TaskEditPageState extends State<TaskEditPage> {
     return PropertyEditorCard(
       title: AppLocalizations.of(context)!.task_edit_page_header_schedule,
       icons: [
-        Container(
+        SizedBox(
           width: 40,
           height: 35,
           child: IconButton(
@@ -327,7 +326,7 @@ class _TaskEditPageState extends State<TaskEditPage> {
             },
           ),
         ),
-        Container(
+        SizedBox(
           width: 40,
           height: 35,
           child: IconButton(
@@ -520,7 +519,7 @@ class _TaskEditPageState extends State<TaskEditPage> {
       //final box = keyContext.findRenderObject() as RenderBox;
       _scrollController.animateTo(
           _scrollController.position.pixels + 200 /*box.size.height*/,
-          duration: Duration(milliseconds: 200),
+          duration: const Duration(milliseconds: 200),
           curve: Curves.linear);
     }
   }
@@ -553,37 +552,37 @@ class _TaskEditPageState extends State<TaskEditPage> {
           ),
           actions: [
             _isNew
-                ? Container(
+                ? SizedBox(
                     width: 45,
                     child: IconButton(
                       iconSize: 30,
-                      icon: Icon(Icons.add_circle_outline),
+                      icon: const Icon(Icons.add_circle_outline),
                       tooltip: AppLocalizations.of(context)!.appbar_add_button,
                       onPressed: _addTask,
                     ),
                   )
-                : Container(
+                : SizedBox(
                     width: 40,
                     child: IconButton(
-                      icon: Icon(Icons.delete_outline),
+                      icon: const Icon(Icons.delete_outline),
                       tooltip: AppLocalizations.of(context)!
                           .task_edit_page_action_delete,
                       onPressed: _deleteTaskDialog,
                     ),
                   ),
-            Container(
+            SizedBox(
               width: 45,
               child: _task.closed
                   ? IconButton(
                       iconSize: 30,
-                      icon: Icon(Icons.unarchive),
+                      icon: const Icon(Icons.unarchive),
                       tooltip: AppLocalizations.of(context)!
                           .task_edit_page_action_reopen,
                       onPressed: _reopenTask,
                     )
                   : IconButton(
                       iconSize: 30,
-                      icon: Icon(Icons.archive),
+                      icon: const Icon(Icons.archive),
                       tooltip: AppLocalizations.of(context)!
                           .task_edit_page_action_close,
                       onPressed: _closeTask,
@@ -679,13 +678,13 @@ class _TaskEditPageState extends State<TaskEditPage> {
 
   void _deleteTask() {
     widget.motorcycle.removeTask(_task);
-    _task.attachments.forEach((attachment) {
+    for (var attachment in _task.attachments) {
       // FIXME: This should be centralized
       if (attachment.type == AttachmentType.file ||
           attachment.type == AttachmentType.picture) {
         widget.motorcycle.storage!.storage.deleteFile(attachment.url);
       }
-    });
+    }
     widget.motorcycle.saveChanges();
   }
 

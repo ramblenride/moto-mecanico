@@ -11,7 +11,7 @@ import 'package:moto_mecanico/widgets/config_widget.dart';
 import 'package:provider/provider.dart';
 
 class MotorcycleInfoTab extends StatelessWidget {
-  const MotorcycleInfoTab({Key? key}) : super(key: key);
+  const MotorcycleInfoTab({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +45,7 @@ class MotorcycleInfoTab extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 ConstrainedBox(
-                  constraints: BoxConstraints(maxHeight: imageHeight),
+                  constraints: const BoxConstraints(maxHeight: imageHeight),
                   child: FutureBuilder(
                     future: getMotoPicture(motorcycle),
                     builder: (BuildContext context,
@@ -60,7 +60,7 @@ class MotorcycleInfoTab extends StatelessWidget {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(
+                              const Icon(
                                 Icons.error_outline,
                                 color: Colors.redAccent,
                                 size: 48,
@@ -71,7 +71,7 @@ class MotorcycleInfoTab extends StatelessWidget {
                           ),
                         );
                       } else {
-                        return Icon(Icons.image_search);
+                        return const Icon(Icons.image_search);
                       }
                     },
                   ),
@@ -160,7 +160,7 @@ class MotorcycleInfoTab extends StatelessWidget {
                             ),
                             const SizedBox(width: 12),
                             Text(
-                              '${_formatCurrency(_getSpendingCost(motorcycle), smallCurrencyFormat, largeCurrencyFormat)}',
+                              _formatCurrency(_getSpendingCost(motorcycle), smallCurrencyFormat, largeCurrencyFormat),
                               style: Theme.of(context)
                                   .textTheme
                                   .selectorWidgetHeader
@@ -265,7 +265,7 @@ class MotorcycleInfoTab extends StatelessWidget {
 
   String _getPurchaseDateStr(BuildContext context, Motorcycle motorcycle) {
     if (motorcycle.purchaseDate != null) {
-      return '${DateFormat(ConfigWidget.of(context).dateFormat).format(motorcycle.purchaseDate!)}';
+      return DateFormat(ConfigWidget.of(context).dateFormat).format(motorcycle.purchaseDate!);
     }
     return '---';
   }
@@ -298,7 +298,7 @@ class MotorcycleInfoTab extends StatelessWidget {
     }
 
     if (caredFor.isNotEmpty) {
-      return '${AppLocalizations.of(context)!.info_tab_enjoyed_for}${caredFor}.';
+      return '${AppLocalizations.of(context)!.info_tab_enjoyed_for}$caredFor.';
     }
 
     return '';
@@ -315,14 +315,14 @@ class MotorcycleInfoTab extends StatelessWidget {
     var totalOther = Cost(0, AppLocalizations.of(context)!.cost_type_other,
         type: CostType.other);
 
-    motorcycle.closedTasks.forEach((task) {
+    for (var task in motorcycle.closedTasks) {
       totalParts.value =
           Cost.total([totalParts, ...task.costs], CostType.part).value;
       totalLabor.value =
           Cost.total([totalLabor, ...task.costs], CostType.labor).value;
       totalOther.value =
           Cost.total([totalOther, ...task.costs], CostType.other).value;
-    });
+    }
 
     return [purchase, totalParts, totalLabor, totalOther];
   }
@@ -331,7 +331,9 @@ class MotorcycleInfoTab extends StatelessWidget {
     // FIXME: Reuse the totals for each type instead of going through all the
     // tasks again.
     var spending = motorcycle.purchasePrice;
-    motorcycle.closedTasks.forEach((task) => spending += (task.cost.value));
+    for (var task in motorcycle.closedTasks) {
+      spending += (task.cost.value);
+    }
     return spending;
   }
 }

@@ -9,7 +9,7 @@ class NoteFormField extends FormField<Note> {
   final Note? note;
 
   NoteFormField({
-    Key? key,
+    super.key,
     this.note,
     minLines = 1,
     maxLines = 10,
@@ -20,12 +20,9 @@ class NoteFormField extends FormField<Note> {
         borderSide: BorderSide(color: RnrColors.blue),
       ),
     ),
-    required FormFieldSetter onSaved,
-    required FormFieldValidator validator,
+    required FormFieldSetter super.onSaved,
+    required FormFieldValidator super.validator,
   }) : super(
-          key: key,
-          onSaved: onSaved,
-          validator: validator,
           builder: (FormFieldState field) {
             return Row(
               children: [
@@ -57,12 +54,12 @@ class NoteFormField extends FormField<Note> {
                   ),
                 ),
                 const SizedBox(width: 4),
-                Container(
+                SizedBox(
                   width: focusNode != null ? 22 : 0,
                   child: (focusNode != null && focusNode.hasFocus)
                       ? InkWell(
                           onTap: () => focusNode.unfocus(),
-                          child: Icon(Icons.check_circle, size: 22),
+                          child: const Icon(Icons.check_circle, size: 22),
                         )
                       : null,
                 ),

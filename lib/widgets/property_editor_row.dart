@@ -5,13 +5,14 @@ import 'package:moto_mecanico/themes.dart';
 // some input field on the right. The optional trailer is added to the right
 // of the inputField.
 class PropertyEditorRow extends StatelessWidget {
-  PropertyEditorRow({
+  const PropertyEditorRow({
+    super.key,
     required this.name,
     required this.inputField,
     this.trailer,
   });
 
-  static const WIDTH_NARROW_LAYOUT = 360;
+  static const widthNarrowLayout = 360;
   final String name;
   final Widget inputField;
   final Widget? trailer;
@@ -31,7 +32,7 @@ class PropertyEditorRow extends StatelessWidget {
       children.add(trailer!);
     }
 
-    if (width < WIDTH_NARROW_LAYOUT) {
+    if (width < widthNarrowLayout) {
       return _buildNarrowLayout(context, children);
     }
 

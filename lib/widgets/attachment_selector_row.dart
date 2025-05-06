@@ -10,12 +10,12 @@ import 'package:url_launcher/url_launcher.dart';
 enum AttachmentAction { delete, rename, copyable }
 
 class AttachmentSelectorRow extends StatefulWidget {
-  AttachmentSelectorRow({
-    Key? key,
+  const AttachmentSelectorRow({
+    super.key,
     required this.attachment,
     required this.storage,
     required this.onRemove,
-  }) : super(key: key);
+  });
 
   final Attachment attachment;
   final Storage storage;
@@ -50,7 +50,7 @@ class _AttachmentSelectorRowState extends State<AttachmentSelectorRow> {
               child: _getTextOrEditor(),
             ),
           ),
-          Container(
+          SizedBox(
             height: 30,
             width: 40,
             child: PopupMenuButton<AttachmentAction>(
@@ -79,7 +79,7 @@ class _AttachmentSelectorRowState extends State<AttachmentSelectorRow> {
                     child: Row(
                       children: [
                         Text(AppLocalizations.of(context)!.renewable),
-                        SizedBox(
+                        const SizedBox(
                           width: 10,
                         ),
                         Icon(
@@ -188,14 +188,12 @@ class _AttachmentSelectorRowState extends State<AttachmentSelectorRow> {
     if (await canLaunchUrl(uri)) {
       final result = await launchUrl(uri);
       if (!result) {
-        _showOpenAttachmentError(AppLocalizations.of(context)!
-                .attachment_selector_attachment_error_link_open_failed +
-            '\n\n${url}');
+        _showOpenAttachmentError(
+            '${AppLocalizations.of(context)!.attachment_selector_attachment_error_link_open_failed}\n\n$url');
       }
     } else {
-      _showOpenAttachmentError(AppLocalizations.of(context)!
-              .attachment_selector_attachment_error_link_unsupported +
-          '\n\n${url}');
+      _showOpenAttachmentError(
+          '${AppLocalizations.of(context)!.attachment_selector_attachment_error_link_unsupported}\n\n$url');
     }
   }
 
@@ -223,9 +221,8 @@ class _AttachmentSelectorRowState extends State<AttachmentSelectorRow> {
           errorMessage = result.message;
           break;
       }
-      _showOpenAttachmentError(AppLocalizations.of(context)!
-              .attachment_selector_attachment_error_file_open_failed +
-          '\n\n$url\n\n$errorMessage');
+      _showOpenAttachmentError(
+          '${AppLocalizations.of(context)!.attachment_selector_attachment_error_file_open_failed}\n\n$url\n\n$errorMessage');
     }
   }
 

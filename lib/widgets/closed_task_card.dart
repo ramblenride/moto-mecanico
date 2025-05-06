@@ -13,8 +13,8 @@ import 'package:provider/provider.dart';
 // separate because we're playing around with the look a lot.
 // Merge/reuse when happy with results.
 class ClosedTaskCard extends StatelessWidget {
-  const ClosedTaskCard({Key? key, required this.motorcycle, required this.task})
-      : super(key: key);
+  const ClosedTaskCard(
+      {super.key, required this.motorcycle, required this.task});
 
   final Motorcycle motorcycle;
   final Task task;
@@ -41,13 +41,13 @@ class ClosedTaskCard extends StatelessWidget {
           children: [
             Container(
               alignment: Alignment.center,
-              padding: EdgeInsets.only(right: 9),
+              padding: const EdgeInsets.only(right: 9),
               width: 13,
               child: Consumer<LabelsModel>(
-                builder: (context, labels_model, child) {
+                builder: (context, labelsModel, child) {
                   return Column(
                       mainAxisAlignment: MainAxisAlignment.start,
-                      children: _buildIndicators(labels_model.labels));
+                      children: _buildIndicators(labelsModel.labels));
                 },
               ),
             ),
@@ -83,18 +83,14 @@ class ClosedTaskCard extends StatelessWidget {
         name: ConfigWidget.of(context).currencySymbol,
         decimalDigits: 0,
       );
-      return AppLocalizations.of(context)!.closed_task_card_cost +
-          ': ' +
-          currencyFormat.format(task.cost.value);
+      return '${AppLocalizations.of(context)!.closed_task_card_cost}: ${currencyFormat.format(task.cost.value)}';
     }
     return '';
   }
 
   String _getWorkDoneByStr(context) {
     if (task.executor.isNotEmpty == true) {
-      return AppLocalizations.of(context)!.closed_task_card_executor +
-          ': ' +
-          '${task.executor}';
+      return '${AppLocalizations.of(context)!.closed_task_card_executor}: ${task.executor}';
     }
     return '';
   }
@@ -110,8 +106,8 @@ class ClosedTaskCard extends StatelessWidget {
         : DateTime.now().difference(task.closedDate!).inDays;
 
     final remaining = <Widget>[];
-    var daysUnit;
-    var daysStr;
+    String daysUnit = '';
+    String daysStr = '';
     if (daysElapsed != null) {
       if (daysElapsed.abs() > 365) {
         final years = daysElapsed / 365;
@@ -123,33 +119,28 @@ class ClosedTaskCard extends StatelessWidget {
         daysUnit = AppLocalizations.of(context)!.unit_days(daysElapsed.abs());
       }
     }
-    if (daysStr != null) {
-      remaining.add(Text(daysUnit,
-          style: Theme.of(context)
-              .textTheme
-              .titleSmall!
-              .copyWith(color: Colors.blueGrey[200], fontSize: 13)));
-      remaining.add(Text(daysStr,
-          style: Theme.of(context)
-              .textTheme
-              .titleSmall!
-              .copyWith(color: Colors.blueGrey[100], fontSize: 16)));
-    }
+    remaining.add(Text(daysUnit,
+        style: Theme.of(context)
+            .textTheme
+            .titleSmall!
+            .copyWith(color: Colors.blueGrey[200], fontSize: 13)));
+    remaining.add(Text(daysStr,
+        style: Theme.of(context)
+            .textTheme
+            .titleSmall!
+            .copyWith(color: Colors.blueGrey[100], fontSize: 16)));
 
-    final distanceStr = distanceElapsed != null
-        ? distanceElapsed.toUnit(distanceUnit).toString(compact: true)
-        : null;
+    final distanceStr =
+        distanceElapsed?.toUnit(distanceUnit).toString(compact: true);
 
     if (distanceStr != null) {
-      if (daysStr != null) {
-        remaining.add(Divider(
-          height: 2,
-          thickness: 2,
-          color: Colors.blueGrey[400],
-          indent: 24,
-          endIndent: 24,
-        ));
-      }
+      remaining.add(Divider(
+        height: 2,
+        thickness: 2,
+        color: Colors.blueGrey[400],
+        indent: 24,
+        endIndent: 24,
+      ));
 
       remaining.add(Text(distanceStr,
           style: Theme.of(context)
@@ -166,7 +157,7 @@ class ClosedTaskCard extends StatelessWidget {
     return Container(
       height: 80,
       width: 76,
-      padding: EdgeInsets.all(1),
+      padding: const EdgeInsets.all(1),
       child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [...remaining]),
@@ -174,12 +165,12 @@ class ClosedTaskCard extends StatelessWidget {
   }
 
   List<Widget> _buildIndicators(Map<int, Label> labels) {
-    final num_labels = task.labels.length;
-    if (num_labels == 0) return [];
+    final numLabels = task.labels.length;
+    if (numLabels == 0) return [];
 
     return task.labels.map((id) {
       return Container(
-          width: 8, height: 65 / num_labels, color: labels[id]!.color);
+          width: 8, height: 65 / numLabels, color: labels[id]!.color);
     }).toList();
   }
 }

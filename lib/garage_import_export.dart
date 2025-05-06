@@ -7,18 +7,18 @@ import 'package:moto_mecanico/storage/local_file_storage.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 
-const ARCHIVE_NAME = 'moto_mecanico_archive.zip';
+const archiveName = 'moto_mecanico_archive.zip';
 
 class GarageImportExport {
   // NOTE: This will get more complex once the app supports remote repositories.
-  static Future<File?> Export(GarageModel garage) async {
+  static Future<File?> export(GarageModel garage) async {
     final storage = garage.storage;
     if (storage?.storage == null) return null;
 
     final dataDir = Directory(await storage!.storage!.getBaseDir());
     final archiveDir = await getTemporaryDirectory();
 
-    final zipFile = File(join(archiveDir.path, ARCHIVE_NAME));
+    final zipFile = File(join(archiveDir.path, archiveName));
     if (await zipFile.exists() == true) {
       await zipFile.delete(recursive: true);
     }
@@ -27,7 +27,7 @@ class GarageImportExport {
     return zipFile;
   }
 
-  static Future<GarageModel> Import(File archive) async {
+  static Future<GarageModel> import(File archive) async {
     final tempDir = (await getTemporaryDirectory()).path;
     final archiveDir = Directory(join(tempDir, 'import'));
 
@@ -43,7 +43,7 @@ class GarageImportExport {
     return garage;
   }
 
-  static void RemoveTempDirectory() async {
+  static void removeTempDirectory() async {
     final tempDir = (await getTemporaryDirectory()).path;
     final archiveDir = Directory(join(tempDir, 'import'));
 

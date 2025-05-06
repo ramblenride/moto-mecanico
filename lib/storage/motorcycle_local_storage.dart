@@ -72,7 +72,8 @@ class MotorcycleLocalStorage extends MotorcycleStorage {
 
   Future<Motorcycle?> loadMotorcycle(String id) async {
     final motoJson = await _storage.getFromJson(_getMotoFilename(id));
-    final motorcycle = await Motorcycle.fromJson(motoJson);
+    final motorcycle = Motorcycle.fromJson(motoJson);
+
     if (motorcycle != null) {
       final taskJson = await _storage.getFromJson(_getTasksFilename(id));
       if (taskJson['tasks'] != null) {
@@ -86,10 +87,10 @@ class MotorcycleLocalStorage extends MotorcycleStorage {
   }
 
   String _getMotoFilename(String id) {
-    return '${id}.json';
+    return '$id.json';
   }
 
   String _getTasksFilename(String id) {
-    return '${id}-tasks.json';
+    return '$id-tasks.json';
   }
 }

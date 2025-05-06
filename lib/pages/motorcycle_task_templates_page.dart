@@ -22,13 +22,11 @@ import 'package:url_launcher/url_launcher.dart';
 /// It's possible to select which task from a given template will be imported.
 /// Templates are added to the motorcycle as tasks when the 'add' button is pressed.
 class MotorcycleTaskTemplatePage extends StatefulWidget {
-  MotorcycleTaskTemplatePage({Key? key, required this.motorcycle})
-      : super(key: key);
+  const MotorcycleTaskTemplatePage({super.key, required this.motorcycle});
   final Motorcycle motorcycle;
 
   @override
-  _MotorcycleTaskTemplatePageState createState() =>
-      _MotorcycleTaskTemplatePageState();
+  State<StatefulWidget> createState() => _MotorcycleTaskTemplatePageState();
 }
 
 class _MotorcycleTaskTemplatePageState
@@ -186,7 +184,7 @@ class _MotorcycleTaskTemplatePageState
       ),
     );
     children.add(
-      Container(
+      SizedBox(
         width: 40,
         child: IconButton(
           icon: const Icon(Icons.help_outline),
@@ -320,8 +318,8 @@ class _MotorcycleTaskTemplatePageState
   }
 
   Future<String> _loadMotoIndexDocument() async {
-    final response = await http
-        .get(Uri.parse('${TEMPLATES_BASE_DB_URL}/${TEMPLATES_INDEX_FILE}'));
+    final response =
+        await http.get(Uri.parse('$templatesBaseDbUrl/$templatesIndexFile'));
     if (response.statusCode == 200) {
       return response.body;
     } else {
@@ -336,7 +334,7 @@ class _MotorcycleTaskTemplatePageState
       return MotorcycleTemplateIndex.fromJson(
           jsonDecode(jsonString) as Map<String, dynamic>);
     } catch (error) {
-      debugPrint('Failed to parse motorcycle index: ${error}');
+      debugPrint('Failed to parse motorcycle index: $error');
       throw Exception(AppLocalizations.of(context)!
           .motorcycle_task_template_page_error_loading_index);
     }
@@ -347,7 +345,7 @@ class _MotorcycleTaskTemplatePageState
       context: context,
       builder: (BuildContext context) {
         return SimpleDialog(
-          contentPadding: EdgeInsets.fromLTRB(8, 12, 8, 16),
+          contentPadding: const EdgeInsets.fromLTRB(8, 12, 8, 16),
           title: Text(
             AppLocalizations.of(context)!
                 .motorcycle_task_template_page_help_dialog_title,
@@ -364,7 +362,7 @@ class _MotorcycleTaskTemplatePageState
                   .copyWith(color: Colors.blueGrey[200]!),
             ),
             IconButton(
-              icon: Icon(Icons.open_in_browser),
+              icon: const Icon(Icons.open_in_browser),
               onPressed: _openMotoServiceDbUrl,
             ),
           ],
@@ -374,6 +372,6 @@ class _MotorcycleTaskTemplatePageState
   }
 
   void _openMotoServiceDbUrl() {
-    launchUrl(Uri.parse(MOTO_SERVICE_DB_WEB));
+    launchUrl(Uri.parse(motoServiceDbWeb));
   }
 }

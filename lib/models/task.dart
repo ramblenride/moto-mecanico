@@ -73,7 +73,7 @@ class Task implements Comparable<dynamic> {
     return newTask;
   }
 
-  final String id = Uuid().v4(); // Unique id
+  final String id = const Uuid().v4(); // Unique id
 
   String name; // Name / title / theme / part.
 
@@ -106,35 +106,33 @@ class Task implements Comparable<dynamic> {
       (recurringMonths > 0);
 
   @override
-  int compareTo(dynamic other, {Distance? odometer}) {
-    assert(other != null);
-    if (!(other is Task)) {
-      return 0;
-    }
+  int compareTo(covariant Task other) {
+    return compareTimeAndDistance(other);
+  }
 
-    var otherTask = other;
-
+  // Comparison used for sorting in lists. Allows optional odometer parameter.
+  int compareTimeAndDistance(Task other, {Distance? odometer}) {
     // FIXME: Find a better way to determine this value. Based on history?
-    const _DISTANCE_PER_DAY = Distance(33, DistanceUnit.UnitKM);
+    const distancePerDay = Distance(30, DistanceUnit.unitKm);
 
     var distanceThis =
-        dueOdometer.toUnit(DistanceUnit.UnitKM).distance ?? 999999;
+        dueOdometer.toUnit(DistanceUnit.unitKm).distance ?? 999999;
     if (odometer?.distance != null) {
-      distanceThis -= odometer!.toUnit(DistanceUnit.UnitKM).distance ?? 0;
+      distanceThis -= odometer!.toUnit(DistanceUnit.unitKm).distance ?? 0;
     }
     final distanceDateThis = dueDate != null
-        ? _DISTANCE_PER_DAY.distance! *
+        ? distancePerDay.distance! *
             (dueDate!.difference(DateTime.now()).inDays)
         : 999999;
 
     var distanceOther =
-        otherTask.dueOdometer.toUnit(DistanceUnit.UnitKM).distance ?? 999999;
+        other.dueOdometer.toUnit(DistanceUnit.unitKm).distance ?? 999999;
     if (odometer?.distance != null) {
-      distanceOther -= odometer!.toUnit(DistanceUnit.UnitKM).distance ?? 0;
+      distanceOther -= odometer!.toUnit(DistanceUnit.unitKm).distance ?? 0;
     }
-    final distanceDateOther = otherTask.dueDate != null
-        ? _DISTANCE_PER_DAY.distance! *
-            (otherTask.dueDate!.difference(DateTime.now()).inDays)
+    final distanceDateOther = other.dueDate != null
+        ? distancePerDay.distance! *
+            (other.dueDate!.difference(DateTime.now()).inDays)
         : 999999;
 
     final minThis = min(distanceThis, distanceDateThis);
@@ -172,10 +170,10 @@ class Task implements Comparable<dynamic> {
 
     final newTask = Task.from(task);
     newTask.dueDate = null;
-    newTask.dueOdometer = Distance(null);
+    newTask.dueOdometer = const Distance(null);
     newTask.closed = false;
     newTask.closedDate = null;
-    newTask.closedOdometer = Distance(null);
+    newTask.closedOdometer = const Distance(null);
 
     if (task.recurringMonths > 0) {
       final closedDate = task.closedDate ?? DateTime.now();
@@ -314,7 +312,9 @@ class Task implements Comparable<dynamic> {
     return data;
   }
 
-  EffortLevel _parseEffortLevel(String levelStr) {
+  EffortLevel _parseEffortLevel(String? levelStr) {
+    if (levelStr == null) return EffortLevel.none;
+
     switch (levelStr) {
       case 'small':
         return EffortLevel.small;
@@ -327,7 +327,9 @@ class Task implements Comparable<dynamic> {
     }
   }
 
-  TechnicalLevel _parseTechnicalLevel(String levelStr) {
+  TechnicalLevel _parseTechnicalLevel(String? levelStr) {
+    if (levelStr == null) return TechnicalLevel.none;
+
     switch (levelStr) {
       case 'easy':
         return TechnicalLevel.easy;

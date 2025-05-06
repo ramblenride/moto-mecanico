@@ -29,7 +29,7 @@ class LocalFileStorage extends Storage {
   Future<String> addExternalFile(String sourcePath) async {
     await createDir('', recursive: true);
 
-    final destination = Uuid().v4() + getFileExtension(sourcePath);
+    final destination = const Uuid().v4() + getFileExtension(sourcePath);
     await copyExternalFile(sourcePath, destination);
     return destination;
   }

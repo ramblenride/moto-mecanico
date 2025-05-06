@@ -19,7 +19,7 @@ class TextFormFieldDatePicker extends StatefulWidget {
   final FormFieldSetter<DateTime?>? onSaved;
 
   TextFormFieldDatePicker({
-    Key? key,
+    super.key,
     required this.lastDate,
     required this.firstDate,
     this.initialDate,
@@ -36,8 +36,7 @@ class TextFormFieldDatePicker extends StatefulWidget {
     this.onDateChanged,
     this.onSaved,
   })  : assert(!firstDate.isAfter(lastDate),
-            'lastDate must be on or after firstDate'),
-        super(key: key);
+            'lastDate must be on or after firstDate');
 
   @override
   _TextFormFieldDatePicker createState() => _TextFormFieldDatePicker();
@@ -79,14 +78,14 @@ class _TextFormFieldDatePicker extends State<TextFormFieldDatePicker> {
 
     if (_selectedDate != null) {
       widgets.add(
-        Container(
+        SizedBox(
           width: 30,
           height: 30,
           child: IconButton(
             visualDensity: VisualDensity.compact,
             padding: EdgeInsets.zero,
             alignment: Alignment.centerRight,
-            icon: Icon(
+            icon: const Icon(
               Icons.cancel,
               size: 20,
             ),

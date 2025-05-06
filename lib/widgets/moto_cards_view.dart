@@ -14,15 +14,15 @@ class MotoCardsView extends StatefulWidget {
   final MotorcycleSort sortMethod;
   final Widget? snackBarMsg;
 
-  MotoCardsView({
-    Key? key,
+  const MotoCardsView({
+    super.key,
     this.search = '',
     this.sortMethod = MotorcycleSort.alarms,
     this.snackBarMsg,
-  }) : super(key: key);
+  });
 
   @override
-  State<StatefulWidget> createState() => _MotoCardsViewState();
+  State<MotoCardsView> createState() => _MotoCardsViewState();
 }
 
 class _MotoCardsViewState extends State<MotoCardsView> {
@@ -33,8 +33,7 @@ class _MotoCardsViewState extends State<MotoCardsView> {
     garage.onErrorCb = ((error) {
       final snackBar = SnackBar(
         content: Text(
-          AppLocalizations.of(context)!.snackbar_storage_error +
-              ': ${error.toString()}',
+          '${AppLocalizations.of(context)!.snackbar_storage_error}: ${error.toString()}',
         ),
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -49,7 +48,7 @@ class _MotoCardsViewState extends State<MotoCardsView> {
   Widget _createEmptyGarage() {
     return Tooltip(
         message: AppLocalizations.of(context)!.garage_page_empty_garage,
-        child: Image.asset(IMG_ROADSIGN_MOTO_PARKING, width: 140));
+        child: Image.asset(imgRoadsignMotoParking, width: 140));
   }
 
   Widget _showGarageLoading(BuildContext context, GarageModel garage) {
@@ -100,14 +99,14 @@ class _MotoCardsViewState extends State<MotoCardsView> {
             UniqueKey(), // FIXME: Isn't it the provider key that should be unique?
         margin: const EdgeInsets.only(bottom: 8.0),
         child: InkWell(
-          child: MotorcycleCard(),
+          child: const MotorcycleCard(),
           onTap: () async {
             await Navigator.push<Motorcycle>(
               context,
               MaterialPageRoute<Motorcycle>(
                 builder: (context) => ChangeNotifierProvider.value(
                   value: motorcycle,
-                  child: MotorcycleViewPage(),
+                  child: const MotorcycleViewPage(),
                 ),
               ),
             );
@@ -135,6 +134,7 @@ class _MotoCardsViewState extends State<MotoCardsView> {
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       });
     }
+
     return Consumer<GarageModel>(
       builder: (context, garage, child) => _createCards(context, garage),
     );

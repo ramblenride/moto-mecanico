@@ -7,7 +7,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class FeedbackDialog extends StatelessWidget {
-  FeedbackDialog({Key? key}) : super(key: key);
+  const FeedbackDialog({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -98,18 +98,18 @@ class FeedbackDialog extends StatelessWidget {
     final buildNumber = pkgInfo.buildNumber;
 
     final emailUrl =
-        'mailto:$EMAIL_FEEBACK?subject=$appName Feedback&body=Package: $packageName\\n\\r'
+        'mailto:$emailFeedback?subject=$appName Feedback&body=Package: $packageName\\n\\r'
         'App Version: $version\\n\\rBuild: $buildNumber\\n\\r';
 
     await launchUrlString(emailUrl);
   }
 
   void _sendToTwitter() async {
-    await launchUrlString(TWITTER_FEEDBACK_URL);
+    await launchUrlString(twitterFeedbackUrl);
   }
 
   void _ratePlayStore() async {
     // FIXME: Use play app instead of URL?
-    await launchUrlString(GOOGLE_PLAY_URL);
+    await launchUrlString(googlePlayUrl);
   }
 }

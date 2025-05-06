@@ -30,11 +30,11 @@ enum MotorcycleAction {
 /// If editing an existing motorcycle, a button allows to delete the motorcycle.
 /// The changes are saved when the 'back' button is pressed.
 class MotorcycleEditPage extends StatefulWidget {
-  MotorcycleEditPage({Key? key, this.motorcycle}) : super(key: key);
+  const MotorcycleEditPage({super.key, this.motorcycle});
   final Motorcycle? motorcycle;
 
   @override
-  _MotorcycleEditPageState createState() =>
+  State<StatefulWidget> createState() =>
       _MotorcycleEditPageState(motorcycle: motorcycle);
 }
 
@@ -110,8 +110,8 @@ class _MotorcycleEditPageState extends State<MotorcycleEditPage> {
     if (_image != null) {
       // The image is tweaked to look like the image in the garage
       return Padding(
-        padding: EdgeInsets.symmetric(horizontal: 30),
-        child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 30),
+        child: SizedBox(
           height: 160,
           child: Ink.image(
             image: FileImage(_image!),
@@ -122,7 +122,7 @@ class _MotorcycleEditPageState extends State<MotorcycleEditPage> {
     }
 
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 25),
+      margin: const EdgeInsets.symmetric(horizontal: 25),
       alignment: Alignment.center,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
@@ -151,7 +151,7 @@ class _MotorcycleEditPageState extends State<MotorcycleEditPage> {
             onPressed: () => _getNewImage(ImageSource.gallery),
             tooltip: AppLocalizations.of(context)!
                 .motorcycle_edit_page_image_selection_tooltip,
-            child: Icon(Icons.add_a_photo),
+            child: const Icon(Icons.add_a_photo),
           ),
         ],
       ),
@@ -357,7 +357,8 @@ class _MotorcycleEditPageState extends State<MotorcycleEditPage> {
               },
             ),
             trailer: Text(
-              '${NumberFormat.compactSimpleCurrency(name: _currencySymbol).currencySymbol}',
+              NumberFormat.compactSimpleCurrency(name: _currencySymbol)
+                  .currencySymbol,
               style: propValueStyle,
             ),
           ),
@@ -485,11 +486,11 @@ class _MotorcycleEditPageState extends State<MotorcycleEditPage> {
           ),
           actions: [
             _isNew
-                ? Container(
+                ? SizedBox(
                     width: 45,
                     child: IconButton(
                       iconSize: 30,
-                      icon: Icon(Icons.add_circle_outline),
+                      icon: const Icon(Icons.add_circle_outline),
                       tooltip: AppLocalizations.of(context)!.appbar_add_button,
                       onPressed: () async {
                         if (await _saveMotorcycle()) {
@@ -580,7 +581,7 @@ class _MotorcycleEditPageState extends State<MotorcycleEditPage> {
       //final box = keyContext.findRenderObject() as RenderBox;
       _scrollController.animateTo(
           _scrollController.position.pixels + 200 /*box.size.height*/,
-          duration: Duration(milliseconds: 200),
+          duration: const Duration(milliseconds: 200),
           curve: Curves.linear);
     }
   }

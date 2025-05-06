@@ -12,12 +12,11 @@ class MotorcycleTemplateCard extends StatefulWidget {
   final _MotorcycleTemplateCardState _state;
   final MotorcycleTemplateIndexItem template;
 
-  MotorcycleTemplateCard({Key? key, required this.template})
-      : _state = _MotorcycleTemplateCardState(),
-        super(key: key);
+  MotorcycleTemplateCard({super.key, required this.template})
+      : _state = _MotorcycleTemplateCardState();
 
   @override
-  State<StatefulWidget> createState() => _state;
+  State<MotorcycleTemplateCard> createState() => _state;
 
   List<TaskTemplate> getSelectedTasks() {
     return _state.getSelectedTasks();
@@ -69,11 +68,10 @@ class _MotorcycleTemplateCardState extends State<MotorcycleTemplateCard> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // FIXME Correct text
               Text(AppLocalizations.of(context)!
                   .motorcycle_task_template_page_loading_templates),
               const SizedBox(height: 10),
-              CircularProgressIndicator(),
+              const CircularProgressIndicator(),
             ],
           ),
         );
@@ -129,7 +127,7 @@ class _MotorcycleTemplateCardState extends State<MotorcycleTemplateCard> {
 
   Future<String> _loadMotoIndexDocument() async {
     final response = await http
-        .get(Uri.parse('${TEMPLATES_BASE_DB_URL}/${widget.template.location}'));
+        .get(Uri.parse('$templatesBaseDbUrl/${widget.template.location}'));
     if (response.statusCode == 200) {
       return response.body;
     } else {
@@ -149,7 +147,7 @@ class _MotorcycleTemplateCardState extends State<MotorcycleTemplateCard> {
           .first;
       widget.template.tasks = moto.tasks; // Cache result
     } catch (error) {
-      debugPrint('Failed to parse motorcycle task template file: ${error}');
+      debugPrint('Failed to parse motorcycle task template file: $error');
       throw Exception(AppLocalizations.of(context)!
           .motorcycle_task_template_page_error_loading_motorcycle);
     }

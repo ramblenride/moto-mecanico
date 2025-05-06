@@ -7,9 +7,9 @@ void main() {
     final task1 = Task(name: '1', dueOdometer: const Distance(100));
     final task2 = Task(name: '2', dueOdometer: const Distance(null));
     final task3 =
-        Task(name: '3', dueOdometer: const Distance(2, DistanceUnit.UnitKM));
+        Task(name: '3', dueOdometer: const Distance(2, DistanceUnit.unitKm));
     final task4 =
-        Task(name: '4', dueOdometer: const Distance(2, DistanceUnit.UnitMile));
+        Task(name: '4', dueOdometer: const Distance(2, DistanceUnit.unitMile));
 
     final tasks = [task1, task2, task3, task4];
     tasks.sort();
@@ -45,7 +45,7 @@ void main() {
 
     final tasks = [task1, task2, task3, task4, task5, task6];
     tasks.sort((a, b) {
-      return a.compareTo(b, odometer: const Distance(1200));
+      return a.compareTimeAndDistance(b, odometer: const Distance(1200));
     });
 
     expect(tasks, equals([task6, task5, task3, task4, task1, task2]));

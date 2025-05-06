@@ -21,6 +21,8 @@
 	"label_editor_name_initial_hint_7": "ici",
 	"label_selector_title": "Étiquettes",
 	"tooltip_reset_date": "Réinitialiser la date",
+	"alerts_red": "Alertes",
+	"alerts_yellow": "Avertissements",
 	"add_attachment_dialog_add_file": "Fichier",
 	"add_attachment_dialog_add_link": "Lien",
 	"add_attachment_dialog_add_new_picture": "Nouvelle photo",

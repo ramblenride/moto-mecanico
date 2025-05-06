@@ -7,14 +7,14 @@ import 'package:moto_mecanico/themes.dart';
 import 'package:moto_mecanico/widgets/cost_selector_row.dart';
 
 class CostSelector extends StatefulWidget {
-  CostSelector({Key? key, required this.costs, required this.currencySymbol})
-      : super(key: key);
+  const CostSelector(
+      {super.key, required this.costs, required this.currencySymbol});
 
   final List<Cost> costs;
   final String currencySymbol;
 
   @override
-  State<StatefulWidget> createState() => _CostSelectorState();
+  State<CostSelector> createState() => _CostSelectorState();
 }
 
 class _CostSelectorState extends State<CostSelector> {
@@ -52,7 +52,7 @@ class _CostSelectorState extends State<CostSelector> {
           },
           child: ConstrainedBox(
             // Force a uniform height
-            constraints: BoxConstraints(minHeight: 35),
+            constraints: const BoxConstraints(minHeight: 35),
             child: Row(
               children: [
                 Text(
@@ -63,8 +63,8 @@ class _CostSelectorState extends State<CostSelector> {
                 Expanded(
                   child: Text(
                     costTotal > 99999
-                        ? '${largeCurrencyFormat.format(costTotal)}'
-                        : '${smallCurrencyFormat.format(costTotal)}',
+                        ? largeCurrencyFormat.format(costTotal)
+                        : smallCurrencyFormat.format(costTotal),
                     style: topLineFont,
                     textAlign: TextAlign.left,
                     maxLines: 2,
@@ -79,7 +79,7 @@ class _CostSelectorState extends State<CostSelector> {
                   height: 26,
                   child: _expanded
                       ? IconButton(
-                          icon: Icon(Icons.add_circle_outline),
+                          icon: const Icon(Icons.add_circle_outline),
                           visualDensity: VisualDensity.compact,
                           alignment: Alignment.bottomCenter,
                           padding: EdgeInsets.zero,
@@ -118,7 +118,7 @@ class _CostSelectorState extends State<CostSelector> {
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(left: 5),
+          padding: const EdgeInsets.only(left: 5),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [..._buildCostList()],

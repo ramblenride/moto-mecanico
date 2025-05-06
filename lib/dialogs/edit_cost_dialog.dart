@@ -8,7 +8,8 @@ import 'package:moto_mecanico/widgets/dissmiss_keyboard_ontap.dart';
 import 'package:moto_mecanico/widgets/property_editor_row.dart';
 
 class EditCostDialog extends StatefulWidget {
-  EditCostDialog({
+  const EditCostDialog({
+    super.key,
     required this.onResult,
     required this.cost,
   });
@@ -65,7 +66,7 @@ class _EditCostDialogState extends State<EditCostDialog> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Center(
-                          child: Container(
+                          child: SizedBox(
                             width: 64,
                             child: _getCostIcon(widget.cost.type),
                           ),
@@ -121,7 +122,7 @@ class _EditCostDialogState extends State<EditCostDialog> {
                             },
                           ),
                         ),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                         _getButtonRow(),
                       ],
                     ),
@@ -138,11 +139,11 @@ class _EditCostDialogState extends State<EditCostDialog> {
   Image _getCostIcon(CostType type) {
     switch (type) {
       case CostType.labor:
-        return Image.asset(IMG_COST_LABOR);
+        return Image.asset(imgCostLabor);
       case CostType.part:
-        return Image.asset(IMG_COST_PART);
+        return Image.asset(imgCostPart);
       case CostType.other:
-        return Image.asset(IMG_COST_OTHER);
+        return Image.asset(imgCostOther);
     }
   }
 

@@ -9,12 +9,11 @@ class MotorcycleTemplateTaskTile extends StatefulWidget {
   final bool _fixedTime;
   final _MotorcycleTemplateTaskTileState _state;
 
-  MotorcycleTemplateTaskTile({Key? key, required this.task})
+  MotorcycleTemplateTaskTile({super.key, required this.task})
       : _renew = (task.intervalDistance.distance ?? 0) > 0 ||
             task.intervalMonths > 0,
         _fixedTime = (task.distance.distance ?? 0) > 0 || task.months > 0,
-        _state = _MotorcycleTemplateTaskTileState(),
-        super(key: key);
+        _state = _MotorcycleTemplateTaskTileState();
 
   @override
   State<StatefulWidget> createState() => _state;

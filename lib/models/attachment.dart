@@ -25,7 +25,7 @@ class Attachment {
 
   static Attachment? fromJson(Map<String, dynamic> json) {
     if (json['type'] != null && json['url'] != null) {
-      var type;
+      AttachmentType type = AttachmentType.file;
       switch (json['type']) {
         case 'file':
           type = AttachmentType.file;
@@ -38,14 +38,12 @@ class Attachment {
           break;
       }
 
-      if (type != null) {
-        return Attachment(
-          type: type,
-          url: json['url'],
-          name: json['name'],
-          copyable: json['copyable'] ?? false,
-        );
-      }
+      return Attachment(
+        type: type,
+        url: json['url'],
+        name: json['name'],
+        copyable: json['copyable'] ?? false,
+      );
     }
 
     return null;

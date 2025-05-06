@@ -3,10 +3,10 @@ import 'package:moto_mecanico/configuration.dart';
 
 class ConfigWidget extends InheritedWidget {
   const ConfigWidget({
-    Key? key,
+    super.key,
     required this.config,
-    required Widget child,
-  }) : super(key: key, child: child);
+    required super.child,
+  });
 
   final Configuration config;
 

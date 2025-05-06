@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:moto_mecanico/locale/formats.dart';
 
 enum DistanceUnit {
@@ -58,8 +57,8 @@ class Distance implements Comparable<dynamic> {
   }
 
   // Returns the multiplication of a distance with a constant.
-  Distance operator *(int other) {
-    return Distance((distance ?? 0) * other, unit);
+  Distance operator *(int mul) {
+    return Distance((distance ?? 0) * mul, unit);
   }
 
   bool operator >(Distance other) {
@@ -103,12 +102,11 @@ class Distance implements Comparable<dynamic> {
   }
 
   factory Distance.fromJson(Map<String, dynamic> json) {
-    if (json.containsKey('distance') && json['unit'] != null) {
-      return Distance(json['distance'],
-          json['unit'] == 'mile' ? DistanceUnit.unitMile : DistanceUnit.unitKm);
-    }
-    debugPrint('Failed to parse distance from JSON. Missing fields.');
-    return const Distance(null);
+    return Distance(
+        json['distance'],
+        json['unit'] != null && json['unit'] == 'mile'
+            ? DistanceUnit.unitMile
+            : DistanceUnit.unitKm);
   }
 
   Map<String, dynamic> toJson() {

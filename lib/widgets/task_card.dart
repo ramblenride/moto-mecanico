@@ -11,10 +11,10 @@ import 'package:provider/provider.dart';
 
 class TaskCard extends StatelessWidget {
   const TaskCard({
-    Key? key,
+    super.key,
     required this.motorcycle,
     required this.task,
-  }) : super(key: key);
+  });
 
   final Motorcycle motorcycle;
   final Task task;
@@ -41,13 +41,13 @@ class TaskCard extends StatelessWidget {
           children: [
             Container(
               alignment: Alignment.center,
-              padding: EdgeInsets.only(right: 9),
+              padding: const EdgeInsets.only(right: 9),
               width: 13,
               child: Consumer<LabelsModel>(
-                builder: (context, labels_model, child) {
+                builder: (context, labelsModel, child) {
                   return Column(
                       mainAxisAlignment: MainAxisAlignment.start,
-                      children: _buildIndicators(labels_model.labels));
+                      children: _buildIndicators(labelsModel.labels));
                 },
               ),
             ),
@@ -101,13 +101,11 @@ class TaskCard extends StatelessWidget {
     final distanceRemaining = !task.dueOdometer.isValid
         ? null
         : task.dueOdometer - motorcycle.odometer;
-    final daysRemaining = task.dueDate == null
-        ? null
-        : task.dueDate!
-            .add(Duration(hours: 23, minutes: 59))
-            .difference(DateTime.now())
-            .inDays
-            .abs();
+    final daysRemaining = task.dueDate
+        ?.add(const Duration(hours: 23, minutes: 59))
+        .difference(DateTime.now())
+        .inDays
+        .abs();
 
     final distanceColor =
         _getAlarmColor(motorcycle.getDistanceAlarmLevel(task));
@@ -115,8 +113,8 @@ class TaskCard extends StatelessWidget {
         _getAlarmColor(motorcycle.getDurationAlarmLevel(task));
 
     final remaining = <Widget>[];
-    var daysUnit;
-    var daysStr;
+    String daysUnit = '';
+    String daysStr = '';
     if (daysRemaining != null) {
       if (daysRemaining > 365) {
         final years = daysRemaining / 365;
@@ -127,38 +125,33 @@ class TaskCard extends StatelessWidget {
         daysUnit = AppLocalizations.of(context)!.unit_days(daysRemaining);
       }
     }
-    if (daysStr != null) {
-      remaining.add(Text(
-        daysUnit,
-        style: Theme.of(context)
-            .textTheme
-            .titleSmall!
-            .copyWith(color: Colors.blueGrey[200], fontSize: 13),
-      ));
-      remaining.add(Text(
-        daysStr,
-        style: Theme.of(context)
-            .textTheme
-            .titleSmall!
-            .copyWith(color: durationColor, fontSize: 16),
-      ));
-    }
+    remaining.add(Text(
+      daysUnit,
+      style: Theme.of(context)
+          .textTheme
+          .titleSmall!
+          .copyWith(color: Colors.blueGrey[200], fontSize: 13),
+    ));
+    remaining.add(Text(
+      daysStr,
+      style: Theme.of(context)
+          .textTheme
+          .titleSmall!
+          .copyWith(color: durationColor, fontSize: 16),
+    ));
 
-    final distanceStr = distanceRemaining != null
-        ? distanceRemaining.toUnit(distanceUnit).toString(compact: true)
-        : null;
+    final distanceStr =
+        distanceRemaining?.toUnit(distanceUnit).toString(compact: true);
     if (distanceStr != null) {
-      if (daysStr != null) {
-        remaining.add(
-          Divider(
-            height: 2,
-            thickness: 2,
-            color: Colors.blueGrey[400],
-            indent: 24,
-            endIndent: 24,
-          ),
-        );
-      }
+      remaining.add(
+        Divider(
+          height: 2,
+          thickness: 2,
+          color: Colors.blueGrey[400],
+          indent: 24,
+          endIndent: 24,
+        ),
+      );
       remaining.add(Text(
         distanceStr,
         style: Theme.of(context)
@@ -177,7 +170,7 @@ class TaskCard extends StatelessWidget {
     return Container(
       height: 80,
       width: 76,
-      padding: EdgeInsets.all(1),
+      padding: const EdgeInsets.all(1),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -187,12 +180,12 @@ class TaskCard extends StatelessWidget {
   }
 
   List<Widget> _buildIndicators(Map<int, Label> labels) {
-    final num_labels = task.labels.length;
-    if (num_labels == 0) return [];
+    final numLabels = task.labels.length;
+    if (numLabels == 0) return [];
 
     return task.labels.map((id) {
       return Container(
-          width: 8, height: 65 / num_labels, color: labels[id]!.color);
+          width: 8, height: 65 / numLabels, color: labels[id]!.color);
     }).toList();
   }
 }

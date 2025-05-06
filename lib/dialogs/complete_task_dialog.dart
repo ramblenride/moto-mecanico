@@ -16,7 +16,7 @@ import 'package:moto_mecanico/widgets/property_editor_row.dart';
 import 'package:moto_mecanico/widgets/textformfield_date_picker.dart';
 
 class CompleteTaskDialog extends StatefulWidget {
-  CompleteTaskDialog({
+  const CompleteTaskDialog({super.key, 
     required this.motorcycle,
     required this.tasks,
     required this.onResult,
@@ -50,7 +50,7 @@ class _CompleteTaskDialogState extends State<CompleteTaskDialog> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Container(
-                padding: EdgeInsets.only(top: 15, bottom: 10),
+                padding: const EdgeInsets.only(top: 15, bottom: 10),
                 decoration: BoxDecoration(
                   color: RnrColors.blue[800],
                   borderRadius: const BorderRadius.only(

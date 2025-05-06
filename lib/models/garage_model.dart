@@ -75,7 +75,7 @@ class GarageModel extends ChangeNotifier {
     if (_motos.contains(moto) == false) {
       _motos.add(moto);
 
-      final listener = () => _motoEventListener(moto);
+      listener() => _motoEventListener(moto);
       _listeners[moto.id] = listener;
       moto.addListener(listener);
 

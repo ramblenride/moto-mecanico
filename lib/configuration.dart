@@ -78,9 +78,9 @@ class Configuration {
       }
       if (countryCode != null &&
           countriesUsingMiles.contains(countryCode.toUpperCase())) {
-        _distanceUnit = DistanceUnit.UnitMile;
+        _distanceUnit = DistanceUnit.unitMile;
       } else {
-        _distanceUnit = DistanceUnit.UnitKM;
+        _distanceUnit = DistanceUnit.unitKm;
       }
     }
     return _distanceUnit!;
@@ -92,7 +92,7 @@ class Configuration {
 
     _prefs?.setString(
         propNameDistanceUnit,
-        unit == DistanceUnit.UnitMile
+        unit == DistanceUnit.unitMile
             ? propValueDistanceUnitMile
             : propValueDistanceUnitKm);
   }
@@ -125,9 +125,9 @@ class Configuration {
     final distance = _prefs?.getString(propNameDistanceUnit);
     if (distance != null) {
       if (distance == propValueDistanceUnitKm) {
-        _distanceUnit = DistanceUnit.UnitKM;
+        _distanceUnit = DistanceUnit.unitKm;
       } else if (distance == propValueDistanceUnitMile) {
-        _distanceUnit = DistanceUnit.UnitMile;
+        _distanceUnit = DistanceUnit.unitMile;
       }
     }
 

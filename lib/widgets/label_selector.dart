@@ -5,19 +5,20 @@ import 'package:moto_mecanico/themes.dart';
 import 'package:provider/provider.dart';
 
 class LabelSelector extends StatefulWidget {
-  LabelSelector({Key? key, required this.active_labels}) : super(key: key);
+  const LabelSelector({super.key, required this.activeLabels});
 
-  final List<int> active_labels;
+  final List<int> activeLabels;
 
   @override
-  State<StatefulWidget> createState() =>
-      _LabelSelectorState(active_labels: active_labels);
+  State<StatefulWidget> createState() => _LabelSelectorState();
 }
 
 class _LabelSelectorState extends State<LabelSelector> {
-  _LabelSelectorState({required this.active_labels});
+  _LabelSelectorState() {
+    activeLabels = widget.activeLabels;
+  }
 
-  List<int> active_labels;
+  List<int> activeLabels = [];
   bool _expanded = false;
 
   @override
@@ -48,7 +49,7 @@ class _LabelSelectorState extends State<LabelSelector> {
                     children: _buildIndicators(labelsModel.labels),
                   ),
                 ),
-                Container(
+                SizedBox(
                   width: 40,
                   child: Icon(
                     _expanded ? Icons.expand_less : Icons.expand_more,
@@ -69,7 +70,7 @@ class _LabelSelectorState extends State<LabelSelector> {
     const indicatorWidth = 28.0;
     var indicators = <Widget>[];
 
-    for (final id in active_labels) {
+    for (final id in activeLabels) {
       indicators.add(
         Container(
           decoration: BoxDecoration(
@@ -79,7 +80,7 @@ class _LabelSelectorState extends State<LabelSelector> {
               width: 1.0,
               style: BorderStyle.solid,
             ),
-            borderRadius: BorderRadius.all(Radius.circular(5.0)),
+            borderRadius: const BorderRadius.all(Radius.circular(5.0)),
           ),
           width: indicatorWidth,
           height: indicatorHeight,
@@ -96,28 +97,28 @@ class _LabelSelectorState extends State<LabelSelector> {
     return labels.entries.map((label) {
       var row = [
         Text(label.value.name, style: Theme.of(context).textTheme.labelName),
-        Spacer(),
+        const Spacer(),
       ];
 
-      if (active_labels.contains(label.key)) {
-        row.add(Icon(Icons.check, color: Colors.white));
+      if (activeLabels.contains(label.key)) {
+        row.add(const Icon(Icons.check, color: Colors.white));
       }
 
       return Padding(
-        padding: EdgeInsets.symmetric(horizontal: 30),
+        padding: const EdgeInsets.symmetric(horizontal: 30),
         child: InkWell(
           onTap: () {
             setState(() {
-              if (active_labels.contains(label.value.id)) {
-                active_labels.remove(label.value.id);
+              if (activeLabels.contains(label.value.id)) {
+                activeLabels.remove(label.value.id);
               } else {
-                active_labels.add(label.value.id);
+                activeLabels.add(label.value.id);
               }
             });
           },
           child: Container(
             height: 40,
-            padding: EdgeInsets.symmetric(horizontal: 15),
+            padding: const EdgeInsets.symmetric(horizontal: 15),
             decoration: BoxDecoration(
               color: label.value.color,
               border: Border.all(

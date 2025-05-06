@@ -1,13 +1,7 @@
 {
 	"@@locale": "es",
-
 	"@@last_modified": "2020-07-11T18:32:08.099892",
 	"garage_page_title": "Garaje",
-	"@garage_page_title": {
-		"description": "The title of the garage page",
-		"type": "text",
-		"placeholders": {}
-	},
 	"motorcycle_edit_page_name_prop_date": "FECHA",
 	"motorcycle_edit_page_name_prop_purchase_date": "FECHA DE COMPRA",
 	"motorcycle_edit_page_name_prop_tech_level": "NIVEL TÉCNICO",
@@ -31,6 +25,8 @@
 	"settings_page_title": "Ajustes",
 	"settings_page_select_color": "Elige un color",
 	"tooltip_reset_date": "Restablecer la fecha",
+	"alerts_red": "Alertas",
+	"alerts_yellow": "Advertencias",
 	"add_attachment_dialog_add_new_picture": "Nueva foto",
 	"add_attachment_dialog_add_picture": "Imagen",
 	"add_attachment_dialog_default_name_picture": "Imagen",
@@ -193,7 +189,7 @@
 	"renew_task_dialog_odometer_prop_name": "PRÓXIMO ODÓMETRO",
 	"renewable": "Renovable",
 	"renewable_tooltip": "Si el elemento se copia cuando se renueva la tarea.",
-	"note_last_updated" : "Última actualización",
+	"note_last_updated": "Última actualización",
 	"note_selector_add_note": "Agregar una nota",
 	"note_selector_empty_list": "Sin nota ingresada",
 	"closed_task_card_cost": "Costo",
@@ -205,7 +201,7 @@
 	"cost_selector_row_hint_cost": "Costo",
 	"cost_selector_row_hint_description": "Descripción",
 	"cost_type_parts": "Piezas",
-  	"cost_type_labor": "Mano de obra",
+	"cost_type_labor": "Mano de obra",
 	"cost_type_other": "Otro",
 	"cost_total": "Coste Total",
 	"task_edit_page_hint_prop_date": "Ingrese la fecha",

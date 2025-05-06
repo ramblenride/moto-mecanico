@@ -13,7 +13,8 @@ import 'package:moto_mecanico/widgets/property_editor_row.dart';
 import 'package:moto_mecanico/widgets/textformfield_date_picker.dart';
 
 class RenewTaskDialog extends StatefulWidget {
-  RenewTaskDialog({
+  const RenewTaskDialog({
+    super.key,
     required this.task,
     required this.onResult,
   });
@@ -28,7 +29,7 @@ class RenewTaskDialog extends StatefulWidget {
 class _RenewTaskDialogState extends State<RenewTaskDialog> {
   _RenewTaskDialogState({required task}) : newTask = Task.fromRenew(task)!;
 
-  var _distanceUnit;
+  DistanceUnit _distanceUnit = DistanceUnit.unitKm;
   Task newTask;
   final _formKey = GlobalKey<FormState>();
 
@@ -51,7 +52,7 @@ class _RenewTaskDialogState extends State<RenewTaskDialog> {
                 padding: const EdgeInsets.only(top: 15, bottom: 10),
                 decoration: BoxDecoration(
                   color: RnrColors.blue[800],
-                  borderRadius: BorderRadius.only(
+                  borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(20),
                       topRight: Radius.circular(20)),
                 ),

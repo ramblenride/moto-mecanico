@@ -9,12 +9,11 @@ import 'package:moto_mecanico/themes.dart';
 enum CostAction { delete, edit, copyable }
 
 class CostSelectorRow extends StatefulWidget {
-  CostSelectorRow(
-      {Key? key,
+  const CostSelectorRow(
+      {super.key,
       required this.cost,
       required this.onRemove,
-      required this.onUpdate})
-      : super(key: key);
+      required this.onUpdate});
 
   final Cost cost;
   final Function onRemove;
@@ -44,7 +43,7 @@ class _CostSelectorRowState extends State<CostSelectorRow> {
       child: Row(
         children: [
           Container(
-            margin: EdgeInsets.only(right: 5),
+            margin: const EdgeInsets.only(right: 5),
             width: 30,
             child: _getCostIcon(),
           ),
@@ -58,7 +57,7 @@ class _CostSelectorRowState extends State<CostSelectorRow> {
             flex: 30,
             child: _getValueTextOrEditor(),
           ),
-          Container(
+          SizedBox(
             height: 30,
             width: 35, // FIXME: Cost / Note / Attachment
             child: PopupMenuButton<CostAction>(
@@ -129,11 +128,11 @@ class _CostSelectorRowState extends State<CostSelectorRow> {
   Image _getCostIcon() {
     switch (widget.cost.type) {
       case CostType.labor:
-        return Image.asset(IMG_COST_LABOR);
+        return Image.asset(imgCostLabor);
       case CostType.part:
-        return Image.asset(IMG_COST_PART);
+        return Image.asset(imgCostPart);
       case CostType.other:
-        return Image.asset(IMG_COST_OTHER);
+        return Image.asset(imgCostOther);
     }
   }
 

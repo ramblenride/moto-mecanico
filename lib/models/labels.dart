@@ -3,7 +3,7 @@ import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:moto_mecanico/storage/local_file_storage.dart';
 
-const _STORAGE_FILE = 'labels.json';
+const storageFile = 'labels.json';
 
 class Label {
   final int id;
@@ -35,18 +35,18 @@ class Label {
 class LabelsModel extends ChangeNotifier {
   Map<int, Label> _labels;
 
-  final _DEFAULT_LABELS = {
-    0: Label(id: 0, color: Colors.red, name: ''),
-    1: Label(id: 1, color: Colors.orange, name: ''),
-    2: Label(id: 2, color: Colors.green, name: ''),
-    3: Label(id: 3, color: Colors.lightBlue, name: ''),
-    4: Label(id: 4, color: Colors.purple, name: ''),
-    5: Label(id: 5, color: Colors.indigo, name: ''),
-    6: Label(id: 6, color: Colors.brown, name: ''),
+  final defaultLabels = {
+    0: const Label(id: 0, color: Colors.red, name: ''),
+    1: const Label(id: 1, color: Colors.orange, name: ''),
+    2: const Label(id: 2, color: Colors.green, name: ''),
+    3: const Label(id: 3, color: Colors.lightBlue, name: ''),
+    4: const Label(id: 4, color: Colors.purple, name: ''),
+    5: const Label(id: 5, color: Colors.indigo, name: ''),
+    6: const Label(id: 6, color: Colors.brown, name: ''),
   };
 
   LabelsModel() : _labels = {} {
-    _labels = _DEFAULT_LABELS;
+    _labels = defaultLabels;
   }
 
   UnmodifiableMapView<int, Label> get labels => UnmodifiableMapView(_labels);
@@ -64,7 +64,7 @@ class LabelsModel extends ChangeNotifier {
   Future<void> loadFromStorage() async {
     final storage = LocalFileStorage();
     try {
-      final json = await storage.getFromJson(_STORAGE_FILE);
+      final json = await storage.getFromJson(storageFile);
       final labels = fromJson(json);
       if (labels.isNotEmpty) {
         _labels = labels;
@@ -79,7 +79,7 @@ class LabelsModel extends ChangeNotifier {
   Future<bool> _saveToStorage() async {
     final storage = LocalFileStorage();
     final json = toJson();
-    final result = await storage.saveToJson(_STORAGE_FILE, json);
+    final result = await storage.saveToJson(storageFile, json);
     return result;
   }
 

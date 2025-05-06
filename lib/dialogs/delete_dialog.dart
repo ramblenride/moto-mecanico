@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DeleteDialog extends StatelessWidget {
-  DeleteDialog(
-      {required this.title, required this.content, required this.onResult});
+  const DeleteDialog(
+      {super.key, required this.title, required this.content, required this.onResult});
 
   final String title;
   final String content;

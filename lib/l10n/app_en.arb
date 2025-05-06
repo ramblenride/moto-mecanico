@@ -1300,6 +1300,18 @@
     "type": "text",
     "placeholders": {}
   },
+  "alerts_red": "Alerts",
+  "@alerts_red": {
+    "description": "Title for red alerts in the alarm indicator",
+    "type": "text",
+    "placeholders": {}
+  },
+  "alerts_yellow": "Warnings",
+  "@alerts_yellow": {
+    "description": "Title for yellow alerts in the alarm indicator",
+    "type": "text",
+    "placeholders": {}
+  },
   "unit_days": "{numDays,plural, =1{day}other{days}}",
   "@unit_days": {
     "description": "String indicating a number of days",

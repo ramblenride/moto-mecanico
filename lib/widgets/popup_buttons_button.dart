@@ -41,7 +41,7 @@ class PopupButtonsButton<T> extends StatefulWidget {
   ///
   /// The [itemBuilder] argument must not be null.
   PopupButtonsButton({
-    Key? key,
+    super.key,
     required this.items,
     required this.initialValue,
     required this.onSelected,
@@ -52,8 +52,7 @@ class PopupButtonsButton<T> extends StatefulWidget {
     this.color,
     this.borderColor,
     this.selectedColor,
-  })  : assert(items.isNotEmpty),
-        super(key: key);
+  })  : assert(items.isNotEmpty);
 
   /// The list of items to diaplay
   final List<PopupButtonsItem<T>> items;
@@ -116,7 +115,7 @@ class _PopupButtonsButtonState<T> extends State<PopupButtonsButton<T>>
   late final Animation<double> _translateAnimation;
   late final T _selectedValue;
   final Curve _curve = Curves.easeOut;
-  final Duration _animationDuration = Duration(milliseconds: 250);
+  final Duration _animationDuration = const Duration(milliseconds: 250);
 
   @override
   void initState() {
@@ -179,8 +178,8 @@ class _PopupButtonsButtonState<T> extends State<PopupButtonsButton<T>>
         width: widget.size,
         height: widget.size,
         child: IconButton(
-          padding: EdgeInsets.all(2),
-          constraints: BoxConstraints.expand(),
+          padding: const EdgeInsets.all(2),
+          constraints: const BoxConstraints.expand(),
           onPressed: () {
             setState(() {
               widget.onSelected(item.value);
@@ -206,8 +205,8 @@ class _PopupButtonsButtonState<T> extends State<PopupButtonsButton<T>>
       width: widget.size,
       height: widget.size,
       child: IconButton(
-        padding: EdgeInsets.all(2),
-        constraints: BoxConstraints.expand(),
+        padding: const EdgeInsets.all(2),
+        constraints: const BoxConstraints.expand(),
         onPressed: widget.enabled ? animate : () {},
         tooltip: widget.tooltip,
         icon: item.selectedIcon ?? item.icon,
@@ -238,7 +237,7 @@ class _PopupButtonsButtonState<T> extends State<PopupButtonsButton<T>>
   Widget build(BuildContext context) {
     // The container is needed because
     // the stack doesn't send click events in the overflow region
-    return Container(
+    return SizedBox(
       width: widget.size * widget.items.length * 1.11,
       height: widget.size,
       child: Stack(

@@ -7,15 +7,14 @@ import 'package:moto_mecanico/themes.dart';
 import 'package:moto_mecanico/widgets/attachment_selector_row.dart';
 
 class AttachmentSelector extends StatefulWidget {
-  AttachmentSelector(
-      {Key? key, required this.attachments, required this.storage})
-      : super(key: key);
+  const AttachmentSelector(
+      {super.key, required this.attachments, required this.storage});
 
   final List<Attachment> attachments;
   final Storage storage;
 
   @override
-  State<StatefulWidget> createState() => _AttachmentSelectorState();
+  State<AttachmentSelector> createState() => _AttachmentSelectorState();
 }
 
 class _AttachmentSelectorState extends State<AttachmentSelector> {
@@ -41,7 +40,7 @@ class _AttachmentSelectorState extends State<AttachmentSelector> {
           },
           child: ConstrainedBox(
             // Force a uniform height
-            constraints: BoxConstraints(minHeight: 35),
+            constraints: const BoxConstraints(minHeight: 35),
             child: Row(
               children: [
                 Text(
@@ -57,7 +56,7 @@ class _AttachmentSelectorState extends State<AttachmentSelector> {
                   height: 26,
                   child: _expanded
                       ? IconButton(
-                          icon: Icon(Icons.add_circle_outline),
+                          icon: const Icon(Icons.add_circle_outline),
                           visualDensity: VisualDensity.compact,
                           alignment: Alignment.bottomCenter,
                           padding: EdgeInsets.zero,
@@ -161,8 +160,7 @@ class _AttachmentSelectorState extends State<AttachmentSelector> {
         debugPrint('Failed to add attachment: ${error.toString()}');
         final snackBar = SnackBar(
           content: Text(
-            AppLocalizations.of(context)!.snackbar_storage_error +
-                ': ${error.toString()}',
+            '${AppLocalizations.of(context)!.snackbar_storage_error}: ${error.toString()}',
           ),
         );
         ScaffoldMessenger.of(context).showSnackBar(snackBar);

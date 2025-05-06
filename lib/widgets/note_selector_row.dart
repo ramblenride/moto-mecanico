@@ -9,8 +9,8 @@ import 'package:moto_mecanico/widgets/note_form_field.dart';
 enum NoteAction { delete, copyable }
 
 class NoteSelectorRow extends StatefulWidget {
-  NoteSelectorRow({
-    Key? key,
+  const NoteSelectorRow({
+    super.key,
     this.note,
     required this.onRemove,
     required this.onSaved,
@@ -18,7 +18,7 @@ class NoteSelectorRow extends StatefulWidget {
     this.header = true,
     this.minLines = 1,
     this.maxLines = 10,
-  }) : super(key: key);
+  });
 
   final Note? note;
   final bool showRenewable;
@@ -29,7 +29,7 @@ class NoteSelectorRow extends StatefulWidget {
   final int maxLines;
 
   @override
-  State<StatefulWidget> createState() => _NoteSelectorRowState(note: note);
+  State<NoteSelectorRow> createState() => _NoteSelectorRowState(note: note);
 }
 
 class _NoteSelectorRowState extends State<NoteSelectorRow> {
@@ -97,7 +97,7 @@ class _NoteSelectorRowState extends State<NoteSelectorRow> {
               )
             : Container(),
         const Spacer(),
-        Container(
+        SizedBox(
           height: 30,
           width: 40,
           child: PopupMenuButton<NoteAction>(

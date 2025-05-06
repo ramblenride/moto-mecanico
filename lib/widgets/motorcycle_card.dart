@@ -7,11 +7,11 @@ import 'package:moto_mecanico/widgets/config_widget.dart';
 import 'package:provider/provider.dart';
 
 class MotorcycleCard extends StatelessWidget {
-  const MotorcycleCard({Key? key}) : super(key: key);
+  const MotorcycleCard({super.key});
 
   @override
   Widget build(BuildContext context) {
-    const image_height = 200.0;
+    const imageHeight = 200.0;
     final theme = Theme.of(context);
     final titleStyle =
         theme.textTheme.headlineSmall!.copyWith(color: Colors.white);
@@ -36,7 +36,7 @@ class MotorcycleCard extends StatelessWidget {
           children: <Widget>[
             // Photo and name.
             SizedBox(
-              height: image_height,
+              height: imageHeight,
               child: Stack(
                 children: <Widget>[
                   Positioned.fill(

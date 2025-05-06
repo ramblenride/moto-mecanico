@@ -9,10 +9,13 @@ void main() {
       final garage = GarageModel();
       expect(garage.motos.isEmpty, true);
 
+      var i = 0;
       garage.addListener(() {
         expect(garage.motos.isNotEmpty, true);
+        i++;
       });
       garage.add(Motorcycle(name: 'Name'));
+      expect(i, 1);
     });
 
     test('removing a motorcycle generates notification', () {

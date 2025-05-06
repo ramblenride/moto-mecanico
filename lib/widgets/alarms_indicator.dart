@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:moto_mecanico/models/motorcycle.dart';
 import 'package:moto_mecanico/motorcycle_alarms.dart';
 import 'package:moto_mecanico/themes.dart';
 
 class AlarmsIndicator extends StatelessWidget {
-  AlarmsIndicator({required this.motorcycle});
+  const AlarmsIndicator({super.key, required this.motorcycle});
 
   final Motorcycle motorcycle;
 
@@ -23,7 +24,7 @@ class AlarmsIndicator extends StatelessWidget {
     if (redAlerts.isNotEmpty) {
       alarmIcons.add(
         Tooltip(
-          message: 'Alerts', // FIXME: Translate
+          message: AppLocalizations.of(context)!.alerts_red,
           child: _buildAlarm(context, RnrColors.red, redAlerts.length),
         ),
       );
@@ -32,7 +33,7 @@ class AlarmsIndicator extends StatelessWidget {
     if (yellowAlerts.isNotEmpty) {
       alarmIcons.add(
         Tooltip(
-          message: 'Warnings', // FIXME: Translate
+          message: AppLocalizations.of(context)!.alerts_yellow,
           child: _buildAlarm(context, Colors.orange, yellowAlerts.length),
         ),
       );

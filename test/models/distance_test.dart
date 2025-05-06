@@ -1,15 +1,9 @@
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:moto_mecanico/models/distance.dart';
 
-// Tests are forcing errors, so drop the error logs.
-void debugHandler(message, {wrapWidth}) {}
-
 void main() {
-  debugPrint = debugHandler;
-
   group('Distance Model Tests', () {
     test('distance isValid', () {
       const invalid = Distance(null);
@@ -53,6 +47,30 @@ void main() {
       expect(km.distance, equals(80));
     });
 
+    test('convert null to km', () {
+      const miles = Distance(null, DistanceUnit.unitMile);
+
+      final km = miles.toUnit(DistanceUnit.unitKm);
+      expect(km.isValid, isFalse);
+      expect(km.unit, equals(DistanceUnit.unitKm));
+      expect(km.distance, null);
+    });
+
+    test('invalid equals invalid', () {
+      const miles = Distance(null, DistanceUnit.unitMile);
+      const km = Distance(null, DistanceUnit.unitKm);
+
+      expect(km, equals(miles));
+    });
+
+    test('orig + invalid = orig', () {
+      const orig = Distance(5, DistanceUnit.unitKm);
+      const invalid = Distance(null, DistanceUnit.unitKm);
+
+      expect(orig + invalid, equals(orig));
+      expect(invalid + orig, equals(orig));
+    });
+
     test('add miles to km', () {
       const miles = Distance(50, DistanceUnit.unitMile);
       const km = Distance(80, DistanceUnit.unitKm);
@@ -87,6 +105,7 @@ void main() {
       const distance = Distance(32, DistanceUnit.unitMile);
       final distanceParsed = Distance.fromJson(distance.toJson());
       expect(distanceParsed, isNotNull);
+      expect(distanceParsed.isValid, isTrue);
       expect(distanceParsed.unit, equals(DistanceUnit.unitMile));
       expect(distanceParsed.distance, equals(32));
     });
@@ -95,6 +114,7 @@ void main() {
       const distance = Distance(23, DistanceUnit.unitKm);
       final distanceParsed = Distance.fromJson(distance.toJson());
       expect(distanceParsed, isNotNull);
+      expect(distanceParsed.isValid, isTrue);
       expect(distanceParsed.unit, equals(DistanceUnit.unitKm));
       expect(distanceParsed.distance, equals(23));
     });
@@ -103,14 +123,12 @@ void main() {
       var distance = Distance.fromJson(jsonDecode('{}'));
       expect(distance, equals(const Distance(null)));
 
-      // Both distance and unit must be filled for a distance to be valid
-      distance = Distance.fromJson(jsonDecode('{"distance": 12}'));
+      distance = Distance.fromJson(jsonDecode('{"distance": null}'));
       expect(distance, equals(const Distance(null)));
 
-      distance =
-          Distance.fromJson(jsonDecode('{"distance": 12, "unit": "mile"}'));
-      expect(distance.unit, equals(DistanceUnit.unitMile));
-      expect(distance.distance, equals(12));
+      // Unit defaults to KM if missing
+      distance = Distance.fromJson(jsonDecode('{"distance": 12}'));
+      expect(distance, equals(const Distance(12, DistanceUnit.unitKm)));
     });
   });
 }

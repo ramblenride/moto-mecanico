@@ -19,8 +19,8 @@ class _AddLinkAttachmentDialogState extends State<AddLinkAttachmentDialog> {
 
   final _formKey = GlobalKey<FormState>();
 
-  String? link_name;
-  String? link_url;
+  String? linkName;
+  String? linkUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +84,7 @@ class _AddLinkAttachmentDialogState extends State<AddLinkAttachmentDialog> {
                             return null;
                           },
                           onSaved: (value) {
-                            link_name = value;
+                            linkName = value;
                           },
                         ),
                         Text(
@@ -125,7 +125,7 @@ class _AddLinkAttachmentDialogState extends State<AddLinkAttachmentDialog> {
                             return null;
                           },
                           onSaved: (value) {
-                            link_url = value;
+                            linkUrl = value;
                           },
                         ),
                         _getButtonRow(),
@@ -178,8 +178,8 @@ class _AddLinkAttachmentDialogState extends State<AddLinkAttachmentDialog> {
     _formKey.currentState!.save();
     return Attachment(
       type: AttachmentType.link,
-      name: link_name ?? '',
-      url: link_url ?? '',
+      name: linkName ?? '',
+      url: linkUrl ?? '',
     );
   }
 }

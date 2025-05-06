@@ -10,13 +10,14 @@ import 'package:url_launcher/url_launcher_string.dart';
 typedef DrawerMethodCallback = void Function();
 
 class GarageDrawer extends StatefulWidget {
-  GarageDrawer({required this.onImport, required this.onExport});
+  const GarageDrawer(
+      {super.key, required this.onImport, required this.onExport});
 
   final DrawerMethodCallback onImport;
   final DrawerMethodCallback onExport;
 
   @override
-  State<StatefulWidget> createState() => _GarageDrawerState();
+  State<GarageDrawer> createState() => _GarageDrawerState();
 }
 
 class _GarageDrawerState extends State<GarageDrawer> {
@@ -53,7 +54,7 @@ class _GarageDrawerState extends State<GarageDrawer> {
               title: Text(AppLocalizations.of(context)!.about_page_title),
               onTap: _openAboutDialog,
             ),
-            Divider(),
+            const Divider(),
             ListTile(
               leading: Icon(
                 Icons.import_export,
@@ -88,7 +89,7 @@ class _GarageDrawerState extends State<GarageDrawer> {
       padding: EdgeInsets.zero,
       decoration: const BoxDecoration(color: RnrColors.darkBlue),
       child: Image.asset(
-        IMG_IDENTITY,
+        imgIdentity,
         fit: BoxFit.fill,
         filterQuality: FilterQuality.high,
       ),
@@ -100,7 +101,7 @@ class _GarageDrawerState extends State<GarageDrawer> {
     Navigator.push(
       context,
       MaterialPageRoute<void>(
-        builder: (context) => SettingsPage(),
+        builder: (context) => const SettingsPage(),
       ),
     );
   }
@@ -127,7 +128,7 @@ class _GarageDrawerState extends State<GarageDrawer> {
             color: Colors.grey[200],
           ),
           title: Text(AppLocalizations.of(context)!.privacy_policy),
-          onTap: () => launchUrlString(PRIVACY_POLICY_URL),
+          onTap: () => launchUrlString(privacyPolicyUrl),
         ),
       ],
       context: context,
@@ -135,14 +136,14 @@ class _GarageDrawerState extends State<GarageDrawer> {
   }
 
   void _openHomePage() async {
-    await launchUrlString(MOTO_MECANICO_HOMEPAGE);
+    await launchUrlString(motoMecanicoHomepage);
   }
 
   void _showFeedbackDialog() async {
     Navigator.of(context).pop();
     await showDialog(
       context: context,
-      builder: (BuildContext context) => FeedbackDialog(),
+      builder: (BuildContext context) => const FeedbackDialog(),
     );
   }
 }

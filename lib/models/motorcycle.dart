@@ -14,7 +14,7 @@ class Motorcycle extends ChangeNotifier {
   Motorcycle({
     required this.name,
     this.id = '',
-    this.odometer = const Distance(null, DistanceUnit.UnitKM),
+    this.odometer = const Distance(null, DistanceUnit.unitKm),
     this.make = '',
     this.model = '',
     this.year,
@@ -23,16 +23,29 @@ class Motorcycle extends ChangeNotifier {
     this.vin = '',
     this.purchasePrice = 0,
     this.purchaseDate,
-    this.purchaseOdometer = const Distance(null, DistanceUnit.UnitKM),
+    this.purchaseOdometer = const Distance(null, DistanceUnit.unitKm),
     this.picture = '',
-    this.notes = const <Note>[],
-    this.attachments = const <Attachment>[],
-    tasks = const <Task>[],
-  }) : _tasks = tasks {
+    List<Note>? notes,
+    List<Attachment>? attachments,
+    List<Task>? tasks,
+  })  : notes = notes ?? [],
+        attachments = attachments ?? [],
+        _tasks = tasks ?? [] {
     if (id.isEmpty) id = const Uuid().v4();
+
+    // Initialize the saved state for tracking changes
+    _lastSavedName = name;
+    _lastSavedId = id;
+    _lastSavedOdometer = odometer;
+    _lastSavedMake = make;
+    _lastSavedModel = model;
+    _lastSavedYear = year;
+    _lastSavedColor = color;
+    _lastSavedImmatriculation = immatriculation;
+    _lastSavedVin = vin;
   }
 
-  MotorcycleStorage? _storage;
+  MotorcycleStorage? storage;
 
   String name;
   String id; // Unique id
@@ -57,14 +70,46 @@ class Motorcycle extends ChangeNotifier {
 
   UnmodifiableListView<Task> get tasks => UnmodifiableListView(_tasks);
 
-  MotorcycleStorage? get storage => _storage;
-  set storage(MotorcycleStorage? storage) => _storage = storage;
+  // Fields that are tracked for changes
+  String _lastSavedName = '';
+  String _lastSavedId = '';
+  Distance _lastSavedOdometer = const Distance(null, DistanceUnit.unitKm);
+  String _lastSavedMake = '';
+  String _lastSavedModel = '';
+  int? _lastSavedYear;
+  String _lastSavedColor = '';
+  String _lastSavedImmatriculation = '';
+  String _lastSavedVin = '';
 
   // Should be called once updating properties is over. Will trigger screen
-  // updates and storage.
+  // updates and storage only if changes were made.
   void saveChanges() {
-    // FIXME: Track changes and notify only if there were changes
-    notifyListeners();
+    // Check if any tracked properties have changed
+    bool hasChanges = name != _lastSavedName ||
+        id != _lastSavedId ||
+        odometer != _lastSavedOdometer ||
+        make != _lastSavedMake ||
+        model != _lastSavedModel ||
+        year != _lastSavedYear ||
+        color != _lastSavedColor ||
+        immatriculation != _lastSavedImmatriculation ||
+        vin != _lastSavedVin;
+
+    if (hasChanges) {
+      // Update the saved state
+      _lastSavedName = name;
+      _lastSavedId = id;
+      _lastSavedOdometer = odometer;
+      _lastSavedMake = make;
+      _lastSavedModel = model;
+      _lastSavedYear = year;
+      _lastSavedColor = color;
+      _lastSavedImmatriculation = immatriculation;
+      _lastSavedVin = vin;
+
+      // Notify listeners
+      notifyListeners();
+    }
   }
 
   bool addTask(Task task) {
@@ -113,16 +158,20 @@ class Motorcycle extends ChangeNotifier {
       final moto = Motorcycle(
         name: json['name'],
         id: json['id'],
-        odometer: Distance.fromJson(json['odometer']),
-        make: json['make'],
-        model: json['model'],
-        year: json['year'] as int,
-        color: json['color'],
-        immatriculation: json['immatriculation'],
-        vin: json['vin'],
-        purchasePrice: json['purchasePrice'],
-        purchaseOdometer: Distance.fromJson(json['purchaseOdometer']),
-        picture: json['picture'],
+        odometer: json['odometer'] != null
+            ? Distance.fromJson(json['odometer'])
+            : const Distance(null),
+        make: json['make'] ?? '',
+        model: json['model'] ?? '',
+        year: json['year'] != null ? int.tryParse(json['year']) : null,
+        color: json['color'] ?? '',
+        immatriculation: json['immatriculation'] ?? '',
+        vin: json['vin'] ?? '',
+        purchasePrice: json['purchasePrice'] ?? 0,
+        purchaseOdometer: json['purchaseOdometer'] != null
+            ? Distance.fromJson(json['purchaseOdometer'])
+            : const Distance(null),
+        picture: json['picture'] ?? '',
       );
 
       if (json['purchaseDate'] != null) {
@@ -137,6 +186,7 @@ class Motorcycle extends ChangeNotifier {
           }
         });
       }
+
       if (json['attachments'] != null) {
         json['attachments'].forEach((a) {
           final attachment = Attachment.fromJson(a);
@@ -161,18 +211,22 @@ class Motorcycle extends ChangeNotifier {
     final data = <String, dynamic>{};
     data['name'] = name;
     data['id'] = id;
-    data['odometer'] = odometer.toJson();
+    if (odometer.isValid) {
+      data['odometer'] = odometer.toJson();
+    }
 
     data['make'] = make;
     data['model'] = model;
-    data['year'] = year;
+    if (year != null) {
+      data['year'] = year;
+    }
     data['color'] = color;
     data['immatriculation'] = immatriculation;
     data['vin'] = vin;
 
     data['purchasePrice'] = purchasePrice;
     if (purchaseDate != null) {
-      data['purchaseDate'] = purchaseDate?.toIso8601String() ?? '';
+      data['purchaseDate'] = purchaseDate?.toIso8601String();
     }
     if (purchaseOdometer.isValid) {
       data['purchaseOdometer'] = purchaseOdometer.toJson();
@@ -190,7 +244,7 @@ class Motorcycle extends ChangeNotifier {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return other is Motorcycle && other.id == id;
   }
 

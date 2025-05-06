@@ -22,13 +22,13 @@ import 'package:provider/provider.dart';
 /// A floating button links to the 'add motorcycle' page.
 /// A drawer contains links to settings, etc...
 class GaragePage extends StatefulWidget {
-  GaragePage({Key? key}) : super(key: key);
+  const GaragePage({super.key});
 
   @override
-  _GaragePageState createState() => _GaragePageState();
+  GaragePageState createState() => GaragePageState();
 }
 
-class _GaragePageState extends State<GaragePage> {
+class GaragePageState extends State<GaragePage> {
   bool _isLoading = false;
 
   // FIXME: Cannot show snackbar cleanly in this widget because it creates the scaffold.
@@ -54,7 +54,7 @@ class _GaragePageState extends State<GaragePage> {
     Navigator.push<Motorcycle>(
       context,
       MaterialPageRoute<Motorcycle>(
-          builder: (context) => MotorcycleEditPage(motorcycle: null)),
+          builder: (context) => const MotorcycleEditPage(motorcycle: null)),
     );
   }
 
@@ -79,13 +79,13 @@ class _GaragePageState extends State<GaragePage> {
         itemBuilder: (context) {
           final list = <PopupMenuEntry<MotorcycleSort>>[
             PopupMenuItem(
+              value: null,
+              enabled: false,
               child: Text(
                 AppLocalizations.of(context)!.garage_page_sort_list_header,
               ),
-              value: null,
-              enabled: false,
             ),
-            PopupMenuDivider(),
+            const PopupMenuDivider(),
           ];
 
           for (final sortValue in MotorcycleSort.values) {
@@ -127,10 +127,10 @@ class _GaragePageState extends State<GaragePage> {
           onExport: _exportGarage,
         ),
         floatingActionButton: FloatingActionButton(
-          child: const Icon(Icons.library_add),
           tooltip:
               AppLocalizations.of(context)!.garage_page_add_motorcycle_button,
           onPressed: _addMotorcycle,
+          child: const Icon(Icons.library_add),
         ),
         body: Center(
           child: MotoCardsView(
@@ -145,26 +145,30 @@ class _GaragePageState extends State<GaragePage> {
 
   void _importGarage() async {
     setState(() => _isLoading = true);
+    final local = AppLocalizations.of(context);
+    final garage = Provider.of<GarageModel>(context, listen: false);
+
     final result = await FilePicker.platform
         .pickFiles(type: FileType.custom, allowedExtensions: ['zip']);
     if (result?.files.single.path != null) {
       final zipFile = File(result!.files.single.path!);
-      final garage = Provider.of<GarageModel>(context, listen: false);
       try {
-        final newGarage = await GarageImportExport.Import(zipFile);
+        final newGarage = await GarageImportExport.import(zipFile);
         await _addToGarage(garage, newGarage);
       } catch (error) {
         debugPrint('Import error: ${error.toString()}');
-        _snackBarMsg = Text(AppLocalizations.of(context)!.garage_import_error);
+        _snackBarMsg = Text(local!.garage_import_error);
       }
       await zipFile.delete();
-      GarageImportExport.RemoveTempDirectory();
+      GarageImportExport.removeTempDirectory();
     }
     setState(() => _isLoading = false);
   }
 
   Future<void> _addToGarage(GarageModel garage, GarageModel newGarage) async {
+    final local = AppLocalizations.of(context);
     var nbIgnored = 0;
+
     for (final moto in newGarage.motos) {
       if (garage.motos.contains(moto)) {
         nbIgnored += 1;
@@ -175,17 +179,18 @@ class _GaragePageState extends State<GaragePage> {
       }
     }
     if (nbIgnored > 0) {
-      debugPrint('Garage import ignored ${nbIgnored} motos');
-      _snackBarMsg =
-          Text(AppLocalizations.of(context)!.garage_import_ignored(nbIgnored));
+      debugPrint('Garage import ignored $nbIgnored motos');
+      _snackBarMsg = Text(local!.garage_import_ignored(nbIgnored));
     }
   }
 
   void _exportGarage() async {
+    final local = AppLocalizations.of(context);
     final garage = Provider.of<GarageModel>(context, listen: false);
+
     try {
       setState(() => _isLoading = true);
-      final zipFile = await GarageImportExport.Export(garage);
+      final zipFile = await GarageImportExport.export(garage);
       if (zipFile == null) throw Exception('Failed to create zip file');
       /* FIXME!!!!!
       await Share.shareFiles([zipFile.path],
@@ -195,10 +200,10 @@ class _GaragePageState extends State<GaragePage> {
       await zipFile.delete();
     } catch (error) {
       debugPrint('Export error: ${error.toString()}');
-      _snackBarMsg = Text(AppLocalizations.of(context)!.garage_export_error);
+      _snackBarMsg = Text(local!.garage_export_error);
     }
 
-    GarageImportExport.RemoveTempDirectory();
+    GarageImportExport.removeTempDirectory();
     setState(() => _isLoading = false);
   }
 }

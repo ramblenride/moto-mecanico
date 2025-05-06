@@ -29,7 +29,7 @@ Future<Widget> createGaragePage(GarageModel garage) async {
         locale: config.locale,
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
-        home: GaragePage(),
+        home: const GaragePage(),
       ),
     ),
   );

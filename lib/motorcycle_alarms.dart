@@ -2,11 +2,11 @@ import 'package:moto_mecanico/models/distance.dart';
 import 'package:moto_mecanico/models/motorcycle.dart';
 import 'package:moto_mecanico/models/task.dart';
 
-const ALARM_DISTANCE_YELLOW = Distance(200);
-const ALARM_DISTANCE_RED = Distance(0);
+const alarmDistanceYellow = Distance(200);
+const alarmDistanceRed = Distance(0);
 
-const ALARM_DURATION_YELLOW = Duration(days: 14);
-const ALARM_DURATION_RED = Duration(days: 0);
+const alarmDurationYellow = Duration(days: 14);
+const alarmDurationRed = Duration(days: 0);
 
 enum TaskAlarm { none, yellow, red }
 
@@ -17,9 +17,9 @@ extension MotoAlarmExt on Motorcycle {
     }
 
     final remaining = task.dueOdometer - odometer;
-    if (remaining <= ALARM_DISTANCE_RED) {
+    if (remaining <= alarmDistanceRed) {
       return TaskAlarm.red;
-    } else if (remaining <= ALARM_DISTANCE_YELLOW) {
+    } else if (remaining <= alarmDistanceYellow) {
       return TaskAlarm.yellow;
     }
 
@@ -31,12 +31,12 @@ extension MotoAlarmExt on Motorcycle {
       return TaskAlarm.none;
     }
     final remaining = task.dueDate!
-        .add(Duration(hours: 23, minutes: 59))
+        .add(const Duration(hours: 23, minutes: 59))
         .difference(DateTime.now());
 
-    if (remaining <= ALARM_DURATION_RED) {
+    if (remaining <= alarmDurationRed) {
       return TaskAlarm.red;
-    } else if (remaining <= ALARM_DURATION_YELLOW) {
+    } else if (remaining <= alarmDurationYellow) {
       return TaskAlarm.yellow;
     }
 

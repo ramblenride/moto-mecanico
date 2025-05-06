@@ -51,18 +51,18 @@ class _AddCostDialogState extends State<AddCostDialog> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _CostItem(
-                  Image.asset(IMG_COST_PART),
+                _costItem(
+                  Image.asset(imgCostPart),
                   AppLocalizations.of(context)!.cost_type_parts,
                   () => _addCost(CostType.part),
                 ),
-                _CostItem(
-                  Image.asset(IMG_COST_LABOR),
+                _costItem(
+                  Image.asset(imgCostLabor),
                   AppLocalizations.of(context)!.cost_type_labor,
                   () => _addCost(CostType.labor),
                 ),
-                _CostItem(
-                  Image.asset(IMG_COST_OTHER),
+                _costItem(
+                  Image.asset(imgCostOther),
                   AppLocalizations.of(context)!.cost_type_other,
                   () => _addCost(CostType.other),
                 ),
@@ -101,13 +101,13 @@ class _AddCostDialogState extends State<AddCostDialog> {
     widget.onResult(result);
   }
 
-  Widget _CostItem(Image icon, String title, Function()? action) {
+  Widget _costItem(Image icon, String title, Function()? action) {
     return InkWell(
       onTap: action,
       child: Column(
         children: [
           Container(
-            margin: EdgeInsets.only(right: 5),
+            margin: const EdgeInsets.only(right: 5),
             width: 45,
             height: 45,
             child: icon,
