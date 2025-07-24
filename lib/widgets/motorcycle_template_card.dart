@@ -9,23 +9,19 @@ import 'package:moto_mecanico/models/motorcycle_templates.dart';
 import 'package:moto_mecanico/widgets/motorcycle_template_task_tile.dart';
 
 class MotorcycleTemplateCard extends StatefulWidget {
-  final _MotorcycleTemplateCardState _state;
   final MotorcycleTemplateIndexItem template;
+  final List<TaskTemplate>? selectedTasks;
 
-  MotorcycleTemplateCard({super.key, required this.template})
-      : _state = _MotorcycleTemplateCardState();
+  const MotorcycleTemplateCard(
+      {super.key, required this.template, this.selectedTasks});
 
   @override
-  State<MotorcycleTemplateCard> createState() => _state;
-
-  List<TaskTemplate> getSelectedTasks() {
-    return _state.getSelectedTasks();
-  }
+  State<MotorcycleTemplateCard> createState() => _MotorcycleTemplateCardState();
 }
 
 class _MotorcycleTemplateCardState extends State<MotorcycleTemplateCard> {
   final List<MotorcycleTemplateTaskTile> _taskTiles = [];
-  late final Future<List<TaskTemplate>> _tasks;
+  late Future<List<TaskTemplate>> _tasks;
 
   @override
   void initState() {
@@ -79,21 +75,11 @@ class _MotorcycleTemplateCardState extends State<MotorcycleTemplateCard> {
     );
   }
 
-  List<TaskTemplate> getSelectedTasks() {
-    final tasks = <TaskTemplate>[];
-    for (final tile in _taskTiles) {
-      if (tile.isEnabled()) {
-        tasks.add(tile.task);
-      }
-    }
-    return tasks;
-  }
-
   Widget _buildTaskList(List<TaskTemplate> tasks) {
-    return Column(children: _showSelected());
+    return Column(children: _showSelected(tasks));
   }
 
-  List<Widget> _showSelected() {
+  List<Widget> _showSelected(List<TaskTemplate> tasks) {
     _taskTiles.clear();
     final children = <Widget>[];
     children.add(
@@ -108,7 +94,7 @@ class _MotorcycleTemplateCardState extends State<MotorcycleTemplateCard> {
     );
 
     var i = 0;
-    for (final task in widget.template.tasks) {
+    for (final task in tasks) {
       children.add(_getTaskTile(task, i));
       i++;
     }
@@ -116,11 +102,19 @@ class _MotorcycleTemplateCardState extends State<MotorcycleTemplateCard> {
     return children;
   }
 
-  Widget _getTaskTile(task, taskId) {
+  Widget _getTaskTile(TaskTemplate task, int taskId) {
     final tile = MotorcycleTemplateTaskTile(
-      key: UniqueKey(),
-      task: task,
-    );
+        key: UniqueKey(),
+        task: task,
+        toggleCb: (TaskTemplate t, bool value) {
+          if (widget.selectedTasks != null) {
+            if (value) {
+              widget.selectedTasks!.add(t);
+            } else {
+              widget.selectedTasks!.remove(t);
+            }
+          }
+        });
     _taskTiles.add(tile);
     return tile;
   }
@@ -132,9 +126,12 @@ class _MotorcycleTemplateCardState extends State<MotorcycleTemplateCard> {
       return response.body;
     } else {
       debugPrint(
-          'Failed to download motorcycle task template. Return code: ${response.statusCode}');
-      throw Exception(AppLocalizations.of(context)!
-          .motorcycle_task_template_page_error_loading_motorcycle);
+          'Failed to download the motorcycle task template. Return code: ${response.statusCode}');
+
+      throw Exception(mounted
+          ? AppLocalizations.of(context)!
+              .motorcycle_task_template_page_error_loading_motorcycle
+          : "Failed to download the motorcycle task template.");
     }
   }
 
@@ -145,13 +142,13 @@ class _MotorcycleTemplateCardState extends State<MotorcycleTemplateCard> {
               jsonDecode(jsonString) as Map<String, dynamic>)
           .templates
           .first;
-      widget.template.tasks = moto.tasks; // Cache result
+      return moto.tasks;
     } catch (error) {
-      debugPrint('Failed to parse motorcycle task template file: $error');
-      throw Exception(AppLocalizations.of(context)!
-          .motorcycle_task_template_page_error_loading_motorcycle);
+      debugPrint('Failed to parse the motorcycle task template file: $error');
+      throw Exception(mounted
+          ? AppLocalizations.of(context)!
+              .motorcycle_task_template_page_error_loading_motorcycle
+          : "Failed to parse the motorcycle task template file.");
     }
-
-    return widget.template.tasks;
   }
 }

@@ -42,8 +42,7 @@ const templatesIndexFile = 'motorcycle-service-index.json';
 
 ////////////////////////////////////////////////////////////////////////
 // Feedback
-// FIXME: Move non-assets to a different file. With app name, version, etc
-const emailFeedback = 'ramblenride+motomecanico-android@gmail.com';
+const emailFeedback = 'ramblenride+motomecanico_android@gmail.com';
 // This is the RnR page. Would it be better to create a mention ?
 const twitterFeedbackUrl = 'https://twitter.com/ramblenride';
 const googlePlayUrl =

@@ -13,6 +13,7 @@ import 'package:moto_mecanico/widgets/app_bar_filter.dart';
 import 'package:moto_mecanico/widgets/garage_drawer.dart';
 import 'package:moto_mecanico/widgets/moto_cards_view.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 
 /// This is the initial page shown when opening the application.
 /// It displays a list of the motorcycles in the garage.
@@ -192,11 +193,11 @@ class GaragePageState extends State<GaragePage> {
       setState(() => _isLoading = true);
       final zipFile = await GarageImportExport.export(garage);
       if (zipFile == null) throw Exception('Failed to create zip file');
-      /* FIXME!!!!!
-      await Share.shareFiles([zipFile.path],
-          subject: 'Moto Mecanico - ' +
-              AppLocalizations.of(context)!.garage_page_title);
-*/
+      XFile xzip = XFile(zipFile.path);
+      await Share.shareXFiles([xzip],
+          subject:
+              'Moto Mecanico - ${(mounted && local != null) ? local.garage_page_title : "Garage"}');
+
       await zipFile.delete();
     } catch (error) {
       debugPrint('Export error: ${error.toString()}');

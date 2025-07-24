@@ -23,15 +23,21 @@ class RenewTaskDialog extends StatefulWidget {
   final Function(Task?) onResult;
 
   @override
-  State<StatefulWidget> createState() => _RenewTaskDialogState(task: task);
+  State<StatefulWidget> createState() => _RenewTaskDialogState();
 }
 
 class _RenewTaskDialogState extends State<RenewTaskDialog> {
-  _RenewTaskDialogState({required task}) : newTask = Task.fromRenew(task)!;
+  _RenewTaskDialogState();
 
   DistanceUnit _distanceUnit = DistanceUnit.unitKm;
-  Task newTask;
+  late Task newTask;
   final _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+    newTask = Task.fromRenew(widget.task)!;
+  }
 
   @override
   Widget build(BuildContext context) {

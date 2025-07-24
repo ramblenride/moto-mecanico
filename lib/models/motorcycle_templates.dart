@@ -18,9 +18,7 @@ class MotorcycleTemplate {
     if (json['tasks'] != null) {
       json['tasks'].forEach((v) {
         final task = TaskTemplate.fromJson(v);
-        if (task != null &&
-            (task.name.isNotEmpty) &&
-            (task.description.isNotEmpty)) {
+        if (task != null && task.name.isNotEmpty) {
           tasks.add(task);
         }
       });
@@ -64,22 +62,23 @@ class TaskTemplate {
             links.add(link);
           }
         });
-
-        return TaskTemplate(
-            description: json['description'],
-            distance: Distance(json['km'], DistanceUnit.unitKm),
-            intervalDistance: Distance(json['interalKm'], DistanceUnit.unitKm),
-            intervalMonths: json['intervalMonths'],
-            months: json['months'],
-            name: json['name'],
-            notes: json['notes'] ?? '',
-            technicalLevel: _parseTechnicalLevel(json['technicalLevel']),
-            links: links);
       }
+
+      return TaskTemplate(
+          description: json['description'] ?? '',
+          distance: Distance(json['km'], DistanceUnit.unitKm),
+          intervalDistance: Distance(json['intervalKm'], DistanceUnit.unitKm),
+          intervalMonths: json['intervalMonths'] ?? 0,
+          months: json['months'] ?? 0,
+          name: json['name'],
+          notes: json['notes'] ?? '',
+          technicalLevel: _parseTechnicalLevel(json['technicalLevel'] ?? ''),
+          links: links);
     } catch (e) {
-      debugPrint('Failed to parse task template from JSON');
+      debugPrint('Failed to parse task template from JSON: ${json.toString()}');
       debugPrint(e.toString());
     }
+
     return null;
   }
 
@@ -110,7 +109,7 @@ class TaskLink {
     try {
       return TaskLink(name: json['name'], url: json['url']);
     } catch (e) {
-      debugPrint('Failed to parse JSON link');
+      debugPrint('Failed to parse JSON link: $json');
       debugPrint(e.toString());
       return null;
     }
@@ -136,7 +135,7 @@ class MotorcycleTemplates {
             templates.add(moto);
           }
         } catch (e) {
-          debugPrint('Failed to parse motorcycle task template');
+          debugPrint('Failed to parse motorcycle task template: $m');
           debugPrint(e.toString());
         }
       });

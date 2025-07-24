@@ -23,7 +23,7 @@ import 'package:provider/provider.dart';
 
 enum MotorcycleAction {
   edit,
-  add_template_tasks,
+  addTemplateTasks,
 }
 
 enum PopupEditAction {
@@ -48,7 +48,7 @@ class _MotorcycleViewPageState extends State<MotorcycleViewPage>
   _MotorcycleViewPageState();
 
   late final TabController _tabController;
-  late final DistanceUnit _distanceUnit;
+  DistanceUnit _distanceUnit = DistanceUnit.unitKm;
 
   final List<Task> _selectedTasks = [];
 
@@ -232,7 +232,7 @@ class _MotorcycleViewPageState extends State<MotorcycleViewPage>
             padding: EdgeInsets.zero,
             itemBuilder: (context) => [
               PopupMenuItem(
-                value: MotorcycleAction.add_template_tasks,
+                value: MotorcycleAction.addTemplateTasks,
                 child: Text(AppLocalizations.of(context)!
                     .motorcycle_view_appbar_popop_add_tasks),
               ),
@@ -244,7 +244,7 @@ class _MotorcycleViewPageState extends State<MotorcycleViewPage>
             ],
             onSelected: (value) async {
               switch (value) {
-                case MotorcycleAction.add_template_tasks:
+                case MotorcycleAction.addTemplateTasks:
                   {
                     final result = await Navigator.push<Motorcycle>(
                       context,
@@ -290,7 +290,9 @@ class _MotorcycleViewPageState extends State<MotorcycleViewPage>
               _selectedTasks.clear();
               motorcycle.saveChanges();
             }
-            Navigator.of(context).pop(result);
+            if (context.mounted) {
+              Navigator.of(context).pop(result);
+            }
           },
         );
       },

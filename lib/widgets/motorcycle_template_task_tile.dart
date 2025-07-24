@@ -7,20 +7,15 @@ class MotorcycleTemplateTaskTile extends StatefulWidget {
   final TaskTemplate task;
   final bool _renew;
   final bool _fixedTime;
-  final _MotorcycleTemplateTaskTileState _state;
+  final Function(TaskTemplate, bool)? toggleCb;
 
-  MotorcycleTemplateTaskTile({super.key, required this.task})
+  MotorcycleTemplateTaskTile({super.key, required this.task, this.toggleCb})
       : _renew = (task.intervalDistance.distance ?? 0) > 0 ||
             task.intervalMonths > 0,
-        _fixedTime = (task.distance.distance ?? 0) > 0 || task.months > 0,
-        _state = _MotorcycleTemplateTaskTileState();
+        _fixedTime = (task.distance.distance ?? 0) > 0 || task.months > 0;
 
   @override
-  State<StatefulWidget> createState() => _state;
-
-  bool isEnabled() {
-    return _state.isEnabled();
-  }
+  State<StatefulWidget> createState() => _MotorcycleTemplateTaskTileState();
 }
 
 class _MotorcycleTemplateTaskTileState
@@ -77,6 +72,9 @@ class _MotorcycleTemplateTaskTileState
 
   @override
   Widget build(BuildContext context) {
+    if (widget.toggleCb != null) {
+      widget.toggleCb!(widget.task, _isEnabled);
+    }
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       mainAxisSize: MainAxisSize.max,
@@ -93,14 +91,15 @@ class _MotorcycleTemplateTaskTileState
             value: _isEnabled,
             onChanged: (value) {
               setState(() => _isEnabled = value);
+              if (widget.toggleCb != null) {
+                widget.toggleCb!(widget.task, _isEnabled);
+              }
             },
           ),
         ),
       ],
     );
   }
-
-  bool isEnabled() => _isEnabled;
 
   Widget _buildTaskTile() {
     if (widget.task.notes.trim().isNotEmpty) {

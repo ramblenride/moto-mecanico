@@ -22,31 +22,29 @@ class AttachmentSelectorRow extends StatefulWidget {
   final Function(Attachment) onRemove;
 
   @override
-  State<StatefulWidget> createState() =>
-      _AttachmentSelectorRowState(attachment: attachment);
+  State<StatefulWidget> createState() => _AttachmentSelectorRowState();
 }
 
 class _AttachmentSelectorRowState extends State<AttachmentSelectorRow> {
-  _AttachmentSelectorRowState({required this.attachment});
+  _AttachmentSelectorRowState();
 
-  final Attachment attachment;
   bool _rename = false;
 
   @override
   Widget build(BuildContext context) {
     return Tooltip(
-      message: attachment.url,
+      message: widget.attachment.url,
       child: Row(
         children: [
           Container(
             alignment: Alignment.centerLeft,
             height: 30,
             width: 35,
-            child: _getIcon(attachment.type),
+            child: _getIcon(widget.attachment.type),
           ),
           Expanded(
             child: InkWell(
-              onTap: () => _handleTap(attachment),
+              onTap: () => _handleTap(widget.attachment),
               child: _getTextOrEditor(),
             ),
           ),
@@ -83,7 +81,7 @@ class _AttachmentSelectorRowState extends State<AttachmentSelectorRow> {
                           width: 10,
                         ),
                         Icon(
-                          attachment.copyable
+                          widget.attachment.copyable
                               ? Icons.check_box
                               : Icons.check_box_outline_blank,
                           size: 20,
@@ -102,13 +100,13 @@ class _AttachmentSelectorRowState extends State<AttachmentSelectorRow> {
                     }
                   case AttachmentAction.delete:
                     {
-                      setState(() => widget.onRemove(attachment));
+                      setState(() => widget.onRemove(widget.attachment));
                       break;
                     }
                   case AttachmentAction.copyable:
                     {
-                      setState(
-                          () => attachment.copyable = !attachment.copyable);
+                      setState(() => widget.attachment.copyable =
+                          !widget.attachment.copyable);
                       break;
                     }
                 }
@@ -123,21 +121,21 @@ class _AttachmentSelectorRowState extends State<AttachmentSelectorRow> {
   Widget _getTextOrEditor() {
     if (!_rename) {
       return Text(
-        attachment.name,
+        widget.attachment.name,
         style:
             Theme.of(context).textTheme.propEditorValue.copyWith(fontSize: 18),
       );
     } else {
       return TextFormField(
         autofocus: true,
-        initialValue: attachment.name,
+        initialValue: widget.attachment.name,
         inputFormatters: [
           LengthLimitingTextInputFormatter(16),
         ],
         onFieldSubmitted: (value) => {
           setState(() {
             if (value.isNotEmpty) {
-              attachment.name = value;
+              widget.attachment.name = value;
             }
             _rename = false;
           })
@@ -187,11 +185,11 @@ class _AttachmentSelectorRowState extends State<AttachmentSelectorRow> {
     final uri = Uri.parse(url);
     if (await canLaunchUrl(uri)) {
       final result = await launchUrl(uri);
-      if (!result) {
+      if (!result && mounted) {
         _showOpenAttachmentError(
             '${AppLocalizations.of(context)!.attachment_selector_attachment_error_link_open_failed}\n\n$url');
       }
-    } else {
+    } else if (mounted) {
       _showOpenAttachmentError(
           '${AppLocalizations.of(context)!.attachment_selector_attachment_error_link_unsupported}\n\n$url');
     }
@@ -202,7 +200,7 @@ class _AttachmentSelectorRowState extends State<AttachmentSelectorRow> {
     if (file == null) return;
 
     final result = await OpenFile.open(file.path);
-    if (result.type != ResultType.done) {
+    if (result.type != ResultType.done && mounted) {
       String errorMessage;
       switch (result.type) {
         case ResultType.fileNotFound:

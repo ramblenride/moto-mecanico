@@ -100,7 +100,7 @@ class MotorcycleInfoTab extends StatelessWidget {
                             ),
                           ),
                         ),
-                        RnrDivider,
+                        rnrDivider,
                         Center(
                           child: Text(
                             _getCaredFor(context, distanceUnit, motorcycle),
@@ -108,7 +108,7 @@ class MotorcycleInfoTab extends StatelessWidget {
                             maxLines: 2,
                           ),
                         ),
-                        RnrDivider,
+                        rnrDivider,
                         const SizedBox(height: 5),
                         _getInfoRow(
                           context,
@@ -147,7 +147,7 @@ class MotorcycleInfoTab extends StatelessWidget {
                           propNameStyle,
                         ),
                         const SizedBox(height: 5),
-                        RnrDivider,
+                        rnrDivider,
                         const SizedBox(height: 5),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -160,7 +160,8 @@ class MotorcycleInfoTab extends StatelessWidget {
                             ),
                             const SizedBox(width: 12),
                             Text(
-                              _formatCurrency(_getSpendingCost(motorcycle), smallCurrencyFormat, largeCurrencyFormat),
+                              _formatCurrency(_getSpendingCost(motorcycle),
+                                  smallCurrencyFormat, largeCurrencyFormat),
                               style: Theme.of(context)
                                   .textTheme
                                   .selectorWidgetHeader
@@ -265,7 +266,8 @@ class MotorcycleInfoTab extends StatelessWidget {
 
   String _getPurchaseDateStr(BuildContext context, Motorcycle motorcycle) {
     if (motorcycle.purchaseDate != null) {
-      return DateFormat(ConfigWidget.of(context).dateFormat).format(motorcycle.purchaseDate!);
+      return DateFormat(ConfigWidget.of(context).dateFormat)
+          .format(motorcycle.purchaseDate!);
     }
     return '---';
   }

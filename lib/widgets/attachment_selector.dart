@@ -158,12 +158,14 @@ class _AttachmentSelectorState extends State<AttachmentSelector> {
         });
       } catch (error) {
         debugPrint('Failed to add attachment: ${error.toString()}');
-        final snackBar = SnackBar(
-          content: Text(
-            '${AppLocalizations.of(context)!.snackbar_storage_error}: ${error.toString()}',
-          ),
-        );
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        if (mounted) {
+          final snackBar = SnackBar(
+            content: Text(
+              '${AppLocalizations.of(context)!.snackbar_storage_error}: ${error.toString()}',
+            ),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        }
       }
     }
   }

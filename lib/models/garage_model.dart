@@ -15,12 +15,10 @@ enum MotorcycleSort {
 class GarageModel extends ChangeNotifier {
   final List<Motorcycle> _motos = [];
   final Map<String, VoidCallback> _listeners = {};
-  GarageStorage? _storage;
+  GarageStorage? storage;
   Function(Error)? _onErrorCb; // FIXME: Use a event stream instead?
   bool _loading = false;
 
-  GarageStorage? get storage => _storage;
-  set storage(GarageStorage? storage) => _storage = storage;
   set onErrorCb(Function(Error) onErrorCb) => _onErrorCb = onErrorCb;
 
   /// Returns the complete unsorted list of motorcycles in the garage
@@ -80,9 +78,9 @@ class GarageModel extends ChangeNotifier {
       moto.addListener(listener);
 
       notifyListeners();
-      if (_loading == false && _storage != null) {
+      if (_loading == false && storage != null) {
         try {
-          await _storage!.addMotorcycle(this, moto);
+          await storage!.addMotorcycle(this, moto);
         } on Error catch (error) {
           _handleError(error, 'Failed to save motorcycle to storage.');
         }
@@ -95,14 +93,14 @@ class GarageModel extends ChangeNotifier {
     _motos.remove(moto);
 
     notifyListeners();
-    if (_storage != null) {
+    if (storage != null) {
       var listener = _listeners[moto.id];
       if (listener != null) {
         moto.removeListener(listener);
         _listeners.remove(moto.id);
       }
       try {
-        _storage!.deleteMotorcycle(this, moto);
+        storage!.deleteMotorcycle(this, moto);
       } on Error catch (error) {
         _handleError(error, 'Failed to remove motorcycle from storage.');
       }
@@ -110,10 +108,10 @@ class GarageModel extends ChangeNotifier {
   }
 
   Future<void> loadFromIndex() async {
-    if (_storage != null) {
+    if (storage != null) {
       _loading = true;
       try {
-        await _storage!.loadGarage(this);
+        await storage!.loadGarage(this);
       } on Error catch (error) {
         _handleError(error, 'Failed to load garage.');
       }

@@ -36,19 +36,11 @@ class TaskEditPage extends StatefulWidget {
   final Task? task;
 
   @override
-  State<StatefulWidget> createState() => _TaskEditPageState(task: task);
+  State<StatefulWidget> createState() => _TaskEditPageState();
 }
 
 class _TaskEditPageState extends State<TaskEditPage> {
-  _TaskEditPageState({Task? task}) : _isNew = false {
-    if (task == null) {
-      _isNew = true;
-
-      // Correctly create the task to track images/attachments
-      // The task will be removed if the user leaves the page without adding it.
-      _task = Task(name: '');
-    }
-  }
+  _TaskEditPageState() : _isNew = false;
 
   final _formKey = GlobalKey<FormState>();
   late final ScrollController _scrollController;
@@ -63,6 +55,16 @@ class _TaskEditPageState extends State<TaskEditPage> {
   void initState() {
     super.initState();
     _scrollController = ScrollController();
+
+    if (widget.task == null) {
+      _isNew = true;
+
+      // Correctly create the task to track images/attachments
+      // The task will be removed if the user leaves the page without adding it.
+      _task = Task(name: '');
+    } else {
+      _task = widget.task!;
+    }
   }
 
   @override
@@ -214,7 +216,7 @@ class _TaskEditPageState extends State<TaskEditPage> {
               ),
             ],
           ),
-          RnrDivider,
+          rnrDivider,
           Row(
             children: [
               Expanded(
@@ -240,7 +242,7 @@ class _TaskEditPageState extends State<TaskEditPage> {
               ),
             ],
           ),
-          RnrDivider,
+          rnrDivider,
           PropertyEditorRow(
             name: AppLocalizations.of(context)!
                 .motorcycle_edit_page_name_prop_tech_level,
@@ -266,9 +268,9 @@ class _TaskEditPageState extends State<TaskEditPage> {
           LabelSelector(activeLabels: _task.labels),
         ],
       ),
-      RnrDivider,
+      rnrDivider,
       _task.closed ? _closedTaskSchedule() : _openTaskSchedule(),
-      RnrDivider,
+      rnrDivider,
       PropertyEditorCard(
         children: [
           CostSelector(
@@ -282,7 +284,7 @@ class _TaskEditPageState extends State<TaskEditPage> {
           ),
         ],
       ),
-      RnrDivider,
+      rnrDivider,
       PropertyEditorCard(
         children: [_buildNoteSelector()],
       ),
@@ -531,13 +533,15 @@ class _TaskEditPageState extends State<TaskEditPage> {
     _currencySymbol = config.currencySymbol;
     _dateFormat = DateFormat(config.dateFormat);
 
-    return WillPopScope(
-      onWillPop: () async {
-        if (_isNew) {
-          _deleteTask();
-          return true;
-        } else {
-          return _validateAndSaveTask();
+    return PopScope(
+      canPop: true,
+      onPopInvoked: (bool iDidPop) {
+        if (iDidPop) {
+          if (_isNew) {
+            _deleteTask();
+          } else {
+            _validateAndSaveTask();
+          }
         }
       },
       child: Scaffold(
@@ -643,7 +647,7 @@ class _TaskEditPageState extends State<TaskEditPage> {
           }
         }
         widget.motorcycle.saveChanges();
-        Navigator.pop(context, true);
+        if (mounted) Navigator.pop(context, true);
       }
     }
   }
@@ -672,7 +676,7 @@ class _TaskEditPageState extends State<TaskEditPage> {
     );
     if (result != null && result) {
       _deleteTask();
-      Navigator.pop(context, true);
+      if (mounted) Navigator.pop(context, true);
     }
   }
 

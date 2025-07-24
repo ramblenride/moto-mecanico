@@ -29,13 +29,10 @@ class NoteSelectorRow extends StatefulWidget {
   final int maxLines;
 
   @override
-  State<NoteSelectorRow> createState() => _NoteSelectorRowState(note: note);
+  State<NoteSelectorRow> createState() => _NoteSelectorRowState();
 }
 
 class _NoteSelectorRowState extends State<NoteSelectorRow> {
-  _NoteSelectorRowState({this.note});
-
-  final Note? note;
   final _formKey = GlobalKey<FormState>();
   late final FocusNode _focusNode;
 
@@ -69,7 +66,7 @@ class _NoteSelectorRowState extends State<NoteSelectorRow> {
       Form(
         key: _formKey,
         child: NoteFormField(
-          note: note,
+          note: widget.note,
           focusNode: _focusNode,
           onSaved: widget.onSaved,
           validator: (dynamic) => null,
@@ -87,9 +84,9 @@ class _NoteSelectorRowState extends State<NoteSelectorRow> {
     final dateFormat = DateFormat(config.dateFormat);
     return Row(
       children: [
-        note != null
+        widget.note != null
             ? Text(
-                '${AppLocalizations.of(context)!.note_last_updated}: ${dateFormat.format(note!.lastUpdate)}',
+                '${AppLocalizations.of(context)!.note_last_updated}: ${dateFormat.format(widget.note!.lastUpdate)}',
                 style: Theme.of(context)
                     .textTheme
                     .propEditorHint
@@ -112,13 +109,14 @@ class _NoteSelectorRowState extends State<NoteSelectorRow> {
               switch (value) {
                 case NoteAction.delete:
                   {
-                    widget.onRemove(note);
+                    widget.onRemove(widget.note);
                     break;
                   }
                 case NoteAction.copyable:
                   {
-                    if (note != null) {
-                      setState(() => note!.copyable = !note!.copyable);
+                    if (widget.note != null) {
+                      setState(
+                          () => widget.note!.copyable = !widget.note!.copyable);
                     }
                     break;
                   }
@@ -151,7 +149,7 @@ class _NoteSelectorRowState extends State<NoteSelectorRow> {
                 width: 10,
               ),
               Icon(
-                (note != null && note!.copyable)
+                (widget.note != null && widget.note!.copyable)
                     ? Icons.check_box
                     : Icons.check_box_outline_blank,
                 size: 20,

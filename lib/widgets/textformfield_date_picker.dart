@@ -35,11 +35,11 @@ class TextFormFieldDatePicker extends StatefulWidget {
     this.focusNode,
     this.onDateChanged,
     this.onSaved,
-  })  : assert(!firstDate.isAfter(lastDate),
+  }) : assert(!firstDate.isAfter(lastDate),
             'lastDate must be on or after firstDate');
 
   @override
-  _TextFormFieldDatePicker createState() => _TextFormFieldDatePicker();
+  State<TextFormFieldDatePicker> createState() => _TextFormFieldDatePicker();
 }
 
 class _TextFormFieldDatePicker extends State<TextFormFieldDatePicker> {

@@ -1,18 +1,16 @@
 class Note {
+  bool copyable;
   String _name;
   String _text;
-  bool _copyable;
   DateTime _lastUpdate;
 
-  Note({required name, required text, copyable = false})
+  Note({required name, required text, this.copyable = false})
       : _lastUpdate = DateTime.now(),
         _name = name,
-        _text = text,
-        _copyable = copyable;
+        _text = text;
 
   String get name => _name;
   String get text => _text;
-  bool get copyable => _copyable;
   DateTime get lastUpdate => _lastUpdate;
 
   set name(String name) {
@@ -29,14 +27,10 @@ class Note {
     }
   }
 
-  set copyable(bool copyable) {
-    _copyable = copyable;
-  }
-
   Note.from(Note note)
-      : _name = note.name,
+      : copyable = note.copyable,
+        _name = note.name,
         _text = note.text,
-        _copyable = note.copyable,
         _lastUpdate = note.lastUpdate;
 
   factory Note.fromJson(Map<String, dynamic> json) {
@@ -59,7 +53,7 @@ class Note {
     final data = <String, dynamic>{};
     data['name'] = _name;
     data['text'] = _text;
-    data['copyable'] = _copyable;
+    data['copyable'] = copyable;
     data['lastUpdate'] = _lastUpdate.toIso8601String();
     return data;
   }

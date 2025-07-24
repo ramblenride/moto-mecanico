@@ -20,13 +20,12 @@ class CostSelectorRow extends StatefulWidget {
   final Function onUpdate;
 
   @override
-  State<StatefulWidget> createState() => _CostSelectorRowState(cost: cost);
+  State<StatefulWidget> createState() => _CostSelectorRowState();
 }
 
 class _CostSelectorRowState extends State<CostSelectorRow> {
-  _CostSelectorRowState({required this.cost});
+  _CostSelectorRowState();
 
-  final Cost cost;
   final _formKey = GlobalKey<FormState>();
   bool _edit = false;
   late final TextStyle _textStyle;
@@ -88,7 +87,7 @@ class _CostSelectorRowState extends State<CostSelectorRow> {
                         Text(AppLocalizations.of(context)!.renewable),
                         const SizedBox(width: 10),
                         Icon(
-                          cost.copyable
+                          widget.cost.copyable
                               ? Icons.check_box
                               : Icons.check_box_outline_blank,
                           size: 20,
@@ -108,12 +107,13 @@ class _CostSelectorRowState extends State<CostSelectorRow> {
                   case CostAction.delete:
                     {
                       setState(() => _edit = false);
-                      widget.onRemove(cost);
+                      widget.onRemove(widget.cost);
                       break;
                     }
                   case CostAction.copyable:
                     {
-                      setState(() => cost.copyable = !cost.copyable);
+                      setState(
+                          () => widget.cost.copyable = !widget.cost.copyable);
                       break;
                     }
                 }
@@ -139,13 +139,13 @@ class _CostSelectorRowState extends State<CostSelectorRow> {
   Widget _getNameTextOrEditor() {
     if (!_edit) {
       return Text(
-        cost.description,
+        widget.cost.description,
         style: _textStyle,
       );
     } else {
       return TextFormField(
         autofocus: true,
-        initialValue: cost.description,
+        initialValue: widget.cost.description,
         decoration: InputDecoration(
           hintText:
               AppLocalizations.of(context)!.cost_selector_row_hint_description,
@@ -158,7 +158,7 @@ class _CostSelectorRowState extends State<CostSelectorRow> {
         onFieldSubmitted: (value) => _saveCost(),
         onSaved: (value) {
           if (value != null && value.isNotEmpty) {
-            cost.description = value;
+            widget.cost.description = value;
           }
         },
       );
@@ -170,15 +170,16 @@ class _CostSelectorRowState extends State<CostSelectorRow> {
       final formatter = NumberFormat.compact();
 
       return Text(
-        cost.value > 9999
-            ? formatter.format(cost.value)
-            : cost.value.toString(),
+        widget.cost.value > 9999
+            ? formatter.format(widget.cost.value)
+            : widget.cost.value.toString(),
         textAlign: TextAlign.right,
         style: _textStyle,
       );
     } else {
       return TextFormField(
-        initialValue: cost.value != 0 ? cost.value.toString() : '',
+        initialValue:
+            widget.cost.value != 0 ? widget.cost.value.toString() : '',
         decoration: InputDecoration(
           hintText: AppLocalizations.of(context)!.cost_selector_row_hint_cost,
           hintStyle: _hintStyle,
@@ -193,7 +194,7 @@ class _CostSelectorRowState extends State<CostSelectorRow> {
         onFieldSubmitted: (value) => _saveCost(),
         onSaved: (value) {
           if (value != null && value.isNotEmpty) {
-            cost.value = int.parse(value);
+            widget.cost.value = int.parse(value);
           }
         },
       );

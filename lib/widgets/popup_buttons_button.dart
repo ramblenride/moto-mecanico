@@ -52,7 +52,7 @@ class PopupButtonsButton<T> extends StatefulWidget {
     this.color,
     this.borderColor,
     this.selectedColor,
-  })  : assert(items.isNotEmpty);
+  }) : assert(items.isNotEmpty);
 
   /// The list of items to diaplay
   final List<PopupButtonsItem<T>> items;
@@ -104,7 +104,7 @@ class PopupButtonsButton<T> extends StatefulWidget {
   final Color? selectedColor;
 
   @override
-  _PopupButtonsButtonState<T> createState() => _PopupButtonsButtonState<T>();
+  State<PopupButtonsButton<T>> createState() => _PopupButtonsButtonState<T>();
 }
 
 class _PopupButtonsButtonState<T> extends State<PopupButtonsButton<T>>

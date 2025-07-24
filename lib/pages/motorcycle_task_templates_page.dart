@@ -35,6 +35,7 @@ class _MotorcycleTaskTemplatePageState
 
   bool _clearSelected;
   late final Future<MotorcycleTemplateIndex> _templateIndex;
+  final List<TaskTemplate> _selectedTasks = [];
   MotorcycleTemplateIndexItem? _selected;
   MotorcycleTemplateCard? _motoCard;
 
@@ -111,31 +112,38 @@ class _MotorcycleTaskTemplatePageState
   }
 
   Widget _buildTemplateSelector(List<MotorcycleTemplateIndexItem> templates) {
-    final items = <String>[];
+    // FIXME: Clean this up
+    //final items = <Widget>[];
 
+    /*
     for (final template in templates) {
-      items.add(template.name);
-      //items.add(DropdownMenuItem(
-      //  child: Text(template.name),
-      //  value: template,
-      //));
+      //items.add(template.name);
+      items.add(DropdownMenuItem(
+        value: template,
+        child: Text(template.name),
+      ));
     }
+    */
 
     final children = <Widget>[
       const Padding(padding: EdgeInsets.only(top: 8)),
       DropdownSearch<String>(
-        items: items,
+        items: templates.map((t) => t.name).toList(),
         dropdownDecoratorProps: DropDownDecoratorProps(
           dropdownSearchDecoration: InputDecoration(
             hintText: AppLocalizations.of(context)!
                 .motorcycle_task_template_page_search_hint,
           ),
         ),
-        //selectedItem: _getInitialSelection(templates),
+        selectedItem: _getInitialSelection(templates),
         onChanged: (value) {
           setState(() {
-            if (value == null) _clearSelected = true;
-            //_setSelection(value);
+            if (value == null) {
+              _clearSelected = true;
+              _setSelection(null);
+            } else {}
+            _setSelection(
+                templates.firstWhere((element) => element.name == value));
           });
         },
         /*
@@ -156,14 +164,12 @@ class _MotorcycleTaskTemplatePageState
             result = Iterable<int>.generate(items.length).toList();
           }
           return result;
-        }*/
+        }
+        */
       ),
     ];
+
     if (_selected != null) {
-      _motoCard = MotorcycleTemplateCard(
-        key: UniqueKey(),
-        template: _selected!,
-      );
       children.add(
         Text(
           _selected!.description,
@@ -172,6 +178,11 @@ class _MotorcycleTaskTemplatePageState
           style: Theme.of(context).textTheme.taskCardDescription,
         ),
       );
+      _selectedTasks.clear();
+      _motoCard = MotorcycleTemplateCard(
+          key: ValueKey(_selected!.name), // Ensures a new widget instance
+          template: _selected!,
+          selectedTasks: _selectedTasks);
       children.add(_motoCard!);
     }
     children.add(const SizedBox(height: 16));
@@ -206,31 +217,31 @@ class _MotorcycleTaskTemplatePageState
 
   void _addSelectedTasks() {
     if (_selected?.tasks == null || _motoCard == null) return;
-    for (final template in _motoCard!.getSelectedTasks()) {
-      _addTemplateTaskToMoto(widget.motorcycle, template);
+    for (final taskTemplate in _selectedTasks) {
+      _addTemplateTaskToMoto(widget.motorcycle, taskTemplate);
     }
   }
 
   void _addTemplateTaskToMoto(Motorcycle moto, TaskTemplate templateTask) {
     final motoTask = Task(
-      name: templateTask.name,
-      description: templateTask.description,
-      technicalLevel: templateTask.technicalLevel,
-      notes: templateTask.notes.isNotEmpty
-          ? [
-              Note(
-                name: AppLocalizations.of(context)!
-                    .motorcycle_task_template_page_note_name,
-                text: templateTask.notes,
-                copyable: true,
-              )
-            ]
-          : [],
-      dueOdometer: _getDueOdometer(moto, templateTask),
-      dueDate: _getDueDate(moto, templateTask),
-      recurringMonths: templateTask.intervalMonths,
-      recurringOdometer: templateTask.intervalDistance,
-    );
+        name: templateTask.name,
+        description: templateTask.description,
+        technicalLevel: templateTask.technicalLevel,
+        notes: templateTask.notes.isNotEmpty
+            ? [
+                Note(
+                  name: AppLocalizations.of(context)!
+                      .motorcycle_task_template_page_note_name,
+                  text: templateTask.notes,
+                  copyable: true,
+                )
+              ]
+            : [],
+        dueOdometer: _getDueOdometer(moto, templateTask),
+        dueDate: _getDueDate(moto, templateTask),
+        recurringMonths: templateTask.intervalMonths,
+        recurringOdometer: templateTask.intervalDistance,
+        attachments: []);
 
     for (final link in templateTask.links) {
       motoTask.attachments.add(
@@ -246,29 +257,28 @@ class _MotorcycleTaskTemplatePageState
     moto.addTask(motoTask);
   }
 
-  void _setSelection(MotorcycleTemplateIndexItem template) {
+  void _setSelection(MotorcycleTemplateIndexItem? template) {
     _selected = template;
   }
 
-  String _getInitialSelection(List<MotorcycleTemplateIndexItem> templates) {
+  String? _getInitialSelection(List<MotorcycleTemplateIndexItem> templates) {
     if (_clearSelected == false &&
         _selected == null &&
         templates.isNotEmpty == true &&
         widget.motorcycle.make.isNotEmpty == true &&
         widget.motorcycle.model.isNotEmpty == true) {
       _selected = templates.firstWhere(
-        (template) =>
-            template.name
-                .toLowerCase()
-                .contains(widget.motorcycle.make.toLowerCase()) &&
-            template.name
-                .toLowerCase()
-                .contains(widget.motorcycle.model.toLowerCase()),
-        //orElse: () => null);
-      );
-      _setSelection(_selected!);
+          (template) =>
+              template.name
+                  .toLowerCase()
+                  .contains(widget.motorcycle.make.toLowerCase()) &&
+              template.name
+                  .toLowerCase()
+                  .contains(widget.motorcycle.model.toLowerCase()),
+          orElse: () => templates.first);
+      _setSelection(_selected);
     }
-    return _selected!.name;
+    return _selected?.name;
   }
 
   // Returns the next scheduled service based on distance.
@@ -323,8 +333,12 @@ class _MotorcycleTaskTemplatePageState
     if (response.statusCode == 200) {
       return response.body;
     } else {
-      throw Exception(AppLocalizations.of(context)!
-          .motorcycle_task_template_page_error_loading_index);
+      debugPrint(
+          'Failed to download the template file: ${response.statusCode}');
+      throw Exception(mounted
+          ? AppLocalizations.of(context)!
+              .motorcycle_task_template_page_error_loading_index
+          : "Template download error");
     }
   }
 
@@ -335,8 +349,10 @@ class _MotorcycleTaskTemplatePageState
           jsonDecode(jsonString) as Map<String, dynamic>);
     } catch (error) {
       debugPrint('Failed to parse motorcycle index: $error');
-      throw Exception(AppLocalizations.of(context)!
-          .motorcycle_task_template_page_error_loading_index);
+      throw Exception(mounted
+          ? AppLocalizations.of(context)!
+              .motorcycle_task_template_page_error_loading_index
+          : "Template parsing error");
     }
   }
 

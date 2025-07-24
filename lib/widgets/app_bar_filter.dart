@@ -26,7 +26,7 @@ class AppBarFilter extends StatefulWidget implements PreferredSizeWidget {
   final Size preferredSize;
 
   @override
-  _AppBarFilterState createState() => _AppBarFilterState();
+  State<AppBarFilter> createState() => _AppBarFilterState();
 }
 
 class _AppBarFilterState extends State<AppBarFilter> {

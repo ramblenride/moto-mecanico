@@ -16,16 +16,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class MotoLogApp extends StatefulWidget {
   final SharedPreferences preferences;
-  final Configuration config;
-  final Locale locale;
-  final LabelsModel labels;
 
-  const MotoLogApp(
-      {super.key,
-      required this.preferences,
-      required this.config,
-      required this.locale,
-      required this.labels});
+  const MotoLogApp({super.key, required this.preferences});
 
   @override
   State<StatefulWidget> createState() => _MotoLogAppState();
@@ -38,28 +30,29 @@ class MotoLogApp extends StatefulWidget {
 }
 
 class _MotoLogAppState extends State<MotoLogApp> {
-  Configuration _config = Configuration('en');
-  Future? _initialized;
+  Configuration? _config;
   LabelsModel? _labels;
   GarageModel? _garage;
   Locale? _locale;
 
   void applyConfiguration() {
-    setState(() {
-      _locale = _config.locale;
-    });
+    if (_config != null) {
+      setState(() {
+        _locale = _config!.locale;
+      });
+    }
   }
 
   Future<void> _loadConfig() async {
     _config = Configuration(await findSystemLocale());
-    await _config.loadConfig();
-    _config.packageInfo = await PackageInfo.fromPlatform();
-    _locale = _config.locale;
+    await _config!.loadConfig();
+    _config!.packageInfo = await PackageInfo.fromPlatform();
+    _locale = _config!.locale;
   }
 
   Future<void> _loadLabels() async {
     _labels = LabelsModel();
-    await _labels?.loadFromStorage();
+    await _labels!.loadFromStorage();
   }
 
   Future<void> _setGarage() async {
@@ -67,7 +60,7 @@ class _MotoLogAppState extends State<MotoLogApp> {
     final garageStorage = GarageStorage();
     garageStorage.storage =
         LocalFileStorage(baseDir: await GarageStorage.getBaseDir());
-    _garage?.storage = garageStorage;
+    _garage!.storage = garageStorage;
   }
 
   Future<bool> _initConfiguration() async {
@@ -78,19 +71,13 @@ class _MotoLogAppState extends State<MotoLogApp> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    _initialized = _initConfiguration();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: _initialized,
+        future: _initConfiguration(),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (snapshot.hasData) {
             return ConfigWidget(
-              config: _config,
+              config: _config!,
               child: MultiProvider(
                   providers: [
                     ChangeNotifierProvider.value(
@@ -102,12 +89,12 @@ class _MotoLogAppState extends State<MotoLogApp> {
                   ],
                   builder: (context, widget) {
                     return MaterialApp(
-                      title: _config.packageInfo?.appName ?? '',
-                      darkTheme: Theme.of(context).RnrDarkTheme,
+                      title: _config!.packageInfo?.appName ?? '',
+                      darkTheme: Theme.of(context).rnrDarkTheme,
                       themeMode: ThemeMode.dark,
                       home: const GaragePage(),
                       locale: _locale,
-                      localeListResolutionCallback: _getLocale,
+                      //localeListResolutionCallback: _getLocale,
                       localizationsDelegates:
                           AppLocalizations.localizationsDelegates,
                       supportedLocales: AppLocalizations.supportedLocales,
@@ -127,6 +114,8 @@ class _MotoLogAppState extends State<MotoLogApp> {
         });
   }
 
+// FIXME: Do we need this?
+/*
   Locale? _getLocale(
       List<Locale>? deviceLocale, Iterable<Locale> supportedLocales) {
     if (deviceLocale == null || deviceLocale.isEmpty) return null;
@@ -141,4 +130,5 @@ class _MotoLogAppState extends State<MotoLogApp> {
                 devLocale.languageCode.split(RegExp(r'[_-]'))[0],
             orElse: () => const Locale('en'));
   }
+  */
 }

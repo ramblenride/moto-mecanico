@@ -16,7 +16,8 @@ import 'package:moto_mecanico/widgets/property_editor_row.dart';
 import 'package:moto_mecanico/widgets/textformfield_date_picker.dart';
 
 class CompleteTaskDialog extends StatefulWidget {
-  const CompleteTaskDialog({super.key, 
+  const CompleteTaskDialog({
+    super.key,
     required this.motorcycle,
     required this.tasks,
     required this.onResult,
@@ -27,13 +28,12 @@ class CompleteTaskDialog extends StatefulWidget {
   final Function(bool) onResult;
 
   @override
-  State<StatefulWidget> createState() => _CompleteTaskDialogState(tasks: tasks);
+  State<StatefulWidget> createState() => _CompleteTaskDialogState();
 }
 
 class _CompleteTaskDialogState extends State<CompleteTaskDialog> {
-  _CompleteTaskDialogState({required this.tasks});
+  _CompleteTaskDialogState();
 
-  final List<Task> tasks;
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -59,7 +59,7 @@ class _CompleteTaskDialogState extends State<CompleteTaskDialog> {
                 ),
                 child: Text(
                   AppLocalizations.of(context)!
-                      .complete_task_dialog_title(tasks.length),
+                      .complete_task_dialog_title(widget.tasks.length),
                   style: Theme.of(context).textTheme.dialogHeader,
                   textAlign: TextAlign.center,
                 ),
@@ -87,7 +87,7 @@ class _CompleteTaskDialogState extends State<CompleteTaskDialog> {
                               lastDate: DateTime(2099, 12, 31),
                               dateFormat: dateFormat,
                               onSaved: (selectedDate) {
-                                for (final task in tasks) {
+                                for (final task in widget.tasks) {
                                   task.closedDate = selectedDate;
                                 }
                               },
@@ -116,7 +116,7 @@ class _CompleteTaskDialogState extends State<CompleteTaskDialog> {
                                         ? int.parse(value)
                                         : null,
                                     distanceUnit);
-                                for (final task in tasks) {
+                                for (final task in widget.tasks) {
                                   task.closedOdometer = closedValue;
                                 }
                               },
@@ -135,13 +135,14 @@ class _CompleteTaskDialogState extends State<CompleteTaskDialog> {
                                       .task_edit_page_hint_prop_executor),
                               textAlign: TextAlign.end,
                               style: propValueStyle,
-                              initialValue: tasks.first.executor.toString(),
+                              initialValue:
+                                  widget.tasks.first.executor.toString(),
                               inputFormatters: [
                                 LengthLimitingTextInputFormatter(32),
                               ],
                               onSaved: (value) {
                                 if (value != null) {
-                                  for (final task in tasks) {
+                                  for (final task in widget.tasks) {
                                     task.executor = value;
                                   }
                                 }
@@ -160,7 +161,7 @@ class _CompleteTaskDialogState extends State<CompleteTaskDialog> {
                               maxLines: 5,
                               onSaved: (value) {
                                 if (value != null) {
-                                  for (final task in tasks) {
+                                  for (final task in widget.tasks) {
                                     task.notes.add(Note.from(value));
                                   }
                                 }
@@ -187,7 +188,7 @@ class _CompleteTaskDialogState extends State<CompleteTaskDialog> {
                                     Theme.of(context).textTheme.dialogButton),
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
-                                for (final task in tasks) {
+                                for (final task in widget.tasks) {
                                   task.closed = true;
                                 }
                                 _formKey.currentState!.save();

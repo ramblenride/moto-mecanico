@@ -109,7 +109,6 @@ class FeedbackDialog extends StatelessWidget {
   }
 
   void _ratePlayStore() async {
-    // FIXME: Use play app instead of URL?
     await launchUrlString(googlePlayUrl);
   }
 }

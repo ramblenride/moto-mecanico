@@ -14,11 +14,6 @@ class LabelSelector extends StatefulWidget {
 }
 
 class _LabelSelectorState extends State<LabelSelector> {
-  _LabelSelectorState() {
-    activeLabels = widget.activeLabels;
-  }
-
-  List<int> activeLabels = [];
   bool _expanded = false;
 
   @override
@@ -70,7 +65,7 @@ class _LabelSelectorState extends State<LabelSelector> {
     const indicatorWidth = 28.0;
     var indicators = <Widget>[];
 
-    for (final id in activeLabels) {
+    for (final id in widget.activeLabels) {
       indicators.add(
         Container(
           decoration: BoxDecoration(
@@ -100,7 +95,7 @@ class _LabelSelectorState extends State<LabelSelector> {
         const Spacer(),
       ];
 
-      if (activeLabels.contains(label.key)) {
+      if (widget.activeLabels.contains(label.key)) {
         row.add(const Icon(Icons.check, color: Colors.white));
       }
 
@@ -109,10 +104,10 @@ class _LabelSelectorState extends State<LabelSelector> {
         child: InkWell(
           onTap: () {
             setState(() {
-              if (activeLabels.contains(label.value.id)) {
-                activeLabels.remove(label.value.id);
+              if (widget.activeLabels.contains(label.value.id)) {
+                widget.activeLabels.remove(label.value.id);
               } else {
-                activeLabels.add(label.value.id);
+                widget.activeLabels.add(label.value.id);
               }
             });
           },

@@ -18,14 +18,13 @@ class RecurringTaskDialog extends StatefulWidget {
   final Function(bool) onResult;
 
   @override
-  State<StatefulWidget> createState() => _RecurringTaskDialogState(task: task);
+  State<StatefulWidget> createState() => _RecurringTaskDialogState();
 }
 
 class _RecurringTaskDialogState extends State<RecurringTaskDialog> {
-  _RecurringTaskDialogState({required this.task});
+  _RecurringTaskDialogState();
 
   DistanceUnit _distanceUnit = DistanceUnit.unitKm;
-  final Task task;
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -69,8 +68,8 @@ class _RecurringTaskDialogState extends State<RecurringTaskDialog> {
                               .recurring_task_dialog_duration_prop_hint),
                       textAlign: TextAlign.end,
                       style: propValueStyle,
-                      initialValue: task.recurringMonths > 0
-                          ? task.recurringMonths.toString()
+                      initialValue: widget.task.recurringMonths > 0
+                          ? widget.task.recurringMonths.toString()
                           : '',
                       keyboardType: TextInputType.number,
                       inputFormatters: [
@@ -78,7 +77,7 @@ class _RecurringTaskDialogState extends State<RecurringTaskDialog> {
                         LengthLimitingTextInputFormatter(8),
                       ],
                       onSaved: (value) {
-                        task.recurringMonths =
+                        widget.task.recurringMonths =
                             (value != null && value.isNotEmpty)
                                 ? int.parse(value)
                                 : 0;
@@ -100,7 +99,7 @@ class _RecurringTaskDialogState extends State<RecurringTaskDialog> {
                               .recurring_task_dialog_distance_prop_hint),
                       textAlign: TextAlign.end,
                       style: propValueStyle,
-                      initialValue: task.recurringOdometer
+                      initialValue: widget.task.recurringOdometer
                           .toUnit(_distanceUnit)
                           .toString(),
                       keyboardType: TextInputType.number,
@@ -109,7 +108,7 @@ class _RecurringTaskDialogState extends State<RecurringTaskDialog> {
                         LengthLimitingTextInputFormatter(8),
                       ],
                       onSaved: (value) {
-                        task.recurringOdometer = Distance(
+                        widget.task.recurringOdometer = Distance(
                             (value != null && value.isNotEmpty)
                                 ? int.parse(value)
                                 : null,

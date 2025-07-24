@@ -35,7 +35,7 @@ class RnrColors {
 }
 
 extension RnrThemes on ThemeData {
-  ThemeData get RnrDarkTheme {
+  ThemeData get rnrDarkTheme {
     return ThemeData(
       useMaterial3: false,
       brightness: Brightness.dark,
@@ -133,7 +133,7 @@ extension RnrThemes on ThemeData {
   }
 }
 
-const RnrDivider = Divider(
+const rnrDivider = Divider(
   thickness: 2,
   indent: 10,
   endIndent: 10,

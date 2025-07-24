@@ -7,17 +7,14 @@ import 'package:moto_mecanico/storage/local_file_storage.dart';
 import 'package:moto_mecanico/storage/motorcycle_local_storage.dart';
 import 'package:path/path.dart';
 
-const _INDEX_FILE = 'garageIndex.json';
-const _GARAGE_DIR = 'db';
+const _indexFile = 'garageIndex.json';
+const _garageDir = 'db';
 
 class GarageStorage {
-  LocalFileStorage? _storage;
+  LocalFileStorage? storage;
 
   static Future<String> getBaseDir() async =>
-      join(await LocalFileStorage.getDefaultDir(), _GARAGE_DIR);
-
-  LocalFileStorage? get storage => _storage;
-  set storage(LocalFileStorage? storage) => _storage = storage;
+      join(await LocalFileStorage.getDefaultDir(), _garageDir);
 
   Future<bool> addMotorcycle(GarageModel garage, Motorcycle moto) async {
     await saveGarage(garage);
@@ -43,17 +40,17 @@ class GarageStorage {
   }
 
   Future loadGarage(GarageModel garage) async {
-    if (_storage == null) return;
+    if (storage == null) return;
 
-    final json = await _storage!.getFromJson(_getIndexFilename());
+    final json = await storage!.getFromJson(_getIndexFilename());
     return await _loadGarageIndexMap(garage, json);
   }
 
   Future<bool> saveGarage(GarageModel garage) async {
-    if (_storage == null) return false;
+    if (storage == null) return false;
 
-    await _storage!.createDir('');
-    return await _storage!.saveToJson(_getIndexFilename(), _toIndexMap(garage));
+    await storage!.createDir('');
+    return await storage!.saveToJson(_getIndexFilename(), _toIndexMap(garage));
   }
 
   Map<String, dynamic> _toIndexMap(GarageModel garage) {
@@ -109,6 +106,6 @@ class GarageStorage {
   }
 
   String _getIndexFilename() {
-    return _INDEX_FILE;
+    return _indexFile;
   }
 }

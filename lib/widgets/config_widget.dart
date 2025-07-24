@@ -15,5 +15,5 @@ class ConfigWidget extends InheritedWidget {
   }
 
   @override
-  bool updateShouldNotify(ConfigWidget old) => false;
+  bool updateShouldNotify(ConfigWidget oldWidget) => false;
 }
