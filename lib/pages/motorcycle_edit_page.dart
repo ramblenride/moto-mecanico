@@ -10,7 +10,6 @@ import 'package:moto_mecanico/locale/formats.dart';
 import 'package:moto_mecanico/models/distance.dart';
 import 'package:moto_mecanico/models/garage_model.dart';
 import 'package:moto_mecanico/models/motorcycle.dart';
-import 'package:moto_mecanico/storage/motorcycle_local_storage.dart';
 import 'package:moto_mecanico/themes.dart';
 import 'package:moto_mecanico/widgets/attachment_selector.dart';
 import 'package:moto_mecanico/widgets/config_widget.dart';
@@ -30,30 +29,29 @@ enum MotorcycleAction {
 /// If editing an existing motorcycle, a button allows to delete the motorcycle.
 /// The changes are saved when the 'back' button is pressed.
 class MotorcycleEditPage extends StatefulWidget {
-  const MotorcycleEditPage({super.key, this.motorcycle});
-  final Motorcycle? motorcycle;
+  const MotorcycleEditPage(this.motorcycle, {super.key, this.create = false});
+  final Motorcycle motorcycle;
+  final bool create;
 
   @override
   State<StatefulWidget> createState() => _MotorcycleEditPageState();
 }
 
 class _MotorcycleEditPageState extends State<MotorcycleEditPage> {
-  _MotorcycleEditPageState() : _isNew = false;
-
   final _formKey = GlobalKey<FormState>();
   final _imagePicker = ImagePicker();
   late final ScrollController _scrollController;
   late final DistanceUnit _distanceUnit;
   late final String _currencySymbol;
   late final DateFormat _dateFormat;
-  late final Motorcycle motorcycle;
 
-  bool _isNew;
   File? _image;
 
   void _setImage() async {
-    if (motorcycle.storage != null && motorcycle.picture.isNotEmpty) {
-      _image = await motorcycle.storage!.getMotoFile(motorcycle.picture);
+    if (widget.motorcycle.storage != null &&
+        widget.motorcycle.picture.isNotEmpty) {
+      _image = await widget.motorcycle.storage!
+          .getMotoFile(widget.motorcycle.picture);
     }
   }
 
@@ -79,28 +77,31 @@ class _MotorcycleEditPageState extends State<MotorcycleEditPage> {
   }
 
   Future<bool> _saveMotorcycle() async {
-    if (motorcycle.storage == null || !_formKey.currentState!.validate()) {
+    if (widget.motorcycle.storage == null ||
+        !_formKey.currentState!.validate()) {
       return false;
     }
 
     _formKey.currentState!.save();
 
     if (_image != null &&
-        (motorcycle.picture.isEmpty == true ||
+        (widget.motorcycle.picture.isEmpty == true ||
             _image!.path !=
-                (await motorcycle.storage!.getMotoFile(motorcycle.picture))
+                (await widget.motorcycle.storage!
+                        .getMotoFile(widget.motorcycle.picture))
                     ?.path)) {
-      if (motorcycle.picture.isNotEmpty == true) {
-        await motorcycle.storage!.deleteMotoFile(motorcycle.picture);
+      if (widget.motorcycle.picture.isNotEmpty == true) {
+        await widget.motorcycle.storage!
+            .deleteMotoFile(widget.motorcycle.picture);
       }
 
       if ((_image?.path ?? '').isNotEmpty) {
-        motorcycle.picture =
-            await motorcycle.storage!.addMotoFile(_image!.path) ?? '';
+        widget.motorcycle.picture =
+            await widget.motorcycle.storage!.addMotoFile(_image!.path) ?? '';
       }
     }
 
-    motorcycle.saveChanges();
+    widget.motorcycle.saveChanges();
 
     return true;
   }
@@ -179,7 +180,7 @@ class _MotorcycleEditPageState extends State<MotorcycleEditPage> {
                   .motorcycle_edit_page_hint_prop_name),
               style: propValueStyle,
               textAlign: TextAlign.end,
-              initialValue: motorcycle.name,
+              initialValue: widget.motorcycle.name,
               inputFormatters: [LengthLimitingTextInputFormatter(16)],
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -189,7 +190,7 @@ class _MotorcycleEditPageState extends State<MotorcycleEditPage> {
                 return null;
               },
               onSaved: (value) {
-                motorcycle.name = value ?? '';
+                widget.motorcycle.name = value ?? '';
               },
             ),
           ),
@@ -202,14 +203,14 @@ class _MotorcycleEditPageState extends State<MotorcycleEditPage> {
               style: propValueStyle,
               textAlign: TextAlign.end,
               initialValue:
-                  motorcycle.odometer.toUnit(_distanceUnit).toString(),
+                  widget.motorcycle.odometer.toUnit(_distanceUnit).toString(),
               keyboardType: TextInputType.number,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
                 LengthLimitingTextInputFormatter(7),
               ],
               onSaved: (value) {
-                motorcycle.odometer = Distance(
+                widget.motorcycle.odometer = Distance(
                     (value != null && value.isNotEmpty)
                         ? int.parse(value)
                         : null,
@@ -229,13 +230,13 @@ class _MotorcycleEditPageState extends State<MotorcycleEditPage> {
                   .motorcycle_edit_page_hint_prop_licence_plate),
               textAlign: TextAlign.end,
               style: propValueStyle,
-              initialValue: motorcycle.immatriculation,
+              initialValue: widget.motorcycle.immatriculation,
               keyboardType: TextInputType.visiblePassword,
               textCapitalization: TextCapitalization.characters,
               autocorrect: false,
               inputFormatters: [LengthLimitingTextInputFormatter(16)],
               onSaved: (value) {
-                motorcycle.immatriculation = value ?? '';
+                widget.motorcycle.immatriculation = value ?? '';
               },
             ),
           ),
@@ -253,10 +254,10 @@ class _MotorcycleEditPageState extends State<MotorcycleEditPage> {
                   .motorcycle_edit_page_hint_prop_make),
               style: propValueStyle,
               textAlign: TextAlign.end,
-              initialValue: motorcycle.make,
+              initialValue: widget.motorcycle.make,
               inputFormatters: [LengthLimitingTextInputFormatter(16)],
               onSaved: (value) {
-                motorcycle.make = value ?? '';
+                widget.motorcycle.make = value ?? '';
               },
             ),
           ),
@@ -268,10 +269,10 @@ class _MotorcycleEditPageState extends State<MotorcycleEditPage> {
                   .motorcycle_edit_page_hint_prop_model),
               style: propValueStyle,
               textAlign: TextAlign.end,
-              initialValue: motorcycle.model,
+              initialValue: widget.motorcycle.model,
               inputFormatters: [LengthLimitingTextInputFormatter(16)],
               onSaved: (value) {
-                motorcycle.model = value ?? '';
+                widget.motorcycle.model = value ?? '';
               },
             ),
           ),
@@ -283,14 +284,14 @@ class _MotorcycleEditPageState extends State<MotorcycleEditPage> {
                   .motorcycle_edit_page_hint_prop_year),
               style: propValueStyle,
               textAlign: TextAlign.end,
-              initialValue: motorcycle.year?.toString() ?? '',
+              initialValue: widget.motorcycle.year?.toString() ?? '',
               keyboardType: TextInputType.number,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
                 LengthLimitingTextInputFormatter(4),
               ],
               onSaved: (value) {
-                motorcycle.year = (value != null && value.isNotEmpty)
+                widget.motorcycle.year = (value != null && value.isNotEmpty)
                     ? int.parse(value)
                     : null;
               },
@@ -304,10 +305,10 @@ class _MotorcycleEditPageState extends State<MotorcycleEditPage> {
                   .motorcycle_edit_page_hint_prop_color),
               style: propValueStyle,
               textAlign: TextAlign.end,
-              initialValue: motorcycle.color,
+              initialValue: widget.motorcycle.color,
               inputFormatters: [LengthLimitingTextInputFormatter(16)],
               onSaved: (value) {
-                motorcycle.color = value ?? '';
+                widget.motorcycle.color = value ?? '';
               },
             ),
           ),
@@ -319,14 +320,14 @@ class _MotorcycleEditPageState extends State<MotorcycleEditPage> {
                   .motorcycle_edit_page_hint_prop_vin),
               style: propValueStyle,
               textAlign: TextAlign.end,
-              initialValue: motorcycle.vin,
+              initialValue: widget.motorcycle.vin,
               keyboardType: TextInputType.visiblePassword,
               textCapitalization: TextCapitalization.characters,
               autocorrect: false,
               enableSuggestions: false,
               inputFormatters: [LengthLimitingTextInputFormatter(17)],
               onSaved: (value) {
-                motorcycle.vin = value ?? '';
+                widget.motorcycle.vin = value ?? '';
               },
             ),
           )
@@ -344,14 +345,14 @@ class _MotorcycleEditPageState extends State<MotorcycleEditPage> {
                   .motorcycle_edit_page_hint_prop_purchase_price),
               textAlign: TextAlign.end,
               style: propValueStyle,
-              initialValue: motorcycle.purchasePrice.toString(),
+              initialValue: widget.motorcycle.purchasePrice.toString(),
               keyboardType: TextInputType.number,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
                 LengthLimitingTextInputFormatter(16),
               ],
               onSaved: (value) {
-                motorcycle.purchasePrice =
+                widget.motorcycle.purchasePrice =
                     (value != null && value.isNotEmpty) ? int.parse(value) : 0;
               },
             ),
@@ -369,15 +370,16 @@ class _MotorcycleEditPageState extends State<MotorcycleEditPage> {
                   .motorcycle_edit_page_hint_prop_odometer),
               textAlign: TextAlign.end,
               style: propValueStyle,
-              initialValue:
-                  motorcycle.purchaseOdometer.toUnit(_distanceUnit).toString(),
+              initialValue: widget.motorcycle.purchaseOdometer
+                  .toUnit(_distanceUnit)
+                  .toString(),
               keyboardType: TextInputType.number,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
                 LengthLimitingTextInputFormatter(7),
               ],
               onSaved: (value) {
-                motorcycle.purchaseOdometer = Distance(
+                widget.motorcycle.purchaseOdometer = Distance(
                     (value != null && value.isNotEmpty)
                         ? int.parse(value)
                         : null,
@@ -398,12 +400,12 @@ class _MotorcycleEditPageState extends State<MotorcycleEditPage> {
               resetTooltip: AppLocalizations.of(context)!.tooltip_reset_date,
               textAlign: TextAlign.end,
               style: propValueStyle,
-              initialDate: motorcycle.purchaseDate,
+              initialDate: widget.motorcycle.purchaseDate,
               firstDate: DateTime.fromMillisecondsSinceEpoch(0),
               lastDate: DateTime.now(),
               dateFormat: _dateFormat,
               onSaved: (selectedDate) {
-                motorcycle.purchaseDate = selectedDate;
+                widget.motorcycle.purchaseDate = selectedDate;
               },
             ),
           ),
@@ -411,10 +413,10 @@ class _MotorcycleEditPageState extends State<MotorcycleEditPage> {
       ),
       PropertyEditorCard(
         children: [
-          motorcycle.storage?.storage != null
+          widget.motorcycle.storage?.storage != null
               ? AttachmentSelector(
-                  attachments: motorcycle.attachments,
-                  storage: motorcycle.storage!.storage,
+                  attachments: widget.motorcycle.attachments,
+                  storage: widget.motorcycle.storage!.storage,
                 )
               : Container(),
         ],
@@ -429,32 +431,12 @@ class _MotorcycleEditPageState extends State<MotorcycleEditPage> {
   @override
   void initState() {
     super.initState();
+
     _scrollController = ScrollController();
-
-    if (widget.motorcycle == null) {
-      // Correctly create the motorcycle to track images/attachments
-      // The motorcycle will be removed if the user leaves the page without adding it.
-      motorcycle = Motorcycle(name: '');
-      motorcycle.storage = MotorcycleLocalStorage(motoId: motorcycle.id);
-
-      _isNew = true;
-    } else {
-      motorcycle = widget.motorcycle!;
-    }
 
     if (_image == null) {
       _setImage();
       setState(() => {});
-    }
-  }
-
-  @override
-  void didChangeDependencies() async {
-    super.didChangeDependencies();
-
-    if (_isNew) {
-      await motorcycle.storage!.connect();
-      _addMotorcycleToGarage(motorcycle);
     }
   }
 
@@ -475,21 +457,19 @@ class _MotorcycleEditPageState extends State<MotorcycleEditPage> {
       canPop: true,
       onPopInvoked: (bool didPop) async {
         if (!didPop) return;
-        if (_isNew) {
-          _removeMotorcycleFromGarage(motorcycle);
-        } else {
+        if (!widget.create) {
           await _saveMotorcycle();
         }
       },
       child: Scaffold(
         appBar: AppBar(
           title: Text(
-            _isNew
+            widget.create
                 ? AppLocalizations.of(context)!.motorcycle_edit_page_title_add
                 : AppLocalizations.of(context)!.motorcycle_edit_page_title_edit,
           ),
           actions: [
-            _isNew
+            widget.create
                 ? SizedBox(
                     width: 45,
                     child: IconButton(
@@ -498,6 +478,7 @@ class _MotorcycleEditPageState extends State<MotorcycleEditPage> {
                       tooltip: AppLocalizations.of(context)!.appbar_add_button,
                       onPressed: () async {
                         if (await _saveMotorcycle() && context.mounted) {
+                          _addMotorcycleToGarage(widget.motorcycle);
                           Navigator.pop(context);
                         }
                       },
@@ -523,7 +504,7 @@ class _MotorcycleEditPageState extends State<MotorcycleEditPage> {
                                       .motorcycle_delete_dialog_title,
                                   content: AppLocalizations.of(context)!
                                       .motorcycle_delete_dialog_text(
-                                          motorcycle.name),
+                                          widget.motorcycle.name),
                                   onResult: (result) {
                                     Navigator.of(context).pop(result);
                                   },
@@ -531,7 +512,7 @@ class _MotorcycleEditPageState extends State<MotorcycleEditPage> {
                               },
                             );
                             if (result != null && result) {
-                              _removeMotorcycleFromGarage(motorcycle);
+                              _removeMotorcycleFromGarage(widget.motorcycle);
 
                               if (context.mounted) {
                                 while (Navigator.of(context).canPop()) {
@@ -569,7 +550,7 @@ class _MotorcycleEditPageState extends State<MotorcycleEditPage> {
 
     return NoteSelector(
       key: key,
-      notes: motorcycle.notes,
+      notes: widget.motorcycle.notes,
       showRenewable: false,
       onExpansionChanged: (isExpanded) async {
         if (isExpanded) {

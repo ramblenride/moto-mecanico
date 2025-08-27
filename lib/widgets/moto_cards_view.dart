@@ -115,8 +115,7 @@ class _MotoCardsViewState extends State<MotoCardsView> {
             await Navigator.push<Motorcycle>(
               context,
               MaterialPageRoute<Motorcycle>(
-                builder: (context) =>
-                    MotorcycleEditPage(motorcycle: motorcycle),
+                builder: (context) => MotorcycleEditPage(motorcycle),
               ),
             );
           },

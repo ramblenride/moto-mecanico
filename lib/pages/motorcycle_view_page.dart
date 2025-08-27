@@ -263,8 +263,7 @@ class _MotorcycleViewPageState extends State<MotorcycleViewPage>
                     await Navigator.push<Motorcycle>(
                       context,
                       MaterialPageRoute<Motorcycle>(
-                        builder: (context) =>
-                            MotorcycleEditPage(motorcycle: motorcycle),
+                        builder: (context) => MotorcycleEditPage(motorcycle),
                       ),
                     );
                     break;

@@ -52,11 +52,16 @@ class GaragePageState extends State<GaragePage> {
     }
   }
 
-  void _addMotorcycle() {
+  void _addMotorcycle() async {
+    var moto = Motorcycle(name: '');
+    moto.storage = MotorcycleLocalStorage(motoId: moto.id);
+    await moto.storage!.connect();
+    if (!mounted) return;
+
     Navigator.push<Motorcycle>(
       context,
       MaterialPageRoute<Motorcycle>(
-          builder: (context) => const MotorcycleEditPage(motorcycle: null)),
+          builder: (context) => MotorcycleEditPage(moto, create: true)),
     );
   }
 
