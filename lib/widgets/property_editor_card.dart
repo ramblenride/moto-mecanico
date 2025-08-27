@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:moto_mecanico/themes.dart';
 
 class PropertyEditorCard extends StatelessWidget {
-  const PropertyEditorCard({super.key, 
+  const PropertyEditorCard({
+    super.key,
     required this.children,
     this.title,
     this.icons = const [],
