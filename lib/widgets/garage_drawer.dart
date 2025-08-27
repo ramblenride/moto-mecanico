@@ -110,6 +110,8 @@ class _GarageDrawerState extends State<GarageDrawer> {
   void _openAboutDialog() async {
     Navigator.of(context).pop();
     final pkgInfo = await PackageInfo.fromPlatform();
+    if (!mounted) return;
+
     showAboutDialog(
       applicationName: pkgInfo.appName,
       applicationVersion: pkgInfo.version,

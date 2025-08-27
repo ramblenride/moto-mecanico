@@ -197,7 +197,7 @@ class GaragePageState extends State<GaragePage> {
       XFile xzip = XFile(zipFile.path);
       await Share.shareXFiles([xzip],
           subject:
-              '${appTitle} - ${(mounted && local != null) ? local.garage_page_title : "Garage"}');
+              '$appTitle - ${(mounted && local != null) ? local.garage_page_title : "Garage"}');
 
       await zipFile.delete();
     } catch (error) {

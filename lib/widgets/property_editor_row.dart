@@ -71,13 +71,10 @@ class PropertyEditorRow extends StatelessWidget {
         name,
         style: Theme.of(context).textTheme.propEditorName,
       ),
-      Container(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: inputChildren,
-        ),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: inputChildren,
       ),
-      //  ),
     ]);
   }
 }

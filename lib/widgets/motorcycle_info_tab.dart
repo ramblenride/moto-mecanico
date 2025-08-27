@@ -56,19 +56,17 @@ class MotorcycleInfoTab extends StatelessWidget {
                           fit: BoxFit.contain,
                         );
                       } else if (imageProvider.hasError) {
-                        return Container(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Icon(
-                                Icons.error_outline,
-                                color: Colors.redAccent,
-                                size: 48,
-                              ),
-                              Text(AppLocalizations.of(context)!
-                                  .motorcycle_image_load_failed),
-                            ],
-                          ),
+                        return Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(
+                              Icons.error_outline,
+                              color: Colors.redAccent,
+                              size: 48,
+                            ),
+                            Text(AppLocalizations.of(context)!
+                                .motorcycle_image_load_failed),
+                          ],
                         );
                       } else {
                         return const Icon(Icons.image_search);
