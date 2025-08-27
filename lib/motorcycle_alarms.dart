@@ -31,7 +31,8 @@ extension MotoAlarmExt on Motorcycle {
       return TaskAlarm.none;
     }
     final remaining = task.dueDate!
-        .add(const Duration(hours: 23, minutes: 59))
+        // Use the end of day as due date
+        .add(const Duration(hours: 23, minutes: 59, seconds: 59))
         .difference(DateTime.now());
 
     if (remaining <= alarmDurationRed) {
@@ -43,7 +44,7 @@ extension MotoAlarmExt on Motorcycle {
     return TaskAlarm.none;
   }
 
-  TaskAlarm getAlarmLevel(task) {
+  TaskAlarm getAlarmLevel(Task task) {
     final distance = getDistanceAlarmLevel(task);
     final duration = getDurationAlarmLevel(task);
     if (distance == TaskAlarm.red || duration == TaskAlarm.red) {

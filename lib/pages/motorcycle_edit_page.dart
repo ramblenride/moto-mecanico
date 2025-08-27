@@ -40,10 +40,10 @@ class MotorcycleEditPage extends StatefulWidget {
 class _MotorcycleEditPageState extends State<MotorcycleEditPage> {
   final _formKey = GlobalKey<FormState>();
   final _imagePicker = ImagePicker();
+  DistanceUnit _distanceUnit = DistanceUnit.unitKm;
+  String _currencySymbol = '\$';
+  DateFormat _dateFormat = DateFormat.yMd();
   late final ScrollController _scrollController;
-  late final DistanceUnit _distanceUnit;
-  late final String _currencySymbol;
-  late final DateFormat _dateFormat;
 
   File? _image;
 
