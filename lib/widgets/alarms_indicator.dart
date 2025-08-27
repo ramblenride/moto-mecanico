@@ -25,7 +25,7 @@ class AlarmsIndicator extends StatelessWidget {
       alarmIcons.add(
         Tooltip(
           message: AppLocalizations.of(context)!.alerts_red,
-          child: _buildAlarm(context, RnrColors.red, redAlerts.length),
+          child: _buildAlarm(context, RnrColors.mediumRed, redAlerts.length),
         ),
       );
     }

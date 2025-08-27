@@ -41,9 +41,9 @@ class _EditCostDialogState extends State<EditCostDialog> {
           children: [
             Container(
               padding: const EdgeInsets.only(top: 15, bottom: 10),
-              decoration: BoxDecoration(
-                color: RnrColors.blue[800],
-                borderRadius: const BorderRadius.only(
+              decoration: const BoxDecoration(
+                color: RnrColors.blue800,
+                borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(20),
                   topRight: Radius.circular(20),
                 ),

@@ -188,10 +188,10 @@ class _MotorcycleViewPageState extends State<MotorcycleViewPage>
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
                 side: const BorderSide(
-                  color: RnrColors.orange,
+                  color: RnrColors.mediumOrange,
                   width: 2,
                 )),
-            color: RnrColors.lightBlue[700],
+            color: RnrColors.lightBlue,
             padding: EdgeInsets.zero,
             tooltip: AppLocalizations.of(context)!
                 .motorcycle_view_page_appbar_icon_odometer,

@@ -126,8 +126,8 @@ class _MotorcycleEditPageState extends State<MotorcycleEditPage> {
       alignment: Alignment.center,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: RnrColors.orange),
-        color: RnrColors.blue[900],
+        border: Border.all(color: RnrColors.mediumOrange),
+        color: RnrColors.blue900,
       ),
       height: 160,
       child: Text(
@@ -151,7 +151,7 @@ class _MotorcycleEditPageState extends State<MotorcycleEditPage> {
             onPressed: () => _getNewImage(ImageSource.gallery),
             tooltip: AppLocalizations.of(context)!
                 .motorcycle_edit_page_image_selection_tooltip,
-            child: const Icon(Icons.add_a_photo),
+            child: const Icon(Icons.add_a_photo, color: Colors.black),
           ),
         ],
       ),

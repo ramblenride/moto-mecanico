@@ -17,7 +17,7 @@ class NoteFormField extends FormField<Note> {
     decoration = const InputDecoration(
       contentPadding: EdgeInsets.all(10),
       border: OutlineInputBorder(
-        borderSide: BorderSide(color: RnrColors.blue),
+        borderSide: BorderSide(color: RnrColors.mediumBlue),
       ),
     ),
     required FormFieldSetter super.onSaved,

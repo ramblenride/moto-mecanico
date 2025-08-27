@@ -86,7 +86,7 @@ class _MotorcycleTemplateTaskTileState
           message: AppLocalizations.of(context)!
               .motorcycle_task_template_page_task_add_switch_tooltip,
           child: Switch(
-            activeColor: RnrColors.orange,
+            activeColor: RnrColors.mediumOrange,
             inactiveThumbColor: Colors.white70,
             value: _isEnabled,
             onChanged: (value) {

@@ -89,7 +89,7 @@ class TaskCard extends StatelessWidget {
 
   Color _getAlarmColor(TaskAlarm alarm) {
     return alarm == TaskAlarm.red
-        ? RnrColors.red
+        ? RnrColors.mediumRed
         : alarm == TaskAlarm.yellow
             ? Colors.orange
             : Colors.blueGrey[100]!;

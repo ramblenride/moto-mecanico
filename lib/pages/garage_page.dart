@@ -137,7 +137,7 @@ class GaragePageState extends State<GaragePage> {
           tooltip:
               AppLocalizations.of(context)!.garage_page_add_motorcycle_button,
           onPressed: _addMotorcycle,
-          child: const Icon(Icons.library_add),
+          child: const Icon(Icons.library_add, color: Colors.black),
         ),
         body: Center(
           child: MotoCardsView(

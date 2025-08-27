@@ -30,7 +30,7 @@ class MotorcycleCard extends StatelessWidget {
             bottomRight: Radius.circular(4.0),
           ),
         ),
-        color: RnrColors.blue[800],
+        color: RnrColors.blue800,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[

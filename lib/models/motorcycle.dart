@@ -9,7 +9,7 @@ import 'package:moto_mecanico/storage/motorcycle_storage.dart';
 import 'package:uuid/uuid.dart';
 
 // Defines a motorcycle. All objects are optional except for the name.
-// The name doesn't have to be unique across motorcycles.
+// The name doesn't have to be unique across motorcycles, only the id is unique.
 class Motorcycle extends ChangeNotifier {
   Motorcycle({
     required this.name,
@@ -56,7 +56,7 @@ class Motorcycle extends ChangeNotifier {
   int? year;
   String color;
   String immatriculation;
-  String vin; // Usually 17 characters, could also be less for older models
+  String vin; // Usually 17 characters but could also be less for older models
 
   int purchasePrice;
   DateTime? purchaseDate;
@@ -83,6 +83,9 @@ class Motorcycle extends ChangeNotifier {
 
   // Should be called once updating properties is over. Will trigger screen
   // updates and storage only if changes were made.
+  // FIXME: This is a bit clunky. Would be better to have individual setters
+  // that trigger notifyListeners() and storage updates directly.
+  // FIXME: Not all properties are tracked, only the most important ones.
   void saveChanges() {
     // Check if any tracked properties have changed
     bool hasChanges = name != _lastSavedName ||
@@ -163,7 +166,7 @@ class Motorcycle extends ChangeNotifier {
             : const Distance(null),
         make: json['make'] ?? '',
         model: json['model'] ?? '',
-        year: json['year'] != null ? int.tryParse(json['year']) : null,
+        year: json['year'],
         color: json['color'] ?? '',
         immatriculation: json['immatriculation'] ?? '',
         vin: json['vin'] ?? '',

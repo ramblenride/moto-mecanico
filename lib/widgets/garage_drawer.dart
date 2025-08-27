@@ -27,7 +27,7 @@ class _GarageDrawerState extends State<GarageDrawer> {
     final iconColor = Colors.grey[200];
     return Drawer(
       child: Container(
-        color: RnrColors.blue[800],
+        color: RnrColors.blue800,
         child: ListView(
           children: <Widget>[
             _header(),

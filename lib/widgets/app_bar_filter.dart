@@ -87,7 +87,7 @@ class _AppBarFilterState extends State<AppBarFilter> {
         border: InputBorder.none,
         hintStyle: const TextStyle(fontSize: 18),
       ),
-      style: TextStyle(color: RnrColors.blue[200], fontSize: 20),
+      style: const TextStyle(color: RnrColors.blue200, fontSize: 20),
       textInputAction: TextInputAction.search,
       onChanged: _updateSearchQuery,
     );

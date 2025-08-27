@@ -171,7 +171,7 @@ class _PopupButtonsButtonState<T> extends State<PopupButtonsButton<T>>
           color: widget.color ?? RnrColors.darkBlue,
           shape: BoxShape.circle,
           border: Border.all(
-            color: widget.borderColor ?? RnrColors.blue[600]!,
+            color: widget.borderColor ?? RnrColors.blue600,
             width: 2,
           ),
         ),
