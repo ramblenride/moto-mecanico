@@ -4,7 +4,8 @@ import 'package:moto_mecanico/assets.dart';
 import 'package:moto_mecanico/dialogs/feedback_dialog.dart';
 import 'package:moto_mecanico/pages/settings_page.dart';
 import 'package:moto_mecanico/themes.dart';
-import 'package:moto_mecanico/widgets/config_widget.dart';
+
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 typedef DrawerMethodCallback = void Function();
@@ -108,10 +109,10 @@ class _GarageDrawerState extends State<GarageDrawer> {
 
   void _openAboutDialog() async {
     Navigator.of(context).pop();
-    final pkgInfo = ConfigWidget.of(context).packageInfo;
+    final pkgInfo = await PackageInfo.fromPlatform();
     showAboutDialog(
-      applicationName: pkgInfo?.appName ?? '',
-      applicationVersion: pkgInfo?.version ?? '',
+      applicationName: pkgInfo.appName,
+      applicationVersion: pkgInfo.version,
       applicationLegalese: AppLocalizations.of(context)!.copyright,
       children: [
         ListTile(

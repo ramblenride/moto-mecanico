@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:moto_mecanico/assets.dart';
 import 'package:moto_mecanico/themes.dart';
-import 'package:moto_mecanico/widgets/config_widget.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -12,7 +11,6 @@ class FeedbackDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).textTheme;
-    final pkgInfo = ConfigWidget.of(context).packageInfo!;
 
     return Dialog(
       child: SingleChildScrollView(
@@ -40,7 +38,7 @@ class FeedbackDialog extends StatelessWidget {
                 children: [
                   ListTile(
                     leading: const Icon(Icons.feedback),
-                    title: const Text('Twitter'),
+                    title: const Text('Twitter / X'),
                     onTap: () {
                       _sendToTwitter();
                       Navigator.of(context).pop();
@@ -50,7 +48,7 @@ class FeedbackDialog extends StatelessWidget {
                     leading: const Icon(Icons.email),
                     title: Text(AppLocalizations.of(context)!.feedback_email),
                     onTap: () {
-                      _sendToEmail(pkgInfo);
+                      _sendToEmail();
                       Navigator.of(context).pop();
                     },
                   ),
@@ -91,7 +89,8 @@ class FeedbackDialog extends StatelessWidget {
     );
   }
 
-  void _sendToEmail(PackageInfo pkgInfo) async {
+  void _sendToEmail() async {
+    final pkgInfo = await PackageInfo.fromPlatform();
     final appName = pkgInfo.appName;
     final packageName = pkgInfo.packageName;
     final version = pkgInfo.version;

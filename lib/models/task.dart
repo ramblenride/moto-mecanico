@@ -15,42 +15,43 @@ class Task implements Comparable<dynamic> {
   Task({
     required this.name,
     this.description = '',
-    this.effortLevel = EffortLevel.none,
-    this.technicalLevel = TechnicalLevel.none,
-    this.notes = const [],
-    this.labels = const [],
-    this.dueDate,
-    this.dueOdometer = const Distance(null),
-    this.recurringMonths = 0,
-    this.recurringOdometer = const Distance(null),
+    this.attachments = const [],
     this.closed = false,
     this.closedDate,
     this.closedOdometer = const Distance(null),
     this.costs = const [],
+    this.dueDate,
+    this.dueOdometer = const Distance(null),
+    this.effortLevel = EffortLevel.none,
     this.executor = '',
-    this.attachments = const [],
+    this.labels = const [],
+    this.notes = const [],
+    this.recurringMonths = 0,
+    this.recurringOdometer = const Distance(null),
+    this.technicalLevel = TechnicalLevel.none,
   });
 
   // Clones a task ignoring (or not) the costs/attachments marked as non-copyable
   // Copied attachments are not transfered to the local storage.
   factory Task.from(Task task, {bool ignoreCopyable = false}) {
     var newTask = Task(
-        name: task.name,
-        description: task.description,
-        effortLevel: task.effortLevel,
-        technicalLevel: task.technicalLevel,
-        notes: [],
-        labels: List<int>.from(task.labels),
-        dueDate: task.dueDate,
-        dueOdometer: task.dueOdometer,
-        recurringMonths: task.recurringMonths,
-        recurringOdometer: task.recurringOdometer,
-        closed: task.closed,
-        closedDate: task.closedDate,
-        closedOdometer: task.closedOdometer,
-        executor: task.executor,
-        costs: [],
-        attachments: []);
+      name: task.name,
+      description: task.description,
+      attachments: [],
+      closed: task.closed,
+      closedDate: task.closedDate,
+      closedOdometer: task.closedOdometer,
+      costs: [],
+      dueDate: task.dueDate,
+      dueOdometer: task.dueOdometer,
+      effortLevel: task.effortLevel,
+      executor: task.executor,
+      labels: List<int>.from(task.labels),
+      notes: [],
+      recurringMonths: task.recurringMonths,
+      recurringOdometer: task.recurringOdometer,
+      technicalLevel: task.technicalLevel,
+    );
 
     for (final note in task.notes) {
       if (note.copyable || ignoreCopyable) {
@@ -169,11 +170,11 @@ class Task implements Comparable<dynamic> {
     if (task.recurring == false) return null;
 
     final newTask = Task.from(task);
-    newTask.dueDate = null;
-    newTask.dueOdometer = const Distance(null);
     newTask.closed = false;
     newTask.closedDate = null;
     newTask.closedOdometer = const Distance(null);
+    newTask.dueDate = null;
+    newTask.dueOdometer = const Distance(null);
 
     if (task.recurringMonths > 0) {
       final closedDate = task.closedDate ?? DateTime.now();
@@ -193,6 +194,10 @@ class Task implements Comparable<dynamic> {
       final task = Task(
         name: json['name'],
         description: json['description'],
+        attachments: [],
+        costs: [],
+        labels: [],
+        notes: [],
       );
 
       task.effortLevel = task._parseEffortLevel(json['effortLevel']);

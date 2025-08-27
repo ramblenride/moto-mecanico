@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:moto_mecanico/locale/formats.dart';
 import 'package:moto_mecanico/models/distance.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // This class stores the global configuration of the app.
@@ -18,9 +17,6 @@ class Configuration {
   static const propValueDistanceUnitKm = 'km';
   static const propValueDistanceUnitMile = 'mile';
   static const propNameNotifications = 'notifications';
-
-  // Made available to the application here, but not stored in the config.
-  PackageInfo? packageInfo;
 
   final Locale _systemLocale;
 

@@ -184,23 +184,9 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   String _getLanguageCode(Configuration config) {
-    return config.locale.languageCode;
+    return AppLocalSupport.supportedLanguages
+            .containsKey(config.locale.languageCode)
+        ? config.locale.languageCode
+        : AppLocalSupport.supportedLanguages.keys.first;
   }
-
-/*
-  Widget _getNotificationsRow(Configuration config) {
-    assert(config != null);
-    return PropertyEditorRow(
-      name: AppLocalizations.of(context).settings_page_notifications_prop_name,
-      inputField: Switch(
-        activeColor: RnrColors.orange,
-        activeTrackColor: RnrColors.darkOrange,
-        inactiveTrackColor: Colors.grey[700],
-        inactiveThumbColor: Colors.grey[500],
-        value: config.notifications,
-        onChanged: (enabled) => setState(() => config.notifications = enabled),
-      ),
-    );
-  }
-  */
 }

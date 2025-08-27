@@ -44,9 +44,11 @@ const templatesIndexFile = 'motorcycle-service-index.json';
 // Feedback
 const emailFeedback = 'ramblenride+motomecanico_android@gmail.com';
 // This is the RnR page. Would it be better to create a mention ?
-const twitterFeedbackUrl = 'https://twitter.com/ramblenride';
+const twitterFeedbackUrl = 'https://x.com/ramblenride';
 const googlePlayUrl =
     'https://play.google.com/store/apps/details?id=com.ramblenride.moto_mecanico';
 const motoMecanicoHomepage = 'https://ramblenride.github.io/moto-mecanico';
 const privacyPolicyUrl =
     'https://ramblenride.github.io/moto-mecanico/privacy_policy.html';
+
+const appTitle = 'Moto Mecanico';

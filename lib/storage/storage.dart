@@ -18,8 +18,7 @@ abstract class Storage {
 
   Future<Map<String, dynamic>> getFromJson(String name) async {
     final file = await getFile(name);
-    if (file != null && file.existsSync() == false ||
-        file!.lengthSync() == 0) {
+    if (file != null && file.existsSync() == false || file!.lengthSync() == 0) {
       return {};
     }
 

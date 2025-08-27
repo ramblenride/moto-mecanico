@@ -100,8 +100,7 @@ class GarageStorage {
         debugPrint('Failed to find motorcycle info in index file');
       }
     } catch (e) {
-      debugPrint('Failed to parse a motorcycle from JSON storage:');
-      debugPrint(e.toString());
+      debugPrint('Failed to parse a motorcycle from JSON storage: $e');
     }
   }
 
