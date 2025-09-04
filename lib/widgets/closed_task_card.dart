@@ -147,7 +147,7 @@ class ClosedTaskCard extends StatelessWidget {
               .textTheme
               .titleSmall!
               .copyWith(color: Colors.blueGrey[100], fontSize: 16)));
-      remaining.add(Text(AppLocalSupport.distanceUnitsCompact[distanceUnit]!,
+      remaining.add(Text(DistanceSupport.getUnitSymbol(distanceUnit),
           style: Theme.of(context)
               .textTheme
               .titleSmall!

@@ -405,7 +405,7 @@ class _TaskEditPageState extends State<TaskEditPage> {
             },
           ),
           trailer: Text(
-            '${AppLocalSupport.distanceUnits[_distanceUnit]}',
+            DistanceSupport.getUnitName(_distanceUnit),
             style: propValueStyle,
           ),
         ),
@@ -475,7 +475,7 @@ class _TaskEditPageState extends State<TaskEditPage> {
             },
           ),
           trailer: Text(
-            '${AppLocalSupport.distanceUnits[_distanceUnit]}',
+            DistanceSupport.getUnitName(_distanceUnit),
             style: propValueStyle,
           ),
         ),

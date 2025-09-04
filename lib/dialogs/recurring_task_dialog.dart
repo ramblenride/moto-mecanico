@@ -116,7 +116,7 @@ class _RecurringTaskDialogState extends State<RecurringTaskDialog> {
                       },
                     ),
                     trailer: Text(
-                      '${AppLocalSupport.distanceUnits[_distanceUnit]}',
+                      DistanceSupport.getUnitName(_distanceUnit),
                       style: propValueStyle,
                     ),
                   ),

@@ -38,9 +38,7 @@ class Distance implements Comparable<dynamic> {
   String toFullString({bool compact = false}) {
     final distanceStr = toString(compact: compact);
     if (distanceStr.isNotEmpty) {
-      final unitStr = compact
-          ? AppLocalSupport.distanceUnitsCompact[unit]
-          : AppLocalSupport.distanceUnits[unit];
+      final unitStr = DistanceSupport.getUnitName(unit, compact: compact);
       return '$distanceStr $unitStr';
     }
     return distanceStr;

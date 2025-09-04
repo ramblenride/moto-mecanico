@@ -282,8 +282,7 @@ void main() {
       final config = Configuration('en_US');
       await config.loadConfig();
 
-      expect(AppLocalSupport.supportedDateFormats.contains(config.dateFormat),
-          isTrue);
+      expect(DateFormatSupport.isValidFormat(config.dateFormat), isTrue);
     });
 
     test('falls back to first supported format for unsupported locale format',
@@ -292,8 +291,7 @@ void main() {
       final config = Configuration('ru_RU'); // Locale with different format
       await config.loadConfig();
 
-      expect(AppLocalSupport.supportedDateFormats.contains(config.dateFormat),
-          isTrue);
+      expect(DateFormatSupport.isValidFormat(config.dateFormat), isTrue);
     });
 
     test('uses saved date format when available', () async {
@@ -406,7 +404,7 @@ void main() {
       await config.loadConfig();
 
       final dateFormat = config.dateFormat;
-      expect(AppLocalSupport.supportedDateFormats.contains(dateFormat), isTrue,
+      expect(DateFormatSupport.isValidFormat(dateFormat), isTrue,
           reason: 'Date format should be from supported formats list');
 
       // Test that the format actually works

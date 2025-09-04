@@ -218,7 +218,7 @@ class _MotorcycleEditPageState extends State<MotorcycleEditPage> {
               },
             ),
             trailer: Text(
-              '${AppLocalSupport.distanceUnits[_distanceUnit]}',
+              DistanceSupport.getUnitName(_distanceUnit),
               style: propValueStyle,
             ),
           ),
@@ -345,15 +345,20 @@ class _MotorcycleEditPageState extends State<MotorcycleEditPage> {
                   .motorcycle_edit_page_hint_prop_purchase_price),
               textAlign: TextAlign.end,
               style: propValueStyle,
-              initialValue: widget.motorcycle.purchasePrice.toString(),
+              initialValue: widget.motorcycle.purchasePrice?.toString() ?? '',
               keyboardType: TextInputType.number,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
                 LengthLimitingTextInputFormatter(16),
               ],
               onSaved: (value) {
-                widget.motorcycle.purchasePrice =
-                    (value != null && value.isNotEmpty) ? int.parse(value) : 0;
+                widget.motorcycle.purchasePrice = null;
+                if (value != null && value.isNotEmpty) {
+                  var price = int.parse(value);
+                  if (price > 0) {
+                    widget.motorcycle.purchasePrice = price;
+                  }
+                }
               },
             ),
             trailer: Text(
@@ -370,9 +375,11 @@ class _MotorcycleEditPageState extends State<MotorcycleEditPage> {
                   .motorcycle_edit_page_hint_prop_odometer),
               textAlign: TextAlign.end,
               style: propValueStyle,
-              initialValue: widget.motorcycle.purchaseOdometer
-                  .toUnit(_distanceUnit)
-                  .toString(),
+              initialValue: widget.motorcycle.purchaseOdometer.isValid
+                  ? widget.motorcycle.purchaseOdometer
+                      .toUnit(_distanceUnit)
+                      .toString()
+                  : '',
               keyboardType: TextInputType.number,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
@@ -387,7 +394,7 @@ class _MotorcycleEditPageState extends State<MotorcycleEditPage> {
               },
             ),
             trailer: Text(
-              '${AppLocalSupport.distanceUnits[_distanceUnit]}',
+              DistanceSupport.getUnitName(_distanceUnit),
               style: propValueStyle,
             ),
           ),

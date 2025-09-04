@@ -7,12 +7,16 @@ import 'package:moto_mecanico/motorcycle_utils.dart';
 
 import 'mocks/motorcycle_void_storage.dart';
 
+// Tests are forcing errors, so drop the error logs.
+void debugHandler(message, {wrapWidth}) {}
+
 void main() {
   group('getMotoPicture', () {
     late Motorcycle testMotorcycle;
     late MotorcycleVoidStorage mockStorage;
 
     setUp(() {
+      debugPrint = debugHandler;
       mockStorage = MotorcycleVoidStorage();
       testMotorcycle = Motorcycle(name: 'test-moto');
       testMotorcycle.storage = mockStorage;

@@ -113,7 +113,7 @@ class _RenewTaskDialogState extends State<RenewTaskDialog> {
                       },
                     ),
                     trailer: Text(
-                      '${AppLocalSupport.distanceUnits[_distanceUnit]}',
+                      DistanceSupport.getUnitName(_distanceUnit),
                       style: propValueStyle,
                     ),
                   ),

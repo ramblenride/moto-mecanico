@@ -160,7 +160,7 @@ class TaskCard extends StatelessWidget {
             .copyWith(color: distanceColor, fontSize: 16),
       ));
       remaining.add(Text(
-        AppLocalSupport.distanceUnitsCompact[distanceUnit]!,
+        DistanceSupport.getUnitSymbol(distanceUnit),
         style: Theme.of(context)
             .textTheme
             .titleSmall!

@@ -1,13 +1,33 @@
 import 'package:moto_mecanico/models/distance.dart';
 
-class AppLocalSupport {
-  static const Map<String, String> supportedLanguages = {
+/// Support for locale-specific language configurations
+class LocaleSupport {
+  static const Map<String, String> _supportedLanguages = {
     'en': 'English (US)',
     'es': 'Español',
     'fr': 'Français',
   };
 
-  static const List<String> supportedDateFormats = [
+  /// Returns the display name for a language code
+  static String getLanguageName(String code) =>
+      _supportedLanguages[code] ?? 'Unknown';
+
+  /// Checks if a language code is supported
+  static bool isValidLanguage(String code) =>
+      _supportedLanguages.containsKey(code);
+
+  /// Returns all supported language codes
+  static List<String> getSupportedLanguages() =>
+      _supportedLanguages.keys.toList();
+
+  /// Returns all language code to name mappings
+  static Map<String, String> getAllLanguages() =>
+      Map.unmodifiable(_supportedLanguages);
+}
+
+/// Support for date format configurations
+class DateFormatSupport {
+  static const List<String> _supportedDateFormats = [
     'M/d/y',
     'MM/dd/y',
     'd/M/y',
@@ -16,18 +36,22 @@ class AppLocalSupport {
     'y/MM/dd'
   ];
 
-  static const Map<DistanceUnit, String> distanceUnits = {
-    DistanceUnit.unitKm: 'km',
-    DistanceUnit.unitMile: 'miles'
-  };
+  /// Checks if a date format is supported
+  static bool isValidFormat(String format) =>
+      _supportedDateFormats.contains(format);
 
-  static const Map<DistanceUnit, String> distanceUnitsCompact = {
-    DistanceUnit.unitKm: 'km',
-    DistanceUnit.unitMile: 'mi'
-  };
+  /// Returns the default date format
+  static String getDefaultFormat() => _supportedDateFormats.first;
 
-  // Currency list from openexchangerates.org
-  static const Map<String, String> currencySymbols = {
+  /// Returns all supported date formats
+  static List<String> getSupportedFormats() =>
+      List.unmodifiable(_supportedDateFormats);
+}
+
+/// Support for currency configurations
+class CurrencySupport {
+  // Currency full names from openexchangerates.org (updated list)
+  static const Map<String, String> _currencyNames = {
     'AED': 'United Arab Emirates Dirham',
     'AFN': 'Afghan Afghani',
     'ALL': 'Albanian Lek',
@@ -124,7 +148,6 @@ class AppLocalSupport {
     'MMK': 'Myanma Kyat',
     'MNT': 'Mongolian Tugrik',
     'MOP': 'Macanese Pataca',
-    'MRO': 'Mauritanian Ouguiya (pre-2018)',
     'MRU': 'Mauritanian Ouguiya',
     'MUR': 'Mauritian Rupee',
     'MVR': 'Maldivian Rufiyaa',
@@ -158,11 +181,10 @@ class AppLocalSupport {
     'SEK': 'Swedish Krona',
     'SGD': 'Singapore Dollar',
     'SHP': 'Saint Helena Pound',
-    'SLL': 'Sierra Leonean Leone',
+    'SLE': 'Sierra Leonean Leone',
     'SOS': 'Somali Shilling',
     'SRD': 'Surinamese Dollar',
     'SSP': 'South Sudanese Pound',
-    'STD': 'São Tomé and Príncipe Dobra (pre-2018)',
     'STN': 'São Tomé and Príncipe Dobra',
     'SVC': 'Salvadoran Colón',
     'SYP': 'Syrian Pound',
@@ -181,7 +203,6 @@ class AppLocalSupport {
     'USD': 'United States Dollar',
     'UYU': 'Uruguayan Peso',
     'UZS': 'Uzbekistan Som',
-    'VEF': 'Venezuelan Bolívar Fuerte (Old)',
     'VES': 'Venezuelan Bolívar Soberano',
     'VND': 'Vietnamese Dong',
     'VUV': 'Vanuatu Vatu',
@@ -200,4 +221,47 @@ class AppLocalSupport {
     'ZMW': 'Zambian Kwacha',
     'ZWL': 'Zimbabwean Dollar'
   };
+
+  /// Returns the full currency name for a currency code
+  static String getCurrencyName(String code) =>
+      _currencyNames[code] ?? 'Unknown Currency';
+
+  /// Checks if a currency code is valid
+  static bool isValidCurrency(String code) => _currencyNames.containsKey(code);
+
+  /// Returns all supported currency codes
+  static List<String> getSupportedCurrencies() => _currencyNames.keys.toList();
+
+  /// Returns all currency code to name mappings
+  static Map<String, String> getAllCurrencies() =>
+      Map.unmodifiable(_currencyNames);
+}
+
+/// Support for distance unit configurations
+class DistanceSupport {
+  static const Map<DistanceUnit, String> _distanceUnits = {
+    DistanceUnit.unitKm: 'km',
+    DistanceUnit.unitMile: 'miles'
+  };
+
+  static const Map<DistanceUnit, String> _distanceUnitsCompact = {
+    DistanceUnit.unitKm: 'km',
+    DistanceUnit.unitMile: 'mi'
+  };
+
+  /// Returns the unit name for a distance unit
+  static String getUnitName(DistanceUnit unit, {bool compact = false}) {
+    final units = compact ? _distanceUnitsCompact : _distanceUnits;
+    return units[unit] ?? 'unknown';
+  }
+
+  /// Returns the unit symbol for a distance unit (same as compact name)
+  static String getUnitSymbol(DistanceUnit unit) =>
+      _distanceUnitsCompact[unit] ?? 'unknown';
+
+  /// Returns all distance units mapping
+  static Map<DistanceUnit, String> getAllUnits({bool compact = false}) {
+    final units = compact ? _distanceUnitsCompact : _distanceUnits;
+    return Map.unmodifiable(units);
+  }
 }

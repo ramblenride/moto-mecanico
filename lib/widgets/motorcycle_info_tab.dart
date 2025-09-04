@@ -139,9 +139,11 @@ class MotorcycleInfoTab extends StatelessWidget {
                           _getPurchaseDateStr(context, motorcycle),
                           AppLocalizations.of(context)!
                               .motorcycle_edit_page_name_prop_purchase_odometer,
-                          motorcycle.purchaseOdometer
-                              .toUnit(distanceUnit)
-                              .toFullString(),
+                          motorcycle.purchaseOdometer.isValid
+                              ? motorcycle.purchaseOdometer
+                                  .toUnit(distanceUnit)
+                                  .toFullString()
+                              : '',
                           propNameStyle,
                         ),
                         const SizedBox(height: 5),
@@ -288,8 +290,7 @@ class MotorcycleInfoTab extends StatelessWidget {
       }
     }
 
-    if (motorcycle.odometer.distance != null &&
-        motorcycle.odometer.distance! > 0) {
+    if (motorcycle.odometer.isValid && motorcycle.purchaseOdometer.isValid) {
       if (caredFor.isNotEmpty) {
         caredFor += ' ${AppLocalizations.of(context)!.info_tab_over}';
       }
@@ -306,7 +307,7 @@ class MotorcycleInfoTab extends StatelessWidget {
 
   List<Cost> _buildCostList(BuildContext context, Motorcycle motorcycle) {
     final purchase = Cost(
-        motorcycle.purchasePrice, AppLocalizations.of(context)!.motorcycle,
+        motorcycle.purchasePrice ?? 0, AppLocalizations.of(context)!.motorcycle,
         type: CostType.other);
     var totalParts = Cost(0, AppLocalizations.of(context)!.cost_type_parts,
         type: CostType.part);
@@ -330,7 +331,7 @@ class MotorcycleInfoTab extends StatelessWidget {
   int _getSpendingCost(Motorcycle motorcycle) {
     // FIXME: Reuse the totals for each type instead of going through all the
     // tasks again.
-    var spending = motorcycle.purchasePrice;
+    var spending = motorcycle.purchasePrice ?? 0;
     for (var task in motorcycle.closedTasks) {
       spending += (task.cost.value);
     }

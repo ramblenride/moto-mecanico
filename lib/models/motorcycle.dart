@@ -21,9 +21,9 @@ class Motorcycle extends ChangeNotifier {
     this.color = '',
     this.immatriculation = '',
     this.vin = '',
-    this.purchasePrice = 0,
+    this.purchasePrice,
     this.purchaseDate,
-    this.purchaseOdometer = const Distance(null, DistanceUnit.unitKm),
+    this.purchaseOdometer = const Distance(null),
     this.picture = '',
     List<Note>? notes,
     List<Attachment>? attachments,
@@ -58,7 +58,7 @@ class Motorcycle extends ChangeNotifier {
   String immatriculation;
   String vin; // Usually 17 characters but could also be less for older models
 
-  int purchasePrice;
+  int? purchasePrice;
   DateTime? purchaseDate;
   Distance purchaseOdometer;
 
@@ -170,7 +170,7 @@ class Motorcycle extends ChangeNotifier {
         color: json['color'] ?? '',
         immatriculation: json['immatriculation'] ?? '',
         vin: json['vin'] ?? '',
-        purchasePrice: json['purchasePrice'] ?? 0,
+        purchasePrice: json['purchasePrice'],
         purchaseOdometer: json['purchaseOdometer'] != null
             ? Distance.fromJson(json['purchaseOdometer'])
             : const Distance(null),
@@ -227,7 +227,9 @@ class Motorcycle extends ChangeNotifier {
     data['immatriculation'] = immatriculation;
     data['vin'] = vin;
 
-    data['purchasePrice'] = purchasePrice;
+    if (purchasePrice != null) {
+      data['purchasePrice'] = purchasePrice;
+    }
     if (purchaseDate != null) {
       data['purchaseDate'] = purchaseDate?.toIso8601String();
     }

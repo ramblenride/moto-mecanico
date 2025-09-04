@@ -48,9 +48,9 @@ class Configuration {
       final localeDateFormat =
           DateFormat.yMd(_systemLocale.languageCode).pattern;
       _dateFormat = (localeDateFormat != null &&
-              AppLocalSupport.supportedDateFormats.contains(localeDateFormat))
+              DateFormatSupport.isValidFormat(localeDateFormat))
           ? localeDateFormat
-          : AppLocalSupport.supportedDateFormats.first;
+          : DateFormatSupport.getDefaultFormat();
     }
     return _dateFormat!;
   }
@@ -132,8 +132,8 @@ class Configuration {
             .currencyName ??
         defaultCurrencySymbol;
     _dateFormat = _prefs?.getString(propNameDateFormat) ??
-        AppLocalSupport.supportedDateFormats
-            .first; // FIXME: Get the default for the locale
+        DateFormatSupport
+            .getDefaultFormat(); // FIXME: Get the default for the locale
     _notifications = _prefs?.getBool(propNameNotifications) ?? true;
   }
 }

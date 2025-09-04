@@ -20,10 +20,10 @@ class TextFormFieldDatePicker extends StatefulWidget {
 
   TextFormFieldDatePicker({
     super.key,
-    required this.lastDate,
     required this.firstDate,
+    required this.lastDate,
     this.initialDate,
-    this.enabled = false,
+    this.enabled = true,
     this.labelText = '',
     this.textAlign = TextAlign.start,
     this.style,
@@ -52,7 +52,7 @@ class _TextFormFieldDatePicker extends State<TextFormFieldDatePicker> {
     super.initState();
 
     _dateFormat = widget.dateFormat ?? DateFormat.MMMEd();
-    _selectedDate = widget.initialDate ?? DateTime.now();
+    _selectedDate = widget.initialDate;
 
     _controllerDate = TextEditingController();
     if (_selectedDate != null) {

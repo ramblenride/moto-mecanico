@@ -122,7 +122,7 @@ class _CompleteTaskDialogState extends State<CompleteTaskDialog> {
                               },
                             ),
                             trailer: Text(
-                              '${AppLocalSupport.distanceUnits[distanceUnit]}',
+                              DistanceSupport.getUnitName(distanceUnit),
                               style: propValueStyle,
                             ),
                           ),

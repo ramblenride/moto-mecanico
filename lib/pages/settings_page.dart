@@ -77,10 +77,10 @@ class _SettingsPageState extends State<SettingsPage> {
         alignment: Alignment.centerRight,
         child: DropdownButton<String>(
           value: _getLanguageCode(config),
-          items: AppLocalSupport.supportedLanguages.keys.map((key) {
+          items: LocaleSupport.getSupportedLanguages().map((key) {
             return DropdownMenuItem<String>(
               value: key,
-              child: Text(AppLocalSupport.supportedLanguages[key]!),
+              child: Text(LocaleSupport.getLanguageName(key)),
             );
           }).toList(),
           onChanged: (newLocale) {
@@ -95,7 +95,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   Widget _getDateRow(Configuration config) {
     final date = DateTime(2020, 1, 31);
-    var dateFormats = AppLocalSupport.supportedDateFormats;
+    var dateFormats = DateFormatSupport.getSupportedFormats();
     if (!dateFormats.contains(config.dateFormat)) {
       if (config.dateFormat.isNotEmpty) {
         dateFormats.add(config.dateFormat);
@@ -134,7 +134,7 @@ class _SettingsPageState extends State<SettingsPage> {
         alignment: Alignment.centerRight,
         child: DropdownButton<String>(
           value: config.currencySymbol,
-          items: AppLocalSupport.currencySymbols.keys.map((item) {
+          items: CurrencySupport.getSupportedCurrencies().map((item) {
             // FIXME: The list is long. A searchable dropdown would be very useful here.
             return DropdownMenuItem<String>(
               value: item,
@@ -165,12 +165,11 @@ class _SettingsPageState extends State<SettingsPage> {
           items: [
             DropdownMenuItem(
               value: DistanceUnit.unitKm,
-              child: Text(AppLocalSupport.distanceUnits[DistanceUnit.unitKm]!),
+              child: Text(DistanceSupport.getUnitName(DistanceUnit.unitKm)),
             ),
             DropdownMenuItem(
               value: DistanceUnit.unitMile,
-              child:
-                  Text(AppLocalSupport.distanceUnits[DistanceUnit.unitMile]!),
+              child: Text(DistanceSupport.getUnitName(DistanceUnit.unitMile)),
             ),
           ],
           onChanged: (newUnit) {
@@ -184,9 +183,8 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   String _getLanguageCode(Configuration config) {
-    return AppLocalSupport.supportedLanguages
-            .containsKey(config.locale.languageCode)
+    return LocaleSupport.isValidLanguage(config.locale.languageCode)
         ? config.locale.languageCode
-        : AppLocalSupport.supportedLanguages.keys.first;
+        : LocaleSupport.getSupportedLanguages().first;
   }
 }

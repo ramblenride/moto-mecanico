@@ -206,7 +206,7 @@ class _MotorcycleViewPageState extends State<MotorcycleViewPage>
                     border: InputBorder.none,
                     prefixText: AppLocalizations.of(context)!
                         .motorcycle_view_page_appbar_odometer_textfield_prefix,
-                    suffixText: AppLocalSupport.distanceUnits[_distanceUnit],
+                    suffixText: DistanceSupport.getUnitName(_distanceUnit),
                   ),
                   initialValue:
                       motorcycle.odometer.toUnit(_distanceUnit).toString(),
