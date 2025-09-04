@@ -1,15 +1,17 @@
 import 'dart:collection';
-
 import 'package:flutter/material.dart';
 import 'package:moto_mecanico/storage/local_file_storage.dart';
 
 const storageFile = 'labels.json';
 
 class Label {
+  static const int maxNameLength = 20;
   final int id;
   final Color color;
   final String name;
-  const Label({required this.id, required this.color, required this.name});
+  Label({required this.id, required this.color, required this.name}) {
+    if (name.length > maxNameLength) throw ArgumentError('Name too long');
+  }
 
   static Label? fromJson(Map<String, dynamic> json) {
     final id = switch (json['id']) { int x => x, _ => null };
@@ -17,7 +19,14 @@ class Label {
     if (id != null && colorNum != null) {
       final color = Color(colorNum);
       final name = switch (json['name']) { String x => x, _ => null };
-      return Label(id: id, color: color, name: name ?? '');
+      return Label(
+          id: id,
+          color: color,
+          name: name != null
+              ? (name.length > maxNameLength
+                  ? name.substring(0, maxNameLength)
+                  : name)
+              : '');
     }
     debugPrint('Failed to parse label from JSON. Missing fields.');
     return null;
@@ -36,13 +45,13 @@ class LabelsModel extends ChangeNotifier {
   Map<int, Label> _labels;
 
   final defaultLabels = {
-    0: const Label(id: 0, color: Colors.red, name: ''),
-    1: const Label(id: 1, color: Colors.orange, name: ''),
-    2: const Label(id: 2, color: Colors.green, name: ''),
-    3: const Label(id: 3, color: Colors.lightBlue, name: ''),
-    4: const Label(id: 4, color: Colors.purple, name: ''),
-    5: const Label(id: 5, color: Colors.indigo, name: ''),
-    6: const Label(id: 6, color: Colors.brown, name: ''),
+    0: Label(id: 0, color: Colors.red, name: ''),
+    1: Label(id: 1, color: Colors.orange, name: ''),
+    2: Label(id: 2, color: Colors.green, name: ''),
+    3: Label(id: 3, color: Colors.lightBlue, name: ''),
+    4: Label(id: 4, color: Colors.purple, name: ''),
+    5: Label(id: 5, color: Colors.indigo, name: ''),
+    6: Label(id: 6, color: Colors.brown, name: ''),
   };
 
   LabelsModel() : _labels = {} {
@@ -52,6 +61,7 @@ class LabelsModel extends ChangeNotifier {
   UnmodifiableMapView<int, Label> get labels => UnmodifiableMapView(_labels);
 
   Future<bool> update(Label label) async {
+    if (label.id < 0 || label.id > 6) return false;
     if (!_labels.containsKey(label.id)) return false;
 
     _labels[label.id] = label;
