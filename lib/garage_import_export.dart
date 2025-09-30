@@ -19,7 +19,7 @@ class GarageImportExport {
     final archiveDir = await getTemporaryDirectory();
 
     final zipFile = File(join(archiveDir.path, archiveName));
-    if (await zipFile.exists() == true) {
+    if (await zipFile.exists()) {
       await zipFile.delete(recursive: true);
     }
     await ZipFile.createFromDirectory(
@@ -43,7 +43,7 @@ class GarageImportExport {
     return garage;
   }
 
-  static void removeTempDirectory() async {
+  static Future<void> removeTempDirectory() async {
     final tempDir = (await getTemporaryDirectory()).path;
     final archiveDir = Directory(join(tempDir, 'import'));
 

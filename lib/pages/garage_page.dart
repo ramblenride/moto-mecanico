@@ -33,7 +33,6 @@ class GaragePage extends StatefulWidget {
 class GaragePageState extends State<GaragePage> {
   bool _isLoading = false;
 
-  // FIXME: Cannot show snackbar cleanly in this widget because it creates the scaffold.
   // Create a loading widget that wraps the main page and shows errors
   Widget? _snackBarMsg;
   String _search = '';

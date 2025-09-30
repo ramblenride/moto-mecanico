@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:moto_mecanico/locale/formats.dart';
 
 enum DistanceUnit {
@@ -5,6 +6,7 @@ enum DistanceUnit {
   unitMile,
 }
 
+@immutable
 class Distance implements Comparable<dynamic> {
   static const double kmToMiles = 0.621371;
   const Distance(this.distance, [this.unit = DistanceUnit.unitKm]);
@@ -99,7 +101,19 @@ class Distance implements Comparable<dynamic> {
     return 0;
   }
 
-  factory Distance.fromJson(Map<String, dynamic> json) {
+  Distance copyWith({
+    int? distance,
+    DistanceUnit? unit,
+  }) {
+    return Distance(
+      distance ?? this.distance,
+      unit ?? this.unit,
+    );
+  }
+
+  factory Distance.fromJson(Map<String, dynamic>? json) {
+    if (json == null) return const Distance(null);
+
     return Distance(
         json['distance'],
         json['unit'] != null && json['unit'] == 'mile'

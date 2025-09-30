@@ -339,6 +339,74 @@ void main() {
       expect(parsedLabel.color.value, equals(originalLabel.color.value));
       expect(parsedLabel.name, equals(originalLabel.name));
     });
+
+    test('copyWith id only', () {
+      final original = Label(id: 1, color: Colors.red, name: 'Test');
+      final copied = original.copyWith(id: 5);
+
+      expect(copied.id, equals(5));
+      expect(copied.color, equals(Colors.red));
+      expect(copied.name, equals('Test'));
+    });
+
+    test('copyWith color only', () {
+      final original = Label(id: 1, color: Colors.red, name: 'Test');
+      final copied = original.copyWith(color: Colors.blue);
+
+      expect(copied.id, equals(1));
+      expect(copied.color, equals(Colors.blue));
+      expect(copied.name, equals('Test'));
+    });
+
+    test('copyWith name only', () {
+      final original = Label(id: 1, color: Colors.red, name: 'Test');
+      final copied = original.copyWith(name: 'Updated');
+
+      expect(copied.id, equals(1));
+      expect(copied.color, equals(Colors.red));
+      expect(copied.name, equals('Updated'));
+    });
+
+    test('copyWith all parameters', () {
+      final original = Label(id: 1, color: Colors.red, name: 'Test');
+      final copied = original.copyWith(
+        id: 3,
+        color: Colors.green,
+        name: 'New',
+      );
+
+      expect(copied.id, equals(3));
+      expect(copied.color, equals(Colors.green));
+      expect(copied.name, equals('New'));
+    });
+
+    test('copyWith no parameters returns equivalent', () {
+      final original = Label(id: 2, color: Colors.orange, name: 'Original');
+      final copied = original.copyWith();
+
+      expect(copied.id, equals(original.id));
+      expect(copied.color, equals(original.color));
+      expect(copied.name, equals(original.name));
+    });
+
+    test('copyWith validates name length', () {
+      final original = Label(id: 1, color: Colors.red, name: 'Test');
+      final tooLongName = 'A' * 21;
+
+      expect(
+        () => original.copyWith(name: tooLongName),
+        throwsA(isA<ArgumentError>()),
+      );
+    });
+
+    test('copyWith empty name', () {
+      final original = Label(id: 1, color: Colors.red, name: 'Test');
+      final copied = original.copyWith(name: '');
+
+      expect(copied.name, equals(''));
+      expect(copied.id, equals(1));
+      expect(copied.color, equals(Colors.red));
+    });
   });
 }
 

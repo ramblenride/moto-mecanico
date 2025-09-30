@@ -130,5 +130,46 @@ void main() {
       distance = Distance.fromJson(jsonDecode('{"distance": 12}'));
       expect(distance, equals(const Distance(12, DistanceUnit.unitKm)));
     });
+
+    test('copyWith distance only', () {
+      const original = Distance(100, DistanceUnit.unitKm);
+      final copied = original.copyWith(distance: 200);
+
+      expect(copied.distance, equals(200));
+      expect(copied.unit, equals(DistanceUnit.unitKm));
+    });
+
+    test('copyWith unit only', () {
+      const original = Distance(100, DistanceUnit.unitKm);
+      final copied = original.copyWith(unit: DistanceUnit.unitMile);
+
+      expect(copied.distance, equals(100));
+      expect(copied.unit, equals(DistanceUnit.unitMile));
+    });
+
+    test('copyWith both parameters', () {
+      const original = Distance(100, DistanceUnit.unitKm);
+      final copied =
+          original.copyWith(distance: 50, unit: DistanceUnit.unitMile);
+
+      expect(copied.distance, equals(50));
+      expect(copied.unit, equals(DistanceUnit.unitMile));
+    });
+
+    test('copyWith no parameters returns equivalent', () {
+      const original = Distance(100, DistanceUnit.unitKm);
+      final copied = original.copyWith();
+
+      expect(copied.distance, equals(original.distance));
+      expect(copied.unit, equals(original.unit));
+      expect(copied, equals(original));
+    });
+
+    test('copyWith with null distance', () {
+      const original = Distance(100, DistanceUnit.unitKm);
+      final copied = original.copyWith(distance: null);
+
+      expect(copied, equals(original));
+    });
   });
 }

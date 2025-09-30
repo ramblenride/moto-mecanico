@@ -12,7 +12,7 @@ enum MotorcycleSort {
   year,
 }
 
-class GarageModel extends ChangeNotifier {
+class GarageModel with ChangeNotifier {
   final List<Motorcycle> _motos = [];
   final Map<String, VoidCallback> _listeners = {};
   GarageStorage? storage;
@@ -73,7 +73,7 @@ class GarageModel extends ChangeNotifier {
     if (_motos.contains(moto) == false) {
       _motos.add(moto);
 
-      listener() => _motoEventListener(moto);
+      void listener() => _motoEventListener(moto);
       _listeners[moto.id] = listener;
       moto.addListener(listener);
 

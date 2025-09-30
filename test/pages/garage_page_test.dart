@@ -36,15 +36,13 @@ Future<Widget> createGaragePage(GarageModel garage) async {
 }
 
 void addMotos(GarageModel garage, int n, bool reverseSort) async {
-  final motos = [];
   Iterable<int>.generate(n).toList().forEach((i) {
     final moto = Motorcycle(
       name: reverseSort ? 'Moto-${n - 1 - i}' : 'Moto-$i',
     );
     moto.storage = MotorcycleVoidStorage();
-    motos.add(moto);
+    garage.add(moto);
   });
-  motos.toList().forEach((moto) => garage.add(moto));
 }
 
 void main() async {
@@ -141,6 +139,8 @@ void main() async {
     await tester.pumpWidget(await createGaragePage(garage));
     await tester.pumpAndSettle();
 
+    // Many moto cards but Moto-0 is at the bottom of the list so not visible
+    expect(find.byType(MotorcycleCard), findsAtLeast(1));
     expect(find.widgetWithText(MotorcycleCard, 'Moto-0'), findsNothing);
     await tester.tap(find.byTooltip('Sort the motorcycle list'));
     await tester.pumpAndSettle();
@@ -158,9 +158,8 @@ void main() async {
     await tester.pumpWidget(await createGaragePage(garage));
     await tester.pumpAndSettle();
 
-    // Many motorcycles initially
-    expect(
-        tester.widgetList(find.byType(MotorcycleCard)).length, greaterThan(1));
+    // Many motorcycles initially, but Moto-5 is at the bottom of the list so not visible
+    expect(find.byType(MotorcycleCard), findsAtLeast(1));
     expect(find.widgetWithText(MotorcycleCard, 'Moto-5'), findsNothing);
     await tester.tap(find.byTooltip('Filter the motorcycle list'));
     await tester.pumpAndSettle();

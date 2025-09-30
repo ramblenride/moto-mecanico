@@ -4,6 +4,7 @@ import 'package:moto_mecanico/storage/local_file_storage.dart';
 
 const storageFile = 'labels.json';
 
+@immutable
 class Label {
   static const int maxNameLength = 20;
   final int id;
@@ -11,6 +12,18 @@ class Label {
   final String name;
   Label({required this.id, required this.color, required this.name}) {
     if (name.length > maxNameLength) throw ArgumentError('Name too long');
+  }
+
+  Label copyWith({
+    int? id,
+    Color? color,
+    String? name,
+  }) {
+    return Label(
+      id: id ?? this.id,
+      color: color ?? this.color,
+      name: name ?? this.name,
+    );
   }
 
   static Label? fromJson(Map<String, dynamic> json) {

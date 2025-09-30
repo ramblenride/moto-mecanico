@@ -10,10 +10,10 @@ import 'package:uuid/uuid.dart';
 
 // Defines a motorcycle. All objects are optional except for the name.
 // The name doesn't have to be unique across motorcycles, only the id is unique.
-class Motorcycle extends ChangeNotifier {
+class Motorcycle with ChangeNotifier {
   Motorcycle({
     required this.name,
-    this.id = '',
+    String? id,
     this.odometer = const Distance(null, DistanceUnit.unitKm),
     this.make = '',
     this.model = '',
@@ -28,14 +28,13 @@ class Motorcycle extends ChangeNotifier {
     List<Note>? notes,
     List<Attachment>? attachments,
     List<Task>? tasks,
-  })  : notes = notes ?? [],
+  })  : id = id ?? const Uuid().v4(),
+        notes = notes ?? [],
         attachments = attachments ?? [],
         _tasks = tasks ?? [] {
-    if (id.isEmpty) id = const Uuid().v4();
-
     // Initialize the saved state for tracking changes
     _lastSavedName = name;
-    _lastSavedId = id;
+    _lastSavedId = this.id;
     _lastSavedOdometer = odometer;
     _lastSavedMake = make;
     _lastSavedModel = model;
@@ -48,7 +47,7 @@ class Motorcycle extends ChangeNotifier {
   MotorcycleStorage? storage;
 
   String name;
-  String id; // Unique id
+  final String id; // Unique id
   Distance odometer;
 
   String make;
@@ -117,7 +116,7 @@ class Motorcycle extends ChangeNotifier {
 
   bool addTask(Task task) {
     if (_tasks.contains(task)) {
-      return false;
+      throw ArgumentError('Task already exists');
     }
 
     _tasks.add(task);
@@ -161,19 +160,16 @@ class Motorcycle extends ChangeNotifier {
       final moto = Motorcycle(
         name: json['name'],
         id: json['id'],
-        odometer: json['odometer'] != null
-            ? Distance.fromJson(json['odometer'])
-            : const Distance(null),
+        odometer: Distance.fromJson(json['odometer']),
         make: json['make'] ?? '',
         model: json['model'] ?? '',
-        year: json['year'],
+        year: json['year'] is int ? json['year'] as int : null,
         color: json['color'] ?? '',
         immatriculation: json['immatriculation'] ?? '',
         vin: json['vin'] ?? '',
-        purchasePrice: json['purchasePrice'],
-        purchaseOdometer: json['purchaseOdometer'] != null
-            ? Distance.fromJson(json['purchaseOdometer'])
-            : const Distance(null),
+        purchasePrice:
+            json['purchasePrice'] is int ? json['purchasePrice'] as int : null,
+        purchaseOdometer: Distance.fromJson(json['purchaseOdometer']),
         picture: json['picture'] ?? '',
       );
 
@@ -275,7 +271,7 @@ class Motorcycle extends ChangeNotifier {
     moto.storage = storage;
 
     for (final note in other.notes) {
-      moto.notes.add(Note.from(note));
+      moto.notes.add(note.copyWith());
     }
 
     if (other.picture.isNotEmpty && storage != null && other.storage != null) {

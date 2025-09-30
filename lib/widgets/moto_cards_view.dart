@@ -39,8 +39,6 @@ class _MotoCardsViewState extends State<MotoCardsView> {
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     });
 
-    // FIXME: Ideally we would load the garage when the app starts, but there is no
-    // way to display errors at that point.
     await garage.loadFromIndex();
     setState(() => _garageLoaded = true);
   }

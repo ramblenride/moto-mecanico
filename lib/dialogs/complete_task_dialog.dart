@@ -5,7 +5,6 @@ import 'package:intl/intl.dart';
 import 'package:moto_mecanico/locale/formats.dart';
 import 'package:moto_mecanico/models/distance.dart';
 import 'package:moto_mecanico/models/motorcycle.dart';
-import 'package:moto_mecanico/models/note.dart';
 import 'package:moto_mecanico/models/task.dart';
 import 'package:moto_mecanico/themes.dart';
 import 'package:moto_mecanico/widgets/config_widget.dart';
@@ -162,7 +161,7 @@ class _CompleteTaskDialogState extends State<CompleteTaskDialog> {
                               onSaved: (value) {
                                 if (value != null) {
                                   for (final task in widget.tasks) {
-                                    task.notes.add(Note.from(value));
+                                    task.notes.add(value.copyWith());
                                   }
                                 }
                               },
