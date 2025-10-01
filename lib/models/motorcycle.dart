@@ -155,55 +155,63 @@ class Motorcycle with ChangeNotifier {
     }));
   }
 
-  static Motorcycle? fromJson(Map<String, dynamic> json) {
-    if (json['name'] != null && json['id'] != null) {
-      final moto = Motorcycle(
-        name: json['name'],
-        id: json['id'],
-        odometer: Distance.fromJson(json['odometer']),
-        make: json['make'] ?? '',
-        model: json['model'] ?? '',
-        year: json['year'] is int ? json['year'] as int : null,
-        color: json['color'] ?? '',
-        immatriculation: json['immatriculation'] ?? '',
-        vin: json['vin'] ?? '',
-        purchasePrice:
-            json['purchasePrice'] is int ? json['purchasePrice'] as int : null,
-        purchaseOdometer: Distance.fromJson(json['purchaseOdometer']),
-        picture: json['picture'] ?? '',
-      );
-
-      if (json['purchaseDate'] != null) {
-        moto.purchaseDate = DateTime.tryParse(json['purchaseDate']);
-      }
-
-      if (json['notes'] != null) {
-        json['notes'].forEach((n) {
-          final note = Note.fromJson(n);
-          if (note.name.isNotEmpty || note.text.isNotEmpty) {
-            moto.notes.add(note);
-          }
-        });
-      }
-
-      if (json['attachments'] != null) {
-        json['attachments'].forEach((a) {
-          final attachment = Attachment.fromJson(a);
-          if (attachment != null) moto.attachments.add(attachment);
-        });
-      }
-
-      if (json['tasks'] != null) {
-        json['tasks'].forEach((t) {
-          final task = Task.fromJson(t);
-          if (task != null) moto._tasks.add(task);
-        });
-      }
-
-      return moto;
+  factory Motorcycle.fromJson(Map<String, dynamic> json) {
+    if (json['name'] == null || json['id'] == null) {
+      throw ArgumentError('Invalid motorcycle JSON: missing name or id');
     }
 
-    return null;
+    final moto = Motorcycle(
+      name: json['name'],
+      id: json['id'],
+      odometer: Distance.fromJson(json['odometer']),
+      make: json['make'] ?? '',
+      model: json['model'] ?? '',
+      year: json['year'] is int ? json['year'] as int : null,
+      color: json['color'] ?? '',
+      immatriculation: json['immatriculation'] ?? '',
+      vin: json['vin'] ?? '',
+      purchasePrice:
+          json['purchasePrice'] is int ? json['purchasePrice'] as int : null,
+      purchaseOdometer: Distance.fromJson(json['purchaseOdometer']),
+      picture: json['picture'] ?? '',
+    );
+
+    if (json['purchaseDate'] != null) {
+      moto.purchaseDate = DateTime.tryParse(json['purchaseDate']);
+    }
+
+    if (json['notes'] != null) {
+      json['notes'].forEach((n) {
+        final note = Note.fromJson(n);
+        if (note.name.isNotEmpty || note.text.isNotEmpty) {
+          moto.notes.add(note);
+        }
+      });
+    }
+
+    if (json['attachments'] != null) {
+      json['attachments'].forEach((a) {
+        try {
+          final attachment = Attachment.fromJson(a);
+          moto.attachments.add(attachment);
+        } catch (e) {
+          debugPrint("Ignoring invalid attachment JSON: $e");
+        }
+      });
+    }
+
+    if (json['tasks'] != null) {
+      json['tasks'].forEach((t) {
+        try {
+          final task = Task.fromJson(t);
+          moto._tasks.add(task);
+        } catch (e) {
+          debugPrint("Ignoring invalid task JSON: $e");
+        }
+      });
+    }
+
+    return moto;
   }
 
   Map<String, dynamic> toJson({bool encodeTasks = true}) {

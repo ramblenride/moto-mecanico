@@ -406,8 +406,7 @@ void main() {
       final json = task.toJson();
       final parsed = Task.fromJson(json);
 
-      expect(parsed, isNotNull);
-      expect(parsed!.name, equals('Simple Task'));
+      expect(parsed.name, equals('Simple Task'));
       expect(parsed.description, equals(''));
       expect(parsed.closed, equals(false));
     });
@@ -439,8 +438,7 @@ void main() {
       final json = jsonDecode(jsonEncode(task.toJson()));
       final parsed = Task.fromJson(json);
 
-      expect(parsed, isNotNull);
-      expect(parsed!.name, equals('Complete Task'));
+      expect(parsed.name, equals('Complete Task'));
       expect(parsed.description, equals('Full description'));
       expect(parsed.closed, isTrue);
       expect(parsed.closedDate, equals(closedDate));
@@ -458,9 +456,8 @@ void main() {
       expect(parsed.attachments.length, equals(1));
     });
 
-    test('fromJson returns null for invalid JSON', () {
-      final parsed = Task.fromJson({});
-      expect(parsed, isNull);
+    test('fromJson throws for invalid JSON', () {
+      expect(() => Task.fromJson({}), throwsArgumentError);
     });
 
     test('toJson handles all EffortLevel values', () {
@@ -481,9 +478,9 @@ void main() {
       expect(json2['effortLevel'], equals('medium'));
       expect(json3['effortLevel'], equals('large'));
 
-      expect(Task.fromJson(json1)!.effortLevel, equals(EffortLevel.small));
-      expect(Task.fromJson(json2)!.effortLevel, equals(EffortLevel.medium));
-      expect(Task.fromJson(json3)!.effortLevel, equals(EffortLevel.large));
+      expect(Task.fromJson(json1).effortLevel, equals(EffortLevel.small));
+      expect(Task.fromJson(json2).effortLevel, equals(EffortLevel.medium));
+      expect(Task.fromJson(json3).effortLevel, equals(EffortLevel.large));
     });
 
     test('toJson handles all TechnicalLevel values', () {
@@ -504,10 +501,10 @@ void main() {
       expect(json2['technicalLevel'], equals('intermediate'));
       expect(json3['technicalLevel'], equals('pro'));
 
-      expect(Task.fromJson(json1)!.technicalLevel, equals(TechnicalLevel.easy));
-      expect(Task.fromJson(json2)!.technicalLevel,
+      expect(Task.fromJson(json1).technicalLevel, equals(TechnicalLevel.easy));
+      expect(Task.fromJson(json2).technicalLevel,
           equals(TechnicalLevel.intermediate));
-      expect(Task.fromJson(json3)!.technicalLevel, equals(TechnicalLevel.pro));
+      expect(Task.fromJson(json3).technicalLevel, equals(TechnicalLevel.pro));
     });
 
     test('fromJson handles invalid enum values', () {
@@ -519,7 +516,7 @@ void main() {
 
       final task = Task.fromJson(json);
 
-      expect(task!.effortLevel, equals(EffortLevel.none));
+      expect(task.effortLevel, equals(EffortLevel.none));
       expect(task.technicalLevel, equals(TechnicalLevel.none));
     });
 
@@ -532,7 +529,7 @@ void main() {
 
       final task = Task.fromJson(json);
 
-      expect(task!.dueDate, isNull);
+      expect(task.dueDate, isNull);
       expect(task.closedDate, isNull);
     });
 
@@ -548,7 +545,7 @@ void main() {
       final json = task.toJson();
       final parsed = Task.fromJson(json);
 
-      expect(parsed!.notes, isEmpty);
+      expect(parsed.notes, isEmpty);
       expect(parsed.costs, isEmpty);
       expect(parsed.attachments, isEmpty);
       expect(parsed.labels, isEmpty);

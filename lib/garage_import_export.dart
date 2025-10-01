@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter_archive/flutter_archive.dart';
-import 'package:moto_mecanico/models/garage_model.dart';
+import 'package:moto_mecanico/models/garage.dart';
 import 'package:moto_mecanico/storage/garage_storage.dart';
 import 'package:moto_mecanico/storage/local_file_storage.dart';
 import 'package:path/path.dart';

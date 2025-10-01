@@ -1,4 +1,6 @@
 import 'dart:math';
+
+import 'package:flutter/rendering.dart';
 import 'package:moto_mecanico/models/attachment.dart';
 import 'package:moto_mecanico/models/cost.dart';
 import 'package:moto_mecanico/models/distance.dart';
@@ -67,13 +69,13 @@ class Task implements Comparable<dynamic> {
 
     for (final cost in task.costs) {
       if (cost.copyable || ignoreCopyable) {
-        newTask.costs.add(Cost.from(cost));
+        newTask.costs.add(cost.copyWith());
       }
     }
 
     for (final attachment in task.attachments) {
       if (attachment.copyable || ignoreCopyable) {
-        newTask.attachments.add(Attachment.from(attachment));
+        newTask.attachments.add(attachment.copyWith());
       }
     }
 
@@ -197,74 +199,77 @@ class Task implements Comparable<dynamic> {
     return newTask;
   }
 
-  static Task? fromJson(Map<String, dynamic> json) {
-    if (json['name'] != null) {
-      final task = Task(
-        name: json['name'] ?? '',
-        description: json['description'] ?? '',
-        attachments: [],
-        costs: [],
-        labels: [],
-        notes: [],
-      );
+  factory Task.fromJson(Map<String, dynamic> json) {
+    if (json['name'] == null) {
+      throw ArgumentError('Invalid task JSON: missing name');
+    }
+    final task = Task(
+      name: json['name'] ?? '',
+      description: json['description'] ?? '',
+      attachments: [],
+      costs: [],
+      labels: [],
+      notes: [],
+    );
 
-      task.effortLevel = task._parseEffortLevel(json['effortLevel']);
-      task.technicalLevel = task._parseTechnicalLevel(json['technicalLevel']);
+    task.effortLevel = task._parseEffortLevel(json['effortLevel']);
+    task.technicalLevel = task._parseTechnicalLevel(json['technicalLevel']);
 
-      if (json['notes'] != null) {
-        json['notes'].forEach((n) {
-          final note = Note.fromJson(n);
-          if (note.name.isNotEmpty || note.text.isNotEmpty) {
-            task.notes.add(note);
-          }
-        });
-      }
-      if (json['labels'] != null) {
-        json['labels'].forEach((label) => task.labels.add(label));
-      }
-      if (json['dueDate'] != null) {
-        task.dueDate = DateTime.tryParse(json['dueDate']);
-      }
-      task.dueOdometer = Distance.fromJson(json['dueOdometer']);
-      task.recurringOdometer = Distance.fromJson(json['recurringOdometer']);
-      if (json['recurringMonths'] != null) {
-        task.recurringMonths = json['recurringMonths'] as int;
-      }
-      if (json['closed'] != null) {
-        task.closed = json['closed'];
-      }
-      if (json['closedDate'] != null) {
-        task.closedDate = DateTime.tryParse(json['closedDate']);
-      }
-
-      task.closedOdometer = Distance.fromJson(json['closedOdometer']);
-
-      if (json['costs'] != null) {
-        json['costs'].forEach((cost) {
-          var newCost = Cost.fromJson(cost);
-          if (newCost != null) {
-            task.costs.add(newCost);
-          }
-        });
-      }
-
-      if (json['executor'] != null) {
-        task.executor = json['executor'];
-      }
-
-      if (json['attachments'] != null) {
-        json['attachments'].forEach((attachment) {
-          var newAttachment = Attachment.fromJson(attachment);
-          if (newAttachment != null) {
-            task.attachments.add(newAttachment);
-          }
-        });
-      }
-
-      return task;
+    if (json['notes'] != null) {
+      json['notes'].forEach((n) {
+        final note = Note.fromJson(n);
+        if (note.name.isNotEmpty || note.text.isNotEmpty) {
+          task.notes.add(note);
+        }
+      });
+    }
+    if (json['labels'] != null) {
+      json['labels'].forEach((label) => task.labels.add(label));
+    }
+    if (json['dueDate'] != null) {
+      task.dueDate = DateTime.tryParse(json['dueDate']);
+    }
+    task.dueOdometer = Distance.fromJson(json['dueOdometer']);
+    task.recurringOdometer = Distance.fromJson(json['recurringOdometer']);
+    if (json['recurringMonths'] != null) {
+      task.recurringMonths = json['recurringMonths'] as int;
+    }
+    if (json['closed'] != null) {
+      task.closed = json['closed'];
+    }
+    if (json['closedDate'] != null) {
+      task.closedDate = DateTime.tryParse(json['closedDate']);
     }
 
-    return null;
+    task.closedOdometer = Distance.fromJson(json['closedOdometer']);
+
+    if (json['costs'] != null) {
+      json['costs'].forEach((cost) {
+        try {
+          final newCost = Cost.fromJson(cost);
+          task.costs.add(newCost);
+        } catch (e) {
+          debugPrint("Ignoring invalid cost JSON: $e");
+        }
+      });
+    }
+
+    if (json['executor'] != null) {
+      task.executor = json['executor'];
+    }
+
+    if (json['attachments'] != null) {
+      json['attachments'].forEach((attachment) {
+        try {
+          final newAttachment = Attachment.fromJson(attachment);
+          task.attachments.add(newAttachment);
+        } catch (e) {
+          debugPrint("Ignoring invalid attachment JSON: $e");
+        }
+      });
+    }
+
+    return task;
   }
 
   Map<String, dynamic> toJson() {

@@ -14,22 +14,23 @@ class MotorcycleTemplateIndexItem {
     this.tasks = const [],
   });
 
-  MotorcycleTemplateIndexItem.fromJson(Map<String, dynamic> json)
-      : description = json['description'],
-        location = json['location'],
-        name = '',
-        tasks = const [];
+  factory MotorcycleTemplateIndexItem.fromJson(Map<String, dynamic> json) =>
+      MotorcycleTemplateIndexItem(
+          description: json['description'],
+          location: json['location'],
+          name: '',
+          tasks: const []);
 }
 
 class MotorcycleTemplateIndex {
   List<MotorcycleTemplateIndexItem> templates = const [];
 
   MotorcycleTemplateIndex({
-    this.templates = const [],
-  });
+    List<MotorcycleTemplateIndexItem>? templates,
+  }) : templates = templates ?? <MotorcycleTemplateIndexItem>[];
 
-  MotorcycleTemplateIndex.fromJson(Map<String, dynamic> json) {
-    templates = <MotorcycleTemplateIndexItem>[];
+  factory MotorcycleTemplateIndex.fromJson(Map<String, dynamic> json) {
+    List<MotorcycleTemplateIndexItem> templates = [];
     json.forEach((name, value) {
       try {
         final template = MotorcycleTemplateIndexItem.fromJson(value);
@@ -43,5 +44,6 @@ class MotorcycleTemplateIndex {
         debugPrint(e.toString());
       }
     });
+    return MotorcycleTemplateIndex(templates: templates);
   }
 }

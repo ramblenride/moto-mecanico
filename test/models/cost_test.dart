@@ -14,34 +14,29 @@ void main() {
     const description = 'this is a cost';
     final cost = Cost(32, description);
     final costParsed = Cost.fromJson(jsonDecode(jsonEncode(cost.toJson())));
-    expect(costParsed, isNotNull);
-    expect(costParsed!.description, equals(description));
+    expect(costParsed.description, equals(description));
     expect(costParsed.value, equals(32));
   });
 
   test('JSON parse missing fields', () {
     var parsedCost = Cost.fromJson(jsonDecode('{}'));
-    expect(parsedCost, isNotNull);
-    expect(parsedCost!.value, equals(0));
+    expect(parsedCost.value, equals(0));
     expect(parsedCost.description, equals(''));
 
     parsedCost = Cost.fromJson(jsonDecode('{\n"value": 17}'));
-    expect(parsedCost, isNotNull);
-    expect(parsedCost!.value, equals(17));
+    expect(parsedCost.value, equals(17));
 
     parsedCost =
         Cost.fromJson(jsonDecode('{"value": 17, "description": "clutch"}'));
-    expect(parsedCost, isNotNull);
-    expect(parsedCost!.value, equals(17));
+    expect(parsedCost.value, equals(17));
     expect(parsedCost.description, equals('clutch'));
   });
 
   test('JSON parse fields wrong type', () {
-    var parsedCost = Cost.fromJson(jsonDecode('{\n"value": "17"}'));
-    expect(parsedCost, isNull);
-
-    parsedCost = Cost.fromJson(jsonDecode('{"value": 17, "description": 17}'));
-    expect(parsedCost, isNull);
+    expect(() => Cost.fromJson(jsonDecode('{\n"value": "17"}')),
+        throwsArgumentError);
+    expect(() => Cost.fromJson(jsonDecode('{"value": 17, "description": 17}')),
+        throwsArgumentError);
   });
 
   test('copyWith creates new instance with updated fields', () {
@@ -164,7 +159,7 @@ void main() {
   test('Cost.from creates copy', () {
     final original =
         Cost(100, 'Oil change', type: CostType.part, copyable: true);
-    final copy = Cost.from(original);
+    final copy = original.copyWith();
 
     expect(copy.value, equals(original.value));
     expect(copy.description, equals(original.description));
@@ -183,9 +178,9 @@ void main() {
     final otherParsed =
         Cost.fromJson(jsonDecode(jsonEncode(otherCost.toJson())));
 
-    expect(partParsed!.type, equals(CostType.part));
-    expect(laborParsed!.type, equals(CostType.labor));
-    expect(otherParsed!.type, equals(CostType.other));
+    expect(partParsed.type, equals(CostType.part));
+    expect(laborParsed.type, equals(CostType.labor));
+    expect(otherParsed.type, equals(CostType.other));
   });
 
   test('JSON serialization preserves copyable field', () {
@@ -197,7 +192,7 @@ void main() {
     final nonCopyableParsed =
         Cost.fromJson(jsonDecode(jsonEncode(nonCopyableCost.toJson())));
 
-    expect(copyableParsed!.copyable, isTrue);
-    expect(nonCopyableParsed!.copyable, isFalse);
+    expect(copyableParsed.copyable, isTrue);
+    expect(nonCopyableParsed.copyable, isFalse);
   });
 }

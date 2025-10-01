@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart';
-
 enum CostType { part, labor, other }
 
 // FIXME: Enable immutability when all usages are converted to use copyWith.
@@ -13,12 +11,6 @@ class Cost {
   Cost(this.value, this.description,
       {this.type = CostType.other, this.copyable = false})
       : assert(value >= 0, 'Cost value cannot be negative');
-
-  Cost.from(Cost cost)
-      : description = cost.description,
-        value = cost.value,
-        type = cost.type,
-        copyable = cost.copyable;
 
   Cost copyWith({
     String? description,
@@ -54,7 +46,7 @@ class Cost {
     return 'Cost(description: $description, value: $value, type: $type, copyable: $copyable)';
   }
 
-  static Cost? fromJson(Map<String, dynamic> json) {
+  factory Cost.fromJson(Map<String, dynamic> json) {
     try {
       var description = json['description'] ?? '';
       var value = json['value'] ?? 0;
@@ -63,9 +55,7 @@ class Cost {
 
       return Cost(value, description, type: type, copyable: copyable);
     } catch (e) {
-      debugPrint('Failed to parse cost:');
-      debugPrint(e.toString());
-      return null;
+      throw ArgumentError('Invalid cost JSON: $e');
     }
   }
 

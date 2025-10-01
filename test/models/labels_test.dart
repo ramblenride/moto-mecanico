@@ -232,8 +232,7 @@ void main() {
 
       final label = Label.fromJson(json);
 
-      expect(label, isNotNull);
-      expect(label!.id, equals(5));
+      expect(label.id, equals(5));
       expect(label.color.value, equals(Colors.purple.value));
       expect(label.name, equals('Purple Label'));
     });
@@ -247,29 +246,28 @@ void main() {
 
       final label = Label.fromJson(json);
 
-      expect(label, isNotNull);
-      expect(label!.id, equals(1));
+      expect(label.id, equals(1));
       expect(label.name, equals('')); // Should default to empty string
     });
 
-    test('Label.fromJson returns null for missing required fields', () {
+    test('Label.fromJson throws for missing required fields', () {
       // Missing id
       final jsonMissingId = {
         'color': Colors.red.value,
         'name': 'Test',
       };
-      expect(Label.fromJson(jsonMissingId), isNull);
+      expect(() => Label.fromJson(jsonMissingId), throwsArgumentError);
 
       // Missing color
       final jsonMissingColor = {
         'id': 1,
         'name': 'Test',
       };
-      expect(Label.fromJson(jsonMissingColor), isNull);
+      expect(() => Label.fromJson(jsonMissingColor), throwsArgumentError);
 
       // Both missing
       final jsonEmpty = <String, dynamic>{};
-      expect(Label.fromJson(jsonEmpty), isNull);
+      expect(() => Label.fromJson(jsonEmpty), throwsArgumentError);
     });
 
     test('Label.fromJson handles invalid data types', () {
@@ -279,7 +277,7 @@ void main() {
         'color': Colors.red.value,
         'name': 'Test',
       };
-      expect(Label.fromJson(jsonStringId), isNull);
+      expect(() => Label.fromJson(jsonStringId), throwsArgumentError);
 
       // String color instead of int
       final jsonStringColor = {
@@ -287,7 +285,7 @@ void main() {
         'color': 'red',
         'name': 'Test',
       };
-      expect(Label.fromJson(jsonStringColor), isNull);
+      expect(() => Label.fromJson(jsonStringColor), throwsArgumentError);
 
       // Non-string name (should default to empty string)
       final jsonIntName = {
@@ -296,8 +294,7 @@ void main() {
         'name': 123,
       };
       final labelWithIntName = Label.fromJson(jsonIntName);
-      expect(labelWithIntName, isNotNull);
-      expect(labelWithIntName!.name, equals(''));
+      expect(labelWithIntName.name, equals(''));
     });
 
     test('Label.fromJson handles null values', () {
@@ -306,7 +303,7 @@ void main() {
         'color': null,
         'name': null,
       };
-      expect(Label.fromJson(jsonNullValues), isNull);
+      expect(() => Label.fromJson(jsonNullValues), throwsArgumentError);
     });
 
     test('Label.toJson creates correct JSON representation', () {
@@ -334,8 +331,7 @@ void main() {
       final json = originalLabel.toJson();
       final parsedLabel = Label.fromJson(json);
 
-      expect(parsedLabel, isNotNull);
-      expect(parsedLabel!.id, equals(originalLabel.id));
+      expect(parsedLabel.id, equals(originalLabel.id));
       expect(parsedLabel.color.value, equals(originalLabel.color.value));
       expect(parsedLabel.name, equals(originalLabel.name));
     });

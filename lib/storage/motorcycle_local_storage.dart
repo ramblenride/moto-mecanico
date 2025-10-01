@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:io';
-
+import 'package:flutter/foundation.dart';
 import 'package:moto_mecanico/models/motorcycle.dart';
 import 'package:moto_mecanico/models/task.dart';
 import 'package:moto_mecanico/storage/garage_storage.dart';
@@ -70,19 +70,23 @@ class MotorcycleLocalStorage extends MotorcycleStorage {
     return await _storage.deleteFile(id);
   }
 
-  Future<Motorcycle?> loadMotorcycle(String id) async {
+  // Throws an error if the motorcycle cannot be loaded
+  Future<Motorcycle> loadMotorcycle(String id) async {
     final motoJson = await _storage.getFromJson(_getMotoFilename(id));
     final motorcycle = Motorcycle.fromJson(motoJson);
 
-    if (motorcycle != null) {
-      final taskJson = await _storage.getFromJson(_getTasksFilename(id));
-      if (taskJson['tasks'] != null) {
-        taskJson['tasks'].forEach((t) {
+    final taskJson = await _storage.getFromJson(_getTasksFilename(id));
+    if (taskJson['tasks'] != null) {
+      taskJson['tasks'].forEach((t) {
+        try {
           final task = Task.fromJson(t);
-          if (task != null) motorcycle.addTask(task);
-        });
-      }
+          motorcycle.addTask(task);
+        } catch (e) {
+          debugPrint("Ignoring invalid task JSON: $e");
+        }
+      });
     }
+
     return motorcycle;
   }
 

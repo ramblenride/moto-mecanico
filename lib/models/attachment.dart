@@ -14,39 +14,42 @@ class Attachment {
   String name;
   bool copyable;
 
-  factory Attachment.from(Attachment attachment) {
+  Attachment copyWith({
+    AttachmentType? type,
+    String? url,
+    String? name,
+    bool? copyable,
+  }) {
     return Attachment(
-      type: attachment.type,
-      url: attachment.url,
-      name: attachment.name,
-      copyable: attachment.copyable,
-    );
+        type: type ?? this.type,
+        url: url ?? this.url,
+        name: name ?? this.name,
+        copyable: copyable ?? this.copyable);
   }
 
-  static Attachment? fromJson(Map<String, dynamic> json) {
-    if (json['type'] != null && json['url'] != null) {
-      AttachmentType type = AttachmentType.file;
-      switch (json['type']) {
-        case 'file':
-          type = AttachmentType.file;
-          break;
-        case 'link':
-          type = AttachmentType.link;
-          break;
-        case 'picture':
-          type = AttachmentType.picture;
-          break;
-      }
-
-      return Attachment(
-        type: type,
-        url: json['url'],
-        name: json['name'],
-        copyable: json['copyable'] ?? false,
-      );
+  factory Attachment.fromJson(Map<String, dynamic> json) {
+    if (json['type'] == null || json['url'] == null) {
+      throw ArgumentError('Invalid attachment JSON: $json');
+    }
+    AttachmentType type = AttachmentType.file;
+    switch (json['type']) {
+      case 'file':
+        type = AttachmentType.file;
+        break;
+      case 'link':
+        type = AttachmentType.link;
+        break;
+      case 'picture':
+        type = AttachmentType.picture;
+        break;
     }
 
-    return null;
+    return Attachment(
+      type: type,
+      url: json['url'],
+      name: json['name'],
+      copyable: json['copyable'] ?? false,
+    );
   }
 
   Map<String, dynamic> toJson() {

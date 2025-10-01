@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:moto_mecanico/models/garage_model.dart';
+import 'package:moto_mecanico/models/garage.dart';
 import 'package:moto_mecanico/models/motorcycle.dart';
 import 'package:moto_mecanico/models/task.dart';
 import 'package:moto_mecanico/storage/garage_storage.dart';

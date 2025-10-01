@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
-import 'package:moto_mecanico/models/garage_model.dart';
+import 'package:moto_mecanico/models/garage.dart';
 import 'package:moto_mecanico/models/motorcycle.dart';
 import 'package:moto_mecanico/storage/local_file_storage.dart';
 import 'package:moto_mecanico/storage/motorcycle_local_storage.dart';
@@ -89,12 +89,12 @@ class GarageStorage {
         final motoStorage = MotorcycleLocalStorage(motoId: id);
         await motoStorage.connect(
             baseDir: await garage.storage!.storage!.getBaseDir());
-        final moto = await motoStorage.loadMotorcycle(id);
-        if (moto != null) {
+        try {
+          final moto = await motoStorage.loadMotorcycle(id);
           moto.storage = motoStorage;
           await garage.add(moto);
-        } else {
-          debugPrint('Failed to load motorcycle $id from storage');
+        } catch (e) {
+          debugPrint('Failed to load motorcycle $id from storage: $e');
         }
       } else {
         debugPrint('Failed to find motorcycle info in index file');

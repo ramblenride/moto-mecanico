@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl_standalone.dart';
 import 'package:moto_mecanico/configuration.dart';
-import 'package:moto_mecanico/models/garage_model.dart';
+import 'package:moto_mecanico/models/garage.dart';
 import 'package:moto_mecanico/models/labels.dart';
 import 'package:moto_mecanico/pages/garage_page.dart';
 import 'package:moto_mecanico/pages/loading_page.dart';

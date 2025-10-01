@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:moto_mecanico/models/garage_model.dart';
+import 'package:moto_mecanico/models/garage.dart';
 import 'package:moto_mecanico/models/labels.dart';
 import 'package:moto_mecanico/moto_log_app.dart';
 import 'package:moto_mecanico/pages/garage_page.dart';

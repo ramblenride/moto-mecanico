@@ -13,13 +13,17 @@ class MotorcycleTemplate {
     required this.tasks,
   });
 
-  static MotorcycleTemplate? fromJson(Map<String, dynamic> json) {
+  factory MotorcycleTemplate.fromJson(Map<String, dynamic> json) {
     var tasks = <TaskTemplate>[];
     if (json['tasks'] != null) {
       json['tasks'].forEach((v) {
-        final task = TaskTemplate.fromJson(v);
-        if (task != null && task.name.isNotEmpty) {
-          tasks.add(task);
+        try {
+          final task = TaskTemplate.fromJson(v);
+          if (task.name.isNotEmpty) {
+            tasks.add(task);
+          }
+        } catch (e) {
+          debugPrint('Failed to parse task template from JSON: $e');
         }
       });
     }
@@ -52,34 +56,32 @@ class TaskTemplate {
     this.technicalLevel = TechnicalLevel.none,
   });
 
-  static TaskTemplate? fromJson(Map<String, dynamic> json) {
-    try {
-      var links = <TaskLink>[];
-      if (json['links'] != null) {
-        json['links'].forEach((v) {
+  factory TaskTemplate.fromJson(Map<String, dynamic> json) {
+    final links = <TaskLink>[];
+    if (json['links'] != null) {
+      json['links'].forEach((v) {
+        try {
           final link = TaskLink.fromJson(v);
-          if (link != null && link.name.isNotEmpty && link.url.isNotEmpty) {
+          if (link.name.isNotEmpty && link.url.isNotEmpty) {
             links.add(link);
           }
-        });
-      }
-
-      return TaskTemplate(
-          description: json['description'] ?? '',
-          distance: Distance(json['km'], DistanceUnit.unitKm),
-          intervalDistance: Distance(json['intervalKm'], DistanceUnit.unitKm),
-          intervalMonths: json['intervalMonths'] ?? 0,
-          months: json['months'] ?? 0,
-          name: json['name'],
-          notes: json['notes'] ?? '',
-          technicalLevel: _parseTechnicalLevel(json['technicalLevel'] ?? ''),
-          links: links);
-    } catch (e) {
-      debugPrint('Failed to parse task template from JSON: ${json.toString()}');
-      debugPrint(e.toString());
+        } catch (e) {
+          debugPrint('Failed to parse JSON link: $v');
+          debugPrint(e.toString());
+        }
+      });
     }
 
-    return null;
+    return TaskTemplate(
+        description: json['description'] ?? '',
+        distance: Distance(json['km'], DistanceUnit.unitKm),
+        intervalDistance: Distance(json['intervalKm'], DistanceUnit.unitKm),
+        intervalMonths: json['intervalMonths'] ?? 0,
+        months: json['months'] ?? 0,
+        name: json['name'],
+        notes: json['notes'] ?? '',
+        technicalLevel: _parseTechnicalLevel(json['technicalLevel'] ?? ''),
+        links: links);
   }
 
   static TechnicalLevel _parseTechnicalLevel(String levelStr) {
@@ -105,15 +107,8 @@ class TaskLink {
     required this.url,
   });
 
-  static TaskLink? fromJson(Map<String, dynamic> json) {
-    try {
-      return TaskLink(name: json['name'], url: json['url']);
-    } catch (e) {
-      debugPrint('Failed to parse JSON link: $json');
-      debugPrint(e.toString());
-      return null;
-    }
-  }
+  factory TaskLink.fromJson(Map<String, dynamic> json) =>
+      TaskLink(name: json['name'], url: json['url']);
 }
 
 class MotorcycleTemplates {
@@ -129,13 +124,11 @@ class MotorcycleTemplates {
       json['motorcycles'].forEach((m) {
         try {
           final moto = MotorcycleTemplate.fromJson(m);
-          if (moto != null &&
-              (moto.name.isNotEmpty) &&
-              (moto.description.isNotEmpty)) {
+          if (moto.name.isNotEmpty && (moto.description.isNotEmpty)) {
             templates.add(moto);
           }
         } catch (e) {
-          debugPrint('Failed to parse motorcycle task template: $m');
+          debugPrint('Failed to parse motorcycle task template: $m ');
           debugPrint(e.toString());
         }
       });

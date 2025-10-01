@@ -26,23 +26,22 @@ class Label {
     );
   }
 
-  static Label? fromJson(Map<String, dynamic> json) {
+  factory Label.fromJson(Map<String, dynamic> json) {
     final id = switch (json['id']) { int x => x, _ => null };
     final colorNum = switch (json['color']) { int x => x, _ => null };
-    if (id != null && colorNum != null) {
-      final color = Color(colorNum);
-      final name = switch (json['name']) { String x => x, _ => null };
-      return Label(
-          id: id,
-          color: color,
-          name: name != null
-              ? (name.length > maxNameLength
-                  ? name.substring(0, maxNameLength)
-                  : name)
-              : '');
+    if (id == null || colorNum == null) {
+      throw ArgumentError('Failed to parse label from JSON. Missing fields.');
     }
-    debugPrint('Failed to parse label from JSON. Missing fields.');
-    return null;
+    final color = Color(colorNum);
+    final name = switch (json['name']) { String x => x, _ => null };
+    return Label(
+        id: id,
+        color: color,
+        name: name != null
+            ? (name.length > maxNameLength
+                ? name.substring(0, maxNameLength)
+                : name)
+            : '');
   }
 
   Map<String, dynamic> toJson() {
@@ -110,9 +109,11 @@ class LabelsModel extends ChangeNotifier {
     final labels = <int, Label>{};
     if (json['labels'] != null) {
       json['labels'].forEach((dynamic v) {
-        final label = Label.fromJson(v as Map<String, dynamic>);
-        if (label != null) {
+        try {
+          final label = Label.fromJson(v as Map<String, dynamic>);
           labels[label.id] = label;
+        } catch (e) {
+          debugPrint("Ignoring invalid label JSON: $e");
         }
       });
     }

@@ -8,7 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:moto_mecanico/dialogs/delete_dialog.dart';
 import 'package:moto_mecanico/locale/formats.dart';
 import 'package:moto_mecanico/models/distance.dart';
-import 'package:moto_mecanico/models/garage_model.dart';
+import 'package:moto_mecanico/models/garage.dart';
 import 'package:moto_mecanico/models/motorcycle.dart';
 import 'package:moto_mecanico/themes.dart';
 import 'package:moto_mecanico/widgets/attachment_selector.dart';
@@ -69,10 +69,12 @@ class _MotorcycleEditPageState extends State<MotorcycleEditPage> {
   }
 
   void _addMotorcycleToGarage(Motorcycle moto) async {
+    // FIXME: Notify garage page. Let it handle that.
     await Provider.of<GarageModel>(context, listen: false).add(moto);
   }
 
   void _removeMotorcycleFromGarage(Motorcycle moto) async {
+    // FIXME: Notify garage page. Let it handle that.
     Provider.of<GarageModel>(context, listen: false).remove(moto);
   }
 
